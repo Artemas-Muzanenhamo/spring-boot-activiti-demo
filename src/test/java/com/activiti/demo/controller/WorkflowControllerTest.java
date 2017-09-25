@@ -1,4 +1,4 @@
-package com.activiti.demo;
+package com.activiti.demo.controller;
 
 import java.util.List;
 
