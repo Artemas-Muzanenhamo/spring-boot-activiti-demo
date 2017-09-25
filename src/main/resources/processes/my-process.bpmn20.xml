@@ -4,8 +4,8 @@
     <startEvent id="startEvent" name="startEvent" activiti:initiator="Artemas"></startEvent>
     <endEvent id="endEvent" name="endEvent"></endEvent>
     <userTask id="usertask1" name="my-task" activiti:assignee="artemas"></userTask>
-    <sequenceFlow id="flow1" sourceRef="usertask1" targetRef="endEvent"></sequenceFlow>
-    <sequenceFlow id="flow2" sourceRef="startEvent" targetRef="usertask1"></sequenceFlow>
+    <sequenceFlow id="flow1" sourceRef="startEvent" targetRef="usertask1"></sequenceFlow>
+    <sequenceFlow id="flow2" sourceRef="usertask1" targetRef="endEvent"></sequenceFlow>
   </process>
   <bpmndi:BPMNDiagram id="BPMNDiagram_my-process">
     <bpmndi:BPMNPlane bpmnElement="my-process" id="BPMNPlane_my-process">
@@ -19,12 +19,12 @@
         <omgdc:Bounds height="55.0" width="105.0" x="211.0" y="154.0"></omgdc:Bounds>
       </bpmndi:BPMNShape>
       <bpmndi:BPMNEdge bpmnElement="flow1" id="BPMNEdge_flow1">
-        <omgdi:waypoint x="316.0" y="181.0"></omgdi:waypoint>
-        <omgdi:waypoint x="365.0" y="181.0"></omgdi:waypoint>
-      </bpmndi:BPMNEdge>
-      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
         <omgdi:waypoint x="175.0" y="181.0"></omgdi:waypoint>
         <omgdi:waypoint x="211.0" y="181.0"></omgdi:waypoint>
+      </bpmndi:BPMNEdge>
+      <bpmndi:BPMNEdge bpmnElement="flow2" id="BPMNEdge_flow2">
+        <omgdi:waypoint x="316.0" y="181.0"></omgdi:waypoint>
+        <omgdi:waypoint x="365.0" y="181.0"></omgdi:waypoint>
       </bpmndi:BPMNEdge>
     </bpmndi:BPMNPlane>
   </bpmndi:BPMNDiagram>
