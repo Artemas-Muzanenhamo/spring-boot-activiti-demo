@@ -30,7 +30,7 @@ public class MyFirstWorkFlowTest {
         mockMvc.perform(MockMvcRequestBuilders.post("/start")
         		.param("processInstanceKey", "my-process"))
         .andExpect(status().isOk());
-    }  
+    }
     
     @Test
     public void findTask() throws Exception{

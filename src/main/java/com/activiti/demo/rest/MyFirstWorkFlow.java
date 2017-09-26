@@ -1,6 +1,9 @@
 package com.activiti.demo.rest;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
@@ -37,20 +40,20 @@ public class MyFirstWorkFlow {
 	@ResponseBody
 	public void start(@RequestParam(value="processInstanceKey", required = true) String processInstanceKey){
 		ProcessInstance processInstance = processEngine.getRuntimeService()
-	            .startProcessInstanceByKey("my-process");
+	            .startProcessInstanceByKey(processInstanceKey);
 	        System.out.println("PROCESS INSTANCE ID:-->"+processInstance.getId());  
 	        System.out.println("PROCESS INSTANCE DEF ID:-->"+processInstance.getProcessDefinitionId());
 	}
 	
 	@PostMapping("/findTask")
 	@ResponseBody
-	public String findTask(@RequestParam(value="taskAssignee", required = true) String taskAssignee){
+	public Map<String, String> findTask(@RequestParam(value="taskAssignee", required = true) String taskAssignee){
 		
-		String assignee = "";
+		Map<String, String> assignee = new HashMap<>();
 		
-		List<Task> taskList=processEngine.getTaskService()
+		List<Task> taskList = processEngine.getTaskService()
                 .createTaskQuery()
-                .taskAssignee("artemas")
+                .taskAssignee(taskAssignee)
                 .list();
         
         if (taskList != null && taskList.size() > 0) {
@@ -61,7 +64,8 @@ public class MyFirstWorkFlow {
                 System.out.println("TASK ASSIGNEE："+task.getAssignee());
                 System.out.println("TASK PROCESS INSTANCE ID:"+task.getProcessInstanceId());
                 
-                assignee = task.getAssignee();
+				assignee.put("ID", task.getId());
+				assignee.put("TASK NAME：", task.getName());
             }
             
 		}
