@@ -1,5 +1,7 @@
 # spring-boot-activiti-demo
 
+[![CircleCI](https://circleci.com/gh/Artemas-Muzanenhamo/spring-boot-activiti-demo/tree/develop.svg?style=svg)](https://circleci.com/gh/Artemas-Muzanenhamo/spring-boot-activiti-demo/tree/develop)
+
 ## About
 
 This is a simple project showing examples using Spring-Boot and Activiti BPMN. It will be using Activiti Community not 
