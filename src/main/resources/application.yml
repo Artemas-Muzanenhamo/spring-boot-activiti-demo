@@ -1,15 +1,15 @@
-#spring.datasource:
-#    driverClassName: org.h2.Driver
-#    url: jdbc:h2:mem:bootexample;MODE=MySQL
+spring.datasource:
+    driverClassName: org.h2.Driver
+    url: jdbc:h2:mem:activiti-demo;MODE=MySQL
 
-spring:
-    jpa:
-        database: MYSQL
-        hibernate:
-            ddl-auto: validate
+#spring:
+#    jpa:
+#        database: MYSQL
+#        hibernate:
+#            ddl-auto: validate
 
-    datasource:
-        url: jdbc:mysql://localhost:3306/activiti-demo
-        username: root
-        password: password
-        driver-class-name: com.mysql.jdbc.Driver
+#    datasource:
+#        url: jdbc:mysql://localhost:3306/activiti-demo
+#        username: root
+#        password: password
+#        driver-class-name: com.mysql.jdbc.Driver
