@@ -55,13 +55,13 @@ public class MyFirstWorkFlow {
 	
 	@PostMapping(value = "/findTask", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Map<String, String> findTask(@RequestBody(required = true) String taskAssignee){
+	public Map<String, String> findTask(@RequestBody(required = true) Map<String, String> taskAssignee){
 		
 		Map<String, String> assignee = new HashMap<>();
 		
 		List<Task> taskList = processEngine.getTaskService()
                 .createTaskQuery()
-                .taskAssignee(taskAssignee)
+                .taskAssignee(taskAssignee.get("taskAssignee"))
                 .list();
         
         if (taskList != null && taskList.size() > 0) {
