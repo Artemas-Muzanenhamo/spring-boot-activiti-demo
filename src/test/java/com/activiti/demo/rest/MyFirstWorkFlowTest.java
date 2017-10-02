@@ -2,6 +2,9 @@ package com.activiti.demo.rest;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +14,8 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
+
+import net.minidev.json.JSONObject;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -26,17 +31,27 @@ public class MyFirstWorkFlowTest {
 //	}
 	
     @Test
-    public void startWorkflowTest() throws Exception{  
+    public void startWorkflowTest() throws Exception{
+    	Map<String, String> variables = new HashMap<>();
+    	variables.put("processInstanceKey", "my-process");
+    	JSONObject jsonObject = new JSONObject(variables);
+    	
         mockMvc.perform(MockMvcRequestBuilders.post("/start")
-        		.param("processInstanceKey", "my-process"))
+        		.contentType(MediaType.APPLICATION_JSON_VALUE)
+        		.content(jsonObject.toJSONString()))
         .andExpect(status().isOk());
     }
     
     @Test
     public void findTask() throws Exception{
-    	mockMvc.perform(MockMvcRequestBuilders.post("/findTask").param("taskAssignee", "artemas")
-    			.contentType(MediaType.APPLICATION_JSON_UTF8))
-    			.andExpect(status().isOk());
+    	Map<String, String> variables = new HashMap<>();
+    	variables.put("taskAssignee", "artemas");
+    	JSONObject jsonObject = new JSONObject(variables);
+    	
+    	mockMvc.perform(MockMvcRequestBuilders.post("/findTask")
+    			.contentType(MediaType.APPLICATION_JSON_VALUE)
+    			.content(jsonObject.toJSONString()))
+    	.andExpect(status().isOk());
     }
     
 //    @Test

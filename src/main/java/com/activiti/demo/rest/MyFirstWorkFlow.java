@@ -1,6 +1,5 @@
 package com.activiti.demo.rest;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,15 +9,22 @@ import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 public class MyFirstWorkFlow {
+	
+	private final Logger log = LoggerFactory.getLogger(this.getClass());
 	
 	@Autowired
 	ProcessEngine processEngine;
@@ -26,28 +32,30 @@ public class MyFirstWorkFlow {
 	@Autowired
 	RepositoryService repositoryService;
 	
-	@GetMapping("/deploy")
+	@GetMapping(value = "/deploy", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(value=HttpStatus.OK)
 	public void deploy(){
 		Deployment deployment = repositoryService.createDeployment()
                 .addClasspathResource("processes/my-process.bpmn20.xml")
                 .name("say-hello-process")
                 .deploy();
-		System.out.println("DEPLOYMENT ID:"+deployment.getId());
-		System.out.println("DEPLOYMENT NAME:"+deployment.getName());
+		log.info("DEPLOYMENT ID:"+deployment.getId());
+		log.info("DEPLOYMENT NAME:"+deployment.getName());
 	}
 	
-	@PostMapping("/start")
+	@ResponseStatus(value=HttpStatus.OK)
+	@PostMapping(value = "/start", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public void start(@RequestParam(value="processInstanceKey", required = true) String processInstanceKey){
+	public void start(@RequestBody(required = true) Map<String, String> processInstanceKey){
 		ProcessInstance processInstance = processEngine.getRuntimeService()
-	            .startProcessInstanceByKey(processInstanceKey);
-	        System.out.println("PROCESS INSTANCE ID:-->"+processInstance.getId());  
-	        System.out.println("PROCESS INSTANCE DEF ID:-->"+processInstance.getProcessDefinitionId());
+	            .startProcessInstanceByKey(processInstanceKey.get("processInstanceKey"));
+	        log.info("PROCESS INSTANCE ID:-->"+processInstance.getId());  
+	        log.info("PROCESS INSTANCE DEF ID:-->"+processInstance.getProcessDefinitionId());
 	}
 	
-	@PostMapping("/findTask")
+	@PostMapping(value = "/findTask", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Map<String, String> findTask(@RequestParam(value="taskAssignee", required = true) String taskAssignee){
+	public Map<String, String> findTask(@RequestBody(required = true) String taskAssignee){
 		
 		Map<String, String> assignee = new HashMap<>();
 		
@@ -58,11 +66,11 @@ public class MyFirstWorkFlow {
         
         if (taskList != null && taskList.size() > 0) {
             for(Task task:taskList){
-                System.out.println("ID:"+task.getId());
-                System.out.println("TASK NAME："+task.getName());
-                System.out.println("TASK CREATED TIME："+task.getCreateTime());
-                System.out.println("TASK ASSIGNEE："+task.getAssignee());
-                System.out.println("TASK PROCESS INSTANCE ID:"+task.getProcessInstanceId());
+                log.info("ID:"+task.getId());
+                log.info("TASK NAME："+task.getName());
+                log.info("TASK CREATED TIME："+task.getCreateTime());
+                log.info("TASK ASSIGNEE："+task.getAssignee());
+                log.info("TASK PROCESS INSTANCE ID:"+task.getProcessInstanceId());
                 
 				assignee.put("ID", task.getId());
 				assignee.put("TASK NAME：", task.getName());
