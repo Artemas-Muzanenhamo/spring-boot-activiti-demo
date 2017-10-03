@@ -3,12 +3,14 @@ package com.activiti.demo.rest;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
+import org.activiti.engine.task.TaskQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,7 +46,7 @@ public class MyFirstWorkFlow {
 	}
 	
 	@ResponseStatus(value=HttpStatus.OK)
-	@PostMapping(value = "/start", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/start-task", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public void start(@RequestBody(required = true) Map<String, String> processInstanceKey){
 		ProcessInstance processInstance = processEngine.getRuntimeService()
@@ -53,7 +55,8 @@ public class MyFirstWorkFlow {
 	        log.info("PROCESS INSTANCE DEF ID:-->"+processInstance.getProcessDefinitionId());
 	}
 	
-	@PostMapping(value = "/findTask", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseStatus(value=HttpStatus.OK)
+	@PostMapping(value = "/find-task", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public Map<String, String> findTask(@RequestBody(required = true) Map<String, String> taskAssignee){
 		
@@ -76,7 +79,15 @@ public class MyFirstWorkFlow {
             }
             
 		}
+        
         return assignee;
+	}
+	
+	@ResponseStatus(value=HttpStatus.OK)
+	@PostMapping(value = "/complete-task", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public void completeTask(@RequestBody(required = true) Map<String, String> taskId) {
+		processEngine.getTaskService().complete(taskId.get("taskId"));
 	}
 
 }
