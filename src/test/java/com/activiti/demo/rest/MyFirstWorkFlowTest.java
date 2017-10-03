@@ -27,7 +27,14 @@ public class MyFirstWorkFlowTest {
 	
 //	@Test
 //	public void deployTest() throws Exception{
-//	    mockMvc.perform(MockMvcRequestBuilders.get("/deploy")).andExpect(status().isOk());
+//		Map<String, String> processName = new HashMap<>();
+//		processName.put("processName", "say-hello-process");
+//		JSONObject jsonObject = new JSONObject(processName);
+//		
+//	    mockMvc.perform(MockMvcRequestBuilders.post("/deploy")
+//	    		.contentType(MediaType.APPLICATION_JSON_VALUE)
+//	    		.content(jsonObject.toJSONString()))
+//	    .andExpect(status().isOk());
 //	}
 	
     @Test
