@@ -72,8 +72,7 @@ public class MyFirstWorkFlow {
                 log.info("TASK ASSIGNEE："+task.getAssignee());
                 log.info("TASK PROCESS INSTANCE ID:"+task.getProcessInstanceId());
                 
-				assignee.put("ID", task.getId());
-				assignee.put("TASK NAME：", task.getName());
+				assignee.put(task.getId(), task.getName());
             }
             
 		}

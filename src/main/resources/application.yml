@@ -1,7 +1,12 @@
 spring:
   profiles:
     active:
-    - development
+    - playground
+
+---
+
+spring:
+  profiles: development
   datasource:
     driverClassName: org.h2.Driver
     url: jdbc:h2:mem:activiti-demo;MODE=MySQL
@@ -9,16 +14,9 @@ spring:
 ---
 
 spring:
-  profiles:
-    active:
-    - playground
-    jpa:
-        database: MYSQL
-        hibernate:
-            ddl-auto: validate
-
-    datasource:
-        url: jdbc:mysql://localhost:3306/activiti-demo
-        username: root
-        password: password
-        driver-class-name: com.mysql.jdbc.Driver
+  profiles: playground
+  datasource:
+      url: jdbc:mysql://localhost:3306/activiti-demo
+      username: root
+      password: password
+      driver-class-name: com.mysql.jdbc.Driver
