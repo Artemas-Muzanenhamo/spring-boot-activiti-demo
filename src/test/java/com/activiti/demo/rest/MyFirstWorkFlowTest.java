@@ -65,12 +65,6 @@ public class MyFirstWorkFlowTest {
     }
     
 //    @Test
-//    public void completeTask(){
-//        processEngine.getTaskService()
-//                .complete("usertask1");
-//    }
-    
-//    @Test
 //    public void completeTask() throws Exception {
 //    	Map<String, String> variables = new HashMap<>();
 //    	variables.put("taskId", "10");
