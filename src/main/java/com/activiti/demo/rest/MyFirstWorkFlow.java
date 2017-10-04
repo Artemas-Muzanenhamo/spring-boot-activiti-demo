@@ -67,18 +67,15 @@ public class MyFirstWorkFlow {
                 .taskAssignee(taskAssignee.get("taskAssignee"))
                 .list();
         
-        if (taskList != null && taskList.size() > 0) {
-            for(Task task:taskList){
-                log.info("ID:"+task.getId());
-                log.info("TASK NAME："+task.getName());
-                log.info("TASK CREATED TIME："+task.getCreateTime());
-                log.info("TASK ASSIGNEE："+task.getAssignee());
-                log.info("TASK PROCESS INSTANCE ID:"+task.getProcessInstanceId());
-                
-				assignee.put(task.getId(), task.getName());
-            }
+		taskList.stream().forEach(task -> {
+			log.info("ID:"+task.getId());
+            log.info("TASK NAME："+task.getName());
+            log.info("TASK CREATED TIME："+task.getCreateTime());
+            log.info("TASK ASSIGNEE："+task.getAssignee());
+            log.info("TASK PROCESS INSTANCE ID:"+task.getProcessInstanceId());
             
-		}
+			assignee.put(task.getId(), task.getName());
+		});
         
         return assignee;
 	}
