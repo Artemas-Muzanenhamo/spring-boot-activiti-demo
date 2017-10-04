@@ -1,5 +1,6 @@
 package com.activiti.demo.rest;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,6 +23,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.activiti.demo.model.TaskRepresentation;
 
 @RestController
 public class MyFirstWorkFlow {
@@ -58,9 +61,9 @@ public class MyFirstWorkFlow {
 	@ResponseStatus(value=HttpStatus.OK)
 	@PostMapping(value = "/find-task", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public Map<String, String> findTask(@RequestBody(required = true) Map<String, String> taskAssignee){
+	public List<TaskRepresentation> findTask(@RequestBody(required = true) Map<String, String> taskAssignee){
 		
-		Map<String, String> assignee = new HashMap<>();
+		List<TaskRepresentation> assignee = new ArrayList<>();
 		
 		List<Task> taskList = processEngine.getTaskService()
                 .createTaskQuery()
@@ -74,7 +77,24 @@ public class MyFirstWorkFlow {
             log.info("TASK ASSIGNEE："+task.getAssignee());
             log.info("TASK PROCESS INSTANCE ID:"+task.getProcessInstanceId());
             
-			assignee.put(task.getId(), task.getName());
+            assignee.add(new TaskRepresentation(
+            		task.getId(), 
+            		task.getName(), 
+            		task.getAssignee(), 
+            		task.getDescription(), 
+            		task.getExecutionId(), 
+            		task.getOwner(), 
+            		task.getProcessInstanceId(), 
+            		task.getCreateTime(), 
+            		task.getTaskDefinitionKey(), 
+            		task.getDueDate(), 
+            		task.getParentTaskId(), 
+            		task.getTenantId(), 
+            		task.getTaskLocalVariables(), 
+            		task.getProcessVariables(), 
+            		task.getProcessDefinitionId(), 
+            		task.getDelegationState()));
+			//assignee.put(task.getId(), task.getName());
 		});
         
         return assignee;
