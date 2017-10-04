@@ -14,3 +14,12 @@ and create a database called `activiti-demo`. Before you start up the applicatio
 * There are two profiles you can run depending on your choice of database. You can run `mvn spring-boot:run -Dspring.profiles.active=development` if you wanted to run on an embedded H2 database. Or you can run `mvn spring-boot:run -Dspring.profiles.active=playground` if you wanted to run the relational MySQL database.
 * You are completely not limited to these two databases. If you want to create your profile with your own configuration then go right ahead.
 * To start up the application you will just run `mvn spring-boot:run`.
+
+## API Usage
+
+Url | Request | Req. Body | Description
+:---: | :---: | :---: | :---:
+ `localhost:8080/deploy` | **POST** | Deployment Name : **String** | `Creates a Deployment of the BPMN process.`
+ `localhost:8080/start-task` | **POST** | Process Instance Key : **String** | `Starts a Task given a Process Instance Key.`
+ `localhost:8080/find-task` | **POST** | Task Assignee **String** | `Returns a List of Tasks given an Assignee.`
+ `localhost:8080/complete-task` | **POST** | Task Id **String** | `Completes a task passing a Task Id.`
