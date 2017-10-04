@@ -6,7 +6,7 @@ import java.util.Map;
 import org.activiti.engine.task.DelegationState;
 import org.activiti.engine.task.Task;
 
-public class TaskRepresentation{
+public class TaskObject{
 
 	private String id;
 	private String name;
@@ -25,7 +25,7 @@ public class TaskRepresentation{
 	private String processDefinitionId;
 	private DelegationState delegationState;
 	
-	public TaskRepresentation(String id, String name, String assignee) {
+	public TaskObject(String id, String name, String assignee) {
 		super();
 		this.id = id;
 		this.name = name;
@@ -34,7 +34,7 @@ public class TaskRepresentation{
 	
 	
 	
-	public TaskRepresentation(String id, String name, String assignee, String description, String executionId,
+	public TaskObject(String id, String name, String assignee, String description, String executionId,
 			String owner, String processInstanceId, Date createTime, String taskDefinitionKey, Date dueDate,
 			String parentTaskId, String tenantId, Map<String, Object> taskLocalVariables,
 			Map<String, Object> processVariables, String processDefinitionId, DelegationState delegationState) {

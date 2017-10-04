@@ -24,7 +24,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.activiti.demo.model.TaskRepresentation;
+import com.activiti.demo.model.TaskObject;
 
 @RestController
 public class MyFirstWorkFlow {
@@ -37,7 +37,7 @@ public class MyFirstWorkFlow {
 	@Autowired
 	RepositoryService repositoryService;
 	
-	@GetMapping(value = "/deploy", produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(value = "/deploy", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value=HttpStatus.OK)
 	public void deploy(){
 		Deployment deployment = repositoryService.createDeployment()
@@ -61,9 +61,9 @@ public class MyFirstWorkFlow {
 	@ResponseStatus(value=HttpStatus.OK)
 	@PostMapping(value = "/find-task", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
-	public List<TaskRepresentation> findTask(@RequestBody(required = true) Map<String, String> taskAssignee){
+	public List<TaskObject> findTask(@RequestBody(required = true) Map<String, String> taskAssignee){
 		
-		List<TaskRepresentation> assignee = new ArrayList<>();
+		List<TaskObject> assignee = new ArrayList<>();
 		
 		List<Task> taskList = processEngine.getTaskService()
                 .createTaskQuery()
@@ -77,7 +77,7 @@ public class MyFirstWorkFlow {
             log.info("TASK ASSIGNEE："+task.getAssignee());
             log.info("TASK PROCESS INSTANCE ID:"+task.getProcessInstanceId());
             
-            assignee.add(new TaskRepresentation(
+            assignee.add(new TaskObject(
             		task.getId(), 
             		task.getName(), 
             		task.getAssignee(), 
