@@ -60,9 +60,7 @@ public class MyFirstWorkFlow {
 	@PostMapping(value = "/complete-task", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public void completeTask(@RequestBody(required = true) Map<String, String> taskId) {
-		log.info("ABOUT TO DELETE TASKID: " + taskId.get("taskId"));
-		processEngine.getTaskService().complete(taskId.get("taskId"));
-		log.info("DELETED TASKID: " + taskId.get("taskId"));
+		myProcessService.completeTask(taskId);
 	}
 
 }

@@ -65,5 +65,11 @@ public class MyProcessService {
 		return assignee;
 
 	}
+	
+	public void completeTask(Map<String, String> taskId) {
+		log.info("ABOUT TO DELETE TASKID: " + taskId.get("taskId"));
+		processEngine.getTaskService().complete(taskId.get("taskId"));
+		log.info("DELETED TASKID: " + taskId.get("taskId"));
+	}
 
 }
