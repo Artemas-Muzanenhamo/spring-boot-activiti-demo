@@ -8,10 +8,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
-
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,5 +65,6 @@ public class MyProcessServiceTest {
 		List<TaskObject> task = myProcessService.findTask(taskAssignee);
 		assertEquals("artemas", task.stream().findFirst().get().getAssignee());
 	}
+	
 	
 }

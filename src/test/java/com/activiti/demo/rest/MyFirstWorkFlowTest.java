@@ -63,16 +63,16 @@ public class MyFirstWorkFlowTest {
     	.andExpect(status().isOk());
     }
     
-//    @Test
-//    public void completeTask() throws Exception {
-//    	Map<String, String> variables = new HashMap<>();
-//    	variables.put("taskId", "10");
-//    	JSONObject jsonObject = new JSONObject(variables);
-//    	
-//    	mockMvc.perform(MockMvcRequestBuilders.post("/complete-task")
-//    			.contentType(MediaType.APPLICATION_JSON_VALUE)
-//    			.content(jsonObject.toJSONString()))
-//    	.andExpect(status().isOk());
-//    }
+    @Test
+    public void completeTask() throws Exception {
+    	Map<String, String> variables = new HashMap<>();
+    	variables.put("taskId", "2506");
+    	JSONObject jsonObject = new JSONObject(variables);
+    	
+    	mockMvc.perform(MockMvcRequestBuilders.post("/complete-task")
+    			.contentType(MediaType.APPLICATION_JSON_VALUE)
+    			.content(jsonObject.toJSONString()))
+    	.andExpect(status().isOk());
+    }
 	
 }
