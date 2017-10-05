@@ -53,41 +53,7 @@ public class MyFirstWorkFlow {
 	@PostMapping(value = "/find-task", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public List<TaskObject> findTask(@RequestBody(required = true) Map<String, String> taskAssignee){
-		
-		List<TaskObject> assignee = new ArrayList<>();
-		
-		List<Task> taskList = processEngine.getTaskService()
-                .createTaskQuery()
-                .taskAssignee(taskAssignee.get("taskAssignee"))
-                .list();
-        
-		taskList.stream().forEach(task -> {
-			log.info("ID:"+task.getId());
-            log.info("TASK NAME："+task.getName());
-            log.info("TASK CREATED TIME："+task.getCreateTime());
-            log.info("TASK ASSIGNEE："+task.getAssignee());
-            log.info("TASK PROCESS INSTANCE ID:"+task.getProcessInstanceId());
-            
-            assignee.add(new TaskObject(
-            		task.getId(), 
-            		task.getName(), 
-            		task.getAssignee(), 
-            		task.getDescription(), 
-            		task.getExecutionId(), 
-            		task.getOwner(), 
-            		task.getProcessInstanceId(), 
-            		task.getCreateTime(), 
-            		task.getTaskDefinitionKey(), 
-            		task.getDueDate(), 
-            		task.getParentTaskId(), 
-            		task.getTenantId(), 
-            		task.getTaskLocalVariables(), 
-            		task.getProcessVariables(), 
-            		task.getProcessDefinitionId(), 
-            		task.getDelegationState()));
-		});
-        
-        return assignee;
+		return myProcessService.findTask(taskAssignee);
 	}
 	
 	@ResponseStatus(value=HttpStatus.OK)
