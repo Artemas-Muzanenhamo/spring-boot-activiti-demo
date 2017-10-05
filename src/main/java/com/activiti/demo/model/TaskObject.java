@@ -4,7 +4,6 @@ import java.util.Date;
 import java.util.Map;
 
 import org.activiti.engine.task.DelegationState;
-import org.activiti.engine.task.Task;
 
 public class TaskObject{
 

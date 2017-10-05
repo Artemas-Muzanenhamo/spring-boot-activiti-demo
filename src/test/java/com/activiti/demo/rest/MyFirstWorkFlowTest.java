@@ -10,7 +10,6 @@ import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Profile;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit4.SpringRunner;
@@ -64,16 +63,16 @@ public class MyFirstWorkFlowTest {
     	.andExpect(status().isOk());
     }
     
-    @Test
-    public void completeTask() throws Exception {
-    	Map<String, String> variables = new HashMap<>();
-    	variables.put("taskId", "10");
-    	JSONObject jsonObject = new JSONObject(variables);
-    	
-    	mockMvc.perform(MockMvcRequestBuilders.post("/complete-task")
-    			.contentType(MediaType.APPLICATION_JSON_VALUE)
-    			.content(jsonObject.toJSONString()))
-    	.andExpect(status().isOk());
-    }
+//    @Test
+//    public void completeTask() throws Exception {
+//    	Map<String, String> variables = new HashMap<>();
+//    	variables.put("taskId", "10");
+//    	JSONObject jsonObject = new JSONObject(variables);
+//    	
+//    	mockMvc.perform(MockMvcRequestBuilders.post("/complete-task")
+//    			.contentType(MediaType.APPLICATION_JSON_VALUE)
+//    			.content(jsonObject.toJSONString()))
+//    	.andExpect(status().isOk());
+//    }
 	
 }

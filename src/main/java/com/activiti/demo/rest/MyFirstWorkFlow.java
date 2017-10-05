@@ -1,23 +1,18 @@
 package com.activiti.demo.rest;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
-
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
-import org.activiti.engine.task.TaskQuery;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -25,6 +20,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.activiti.demo.model.TaskObject;
+import com.activiti.demo.service.MyProcessService;
 
 @RestController
 public class MyFirstWorkFlow {
@@ -37,25 +33,20 @@ public class MyFirstWorkFlow {
 	@Autowired
 	RepositoryService repositoryService;
 	
+	@Autowired
+	MyProcessService myProcessService;
+	
 	@PostMapping(value = "/deploy", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value=HttpStatus.OK)
-	public void deploy(){
-		Deployment deployment = repositoryService.createDeployment()
-                .addClasspathResource("processes/my-process.bpmn20.xml")
-                .name("say-hello-process")
-                .deploy();
-		log.info("DEPLOYMENT ID:"+deployment.getId());
-		log.info("DEPLOYMENT NAME:"+deployment.getName());
+	public void deploy(@RequestBody(required = true) Map<String, String> processName){
+		myProcessService.deployProcess(processName);
 	}
 	
 	@ResponseStatus(value=HttpStatus.OK)
 	@PostMapping(value = "/start-task", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
 	public void start(@RequestBody(required = true) Map<String, String> processInstanceKey){
-		ProcessInstance processInstance = processEngine.getRuntimeService()
-	            .startProcessInstanceByKey(processInstanceKey.get("processInstanceKey"));
-	        log.info("PROCESS INSTANCE ID:-->"+processInstance.getId());  
-	        log.info("PROCESS INSTANCE DEF ID:-->"+processInstance.getProcessDefinitionId());
+		myProcessService.startProcessByProcessInstanceKey(processInstanceKey);
 	}
 	
 	@ResponseStatus(value=HttpStatus.OK)
@@ -94,7 +85,6 @@ public class MyFirstWorkFlow {
             		task.getProcessVariables(), 
             		task.getProcessDefinitionId(), 
             		task.getDelegationState()));
-			//assignee.put(task.getId(), task.getName());
 		});
         
         return assignee;
