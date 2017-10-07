@@ -1,6 +1,7 @@
 # spring-boot-activiti-demo
 
 [![CircleCI](https://circleci.com/gh/Artemas-Muzanenhamo/spring-boot-activiti-demo/tree/develop.svg?style=svg)](https://circleci.com/gh/Artemas-Muzanenhamo/spring-boot-activiti-demo/tree/develop)
+[![Build Status](https://travis-ci.org/Artemas-Muzanenhamo/spring-boot-activiti-demo.svg?branch=develop)](https://travis-ci.org/Artemas-Muzanenhamo/spring-boot-activiti-demo)
 
 ## About
 
