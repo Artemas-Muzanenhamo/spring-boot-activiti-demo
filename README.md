@@ -24,4 +24,4 @@ Url | Request | Req. Body | Description
  `localhost:8080/start-task` | **POST** | Process Instance Key : **String** | `Starts a Task given a Process Instance Key.`
  `localhost:8080/find-task` | **POST** | Task Assignee **String** | `Returns a List of Tasks given an Assignee.`
  `localhost:8080/complete-task` | **POST** | Task Id **String** | `Completes a task passing a Task Id.`
- `localhost:8080/tasks` | **GET** | **N/A** | `Returns a List of All the Tasks.`
+ `localhost:8080/tasks` | **GET** | | `Returns a List of All the Tasks.`
