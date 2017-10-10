@@ -14,6 +14,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -76,6 +77,19 @@ public class MyFirstWorkFlow {
 					task.getDelegationState()));
 		});
 		return assignee;
+	}
+	
+	@ResponseStatus(value=HttpStatus.OK)
+	@GetMapping(value = "/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
+	@ResponseBody
+	public List<TaskObject> getAllTasks(){
+		List<TaskObject> taskObjects = new ArrayList<>();
+		List<Task> tasks =  processEngine.getTaskService().createTaskQuery().list();
+		tasks.stream().forEach(task -> {
+			taskObjects.add(new TaskObject(task.getId(), task.getName(), task.getAssignee()));
+		});
+		
+		return taskObjects;
 	}
 	
 	@ResponseStatus(value=HttpStatus.OK)
