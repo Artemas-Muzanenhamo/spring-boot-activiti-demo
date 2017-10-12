@@ -38,7 +38,7 @@ public class MyFirstWorkFlowTest {
 		processName.put("processName", "say-hello-process");
 		JSONObject jsonObject = new JSONObject(processName);
 		
-	    mockMvc.perform(MockMvcRequestBuilders.post("/deploy")
+	    mockMvc.perform(MockMvcRequestBuilders.post("/api/process/deploy")
 	    		.contentType(MediaType.APPLICATION_JSON_VALUE)
 	    		.content(jsonObject.toJSONString()))
 	    .andExpect(status().isOk());
@@ -50,7 +50,7 @@ public class MyFirstWorkFlowTest {
     	variables.put("processInstanceKey", "my-process");
     	JSONObject jsonObject = new JSONObject(variables);
     	
-        mockMvc.perform(MockMvcRequestBuilders.post("/start-task")
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/process/start-task")
         		.contentType(MediaType.APPLICATION_JSON_VALUE)
         		.content(jsonObject.toJSONString()))
         .andExpect(status().isOk());
@@ -62,7 +62,7 @@ public class MyFirstWorkFlowTest {
     	variables.put("taskAssignee", "artemas");
     	JSONObject jsonObject = new JSONObject(variables);
     	
-    	mockMvc.perform(MockMvcRequestBuilders.post("/find-task")
+    	mockMvc.perform(MockMvcRequestBuilders.post("/api/process/find-task")
     			.contentType(MediaType.APPLICATION_JSON_VALUE)
     			.content(jsonObject.toJSONString()))
     	.andExpect(status().isOk());
@@ -74,7 +74,7 @@ public class MyFirstWorkFlowTest {
     	JSONArray jsonArray = new JSONArray();
     	jsonArray.add(tasks);
     	
-    	mockMvc.perform(MockMvcRequestBuilders.get("/tasks"))
+    	mockMvc.perform(MockMvcRequestBuilders.get("/api/process/tasks"))
     	.andExpect(status().isOk());
     }
     
@@ -84,7 +84,7 @@ public class MyFirstWorkFlowTest {
     	variables.put("taskId", "2506");
     	JSONObject jsonObject = new JSONObject(variables);
     	
-    	mockMvc.perform(MockMvcRequestBuilders.post("/complete-task")
+    	mockMvc.perform(MockMvcRequestBuilders.post("/api/process/complete-task")
     			.contentType(MediaType.APPLICATION_JSON_VALUE)
     			.content(jsonObject.toJSONString()))
     	.andExpect(status().isOk());
