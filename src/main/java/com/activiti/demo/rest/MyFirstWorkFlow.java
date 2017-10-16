@@ -90,7 +90,11 @@ public class MyFirstWorkFlow {
 		List<TaskObject> taskObjects = new ArrayList<>();
 		List<Task> tasks =  processEngine.getTaskService().createTaskQuery().list();
 		tasks.stream().forEach(task -> {
-			taskObjects.add(new TaskObject(task.getId(), task.getName(), task.getAssignee()));
+			taskObjects.add(new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
+					task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),
+					task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
+					task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
+					task.getDelegationState()));
 		});
 		
 		return taskObjects;
