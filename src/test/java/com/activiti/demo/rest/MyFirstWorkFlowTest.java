@@ -2,9 +2,7 @@ package com.activiti.demo.rest;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
@@ -18,9 +16,6 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
-import com.activiti.demo.model.TaskObject;
-
-import net.minidev.json.JSONArray;
 import net.minidev.json.JSONObject;
 
 @RunWith(SpringRunner.class)
@@ -31,6 +26,9 @@ public class MyFirstWorkFlowTest {
 
 	@Autowired
 	MockMvc mockMvc;
+	
+	@Autowired
+	MyFirstWorkFlow myFirstWorkFlow;
 	
 	@Test
 	public void deployTest() throws Exception{
@@ -70,18 +68,15 @@ public class MyFirstWorkFlowTest {
     
     @Test
     public void getAllTasks() throws Exception{
-    	List<TaskObject> tasks = Arrays.asList(new TaskObject("10", "my-process", "artemas"));
-    	JSONArray jsonArray = new JSONArray();
-    	jsonArray.add(tasks);
-    	
     	mockMvc.perform(MockMvcRequestBuilders.get("/api/process/tasks"))
     	.andExpect(status().isOk());
     }
     
     @Test
     public void completeTask() throws Exception {
+    	String taskId = myFirstWorkFlow.getAllTasks().stream().findFirst().get().getId();
     	Map<String, String> variables = new HashMap<>();
-    	variables.put("taskId", "2506");
+    	variables.put("taskId", taskId);
     	JSONObject jsonObject = new JSONObject(variables);
     	
     	mockMvc.perform(MockMvcRequestBuilders.post("/api/process/complete-task")
