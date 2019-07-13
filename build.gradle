@@ -1,0 +1,39 @@
+plugins {
+    id 'java'
+    id 'maven'
+    id 'org.springframework.boot' version '2.1.6.RELEASE'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.activiti:activiti-spring-boot-starter-basic:6.0.0'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE'
+    implementation 'org.springframework:spring-context:5.1.8.RELEASE'
+    implementation 'com.h2database:h2:1.4.196'
+    implementation 'mysql:mysql-connector-java:5.1.44'
+    implementation 'org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE'
+    implementation 'net.minidev:json-smart:2.3'
+    testCompile 'org.junit.jupiter:junit-jupiter-api:5.5.0'
+    testCompile 'org.junit.jupiter:junit-jupiter-engine:5.5.0'
+    testCompile 'org.junit.jupiter:junit-jupiter:5.5.0'
+    testCompile 'org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE'
+    testCompile 'org.mockito:mockito-junit-jupiter:3.0.0'
+    testCompile 'org.springframework.boot:spring-boot-test:2.1.6.RELEASE'
+    testCompile "org.springframework.boot:spring-boot-starter-test:2.1.6.RELEASE"
+}
+
+bootRun {
+    systemProperties = System.properties
+}
+
+group = 'com.activiti'
+version = '0.0.1-SNAPSHOT'
+description = 'Activiti-Demo'
+sourceCompatibility = 1.11
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
+}

@@ -5,24 +5,24 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.HashMap;
 import java.util.Map;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
-import org.springframework.test.context.junit4.SpringRunner;
+import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import net.minidev.json.JSONObject;
 
-@RunWith(SpringRunner.class)
+@ExtendWith(SpringExtension.class)
 @SpringBootTest
-@AutoConfigureMockMvc
 @ActiveProfiles("test")
-public class MyFirstWorkFlowTest {
+@AutoConfigureMockMvc
+class MyFirstWorkFlowTest {
 
 	@Autowired
 	MockMvc mockMvc;
@@ -31,7 +31,7 @@ public class MyFirstWorkFlowTest {
 	MyFirstWorkFlow myFirstWorkFlow;
 	
 	@Test
-	public void deployTest() throws Exception{
+	void deployTest() throws Exception{
 		Map<String, String> processName = new HashMap<>();
 		processName.put("processName", "say-hello-process");
 		JSONObject jsonObject = new JSONObject(processName);
@@ -43,7 +43,7 @@ public class MyFirstWorkFlowTest {
 	}
 	
     @Test
-    public void startWorkflowTest() throws Exception{
+	void startWorkflowTest() throws Exception{
     	Map<String, String> variables = new HashMap<>();
     	variables.put("processInstanceKey", "my-process");
     	JSONObject jsonObject = new JSONObject(variables);
@@ -55,7 +55,7 @@ public class MyFirstWorkFlowTest {
     }
     
     @Test
-    public void findTask() throws Exception{
+	void findTask() throws Exception{
     	Map<String, String> variables = new HashMap<>();
     	variables.put("taskAssignee", "artemas");
     	JSONObject jsonObject = new JSONObject(variables);
@@ -67,13 +67,13 @@ public class MyFirstWorkFlowTest {
     }
     
     @Test
-    public void getAllTasks() throws Exception{
+	void getAllTasks() throws Exception{
     	mockMvc.perform(MockMvcRequestBuilders.get("/api/process/tasks"))
     	.andExpect(status().isOk());
     }
     
     @Test
-    public void completeTask() throws Exception {
+	void completeTask() throws Exception {
     	String taskId = myFirstWorkFlow.getAllTasks().stream().findFirst().get().getId();
     	Map<String, String> variables = new HashMap<>();
     	variables.put("taskId", taskId);

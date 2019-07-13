@@ -26,3 +26,7 @@ nbdist/
 ### Other ###
 
 .xml
+/out/
+/build/
+/.idea/
+/.gradle/

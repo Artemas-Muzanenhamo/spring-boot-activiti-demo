@@ -14,19 +14,13 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.*;
 
 import com.activiti.demo.model.TaskObject;
 
 @CrossOrigin(origins = "http://localhost:4200")
-@RestController
+@Controller
 @RequestMapping("/api/process")
 public class MyFirstWorkFlow {
 	
@@ -74,11 +68,7 @@ public class MyFirstWorkFlow {
 			log.info("TASK ASSIGNEE：" + task.getAssignee());
 			log.info("TASK PROCESS INSTANCE ID:" + task.getProcessInstanceId());
 
-			assignee.add(new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
-					task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),
-					task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
-					task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
-					task.getDelegationState()));
+			assignee.add(createTaskObject(task));
 		});
 		return assignee;
 	}
@@ -89,17 +79,11 @@ public class MyFirstWorkFlow {
 	public List<TaskObject> getAllTasks(){
 		List<TaskObject> taskObjects = new ArrayList<>();
 		List<Task> tasks =  processEngine.getTaskService().createTaskQuery().list();
-		tasks.stream().forEach(task -> {
-			taskObjects.add(new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
-					task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),
-					task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
-					task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
-					task.getDelegationState()));
-		});
+		tasks.stream().forEach(task -> taskObjects.add(createTaskObject(task)));
 		
 		return taskObjects;
 	}
-	
+
 	@ResponseStatus(value=HttpStatus.OK)
 	@PostMapping(value = "/complete-task", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseBody
@@ -107,6 +91,14 @@ public class MyFirstWorkFlow {
 		log.info("ABOUT TO DELETE TASKID: " + taskId.get("taskId"));
 		processEngine.getTaskService().complete(taskId.get("taskId"));
 		log.info("DELETED TASKID: " + taskId.get("taskId"));
+	}
+
+	private TaskObject createTaskObject(Task task) {
+		return new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
+				task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),
+				task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
+				task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
+				task.getDelegationState());
 	}
 
 }
