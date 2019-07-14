@@ -16,6 +16,7 @@ dependencies {
     implementation 'mysql:mysql-connector-java:5.1.44'
     implementation 'org.springframework.boot:spring-boot-starter-web:2.1.6.RELEASE'
     implementation 'net.minidev:json-smart:2.3'
+    implementation 'net.saliman:gradle-cobertura-plugin:2.6.1'
     testCompile 'org.junit.jupiter:junit-jupiter-api:5.5.0'
     testCompile 'org.junit.jupiter:junit-jupiter-engine:5.5.0'
     testCompile 'org.junit.jupiter:junit-jupiter:5.5.0'
@@ -23,6 +24,7 @@ dependencies {
     testCompile 'org.mockito:mockito-junit-jupiter:3.0.0'
     testCompile 'org.springframework.boot:spring-boot-test:2.1.6.RELEASE'
     testCompile "org.springframework.boot:spring-boot-starter-test:2.1.6.RELEASE"
+    testCompile 'net.saliman:gradle-cobertura-plugin:2.6.1'
 }
 
 bootRun {

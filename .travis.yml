@@ -7,7 +7,8 @@ notifications:
     rooms:
       - pictopage:GgJNEnLcl4annmdzEwdCVbqY#random
 
-script: "mvn cobertura:cobertura"
+#TODO: Get cobertura plugin for Gradle to run this.
+#script: "./gradlew install"
 
 after_success:
   - bash <(curl -s https://codecov.io/bash)
