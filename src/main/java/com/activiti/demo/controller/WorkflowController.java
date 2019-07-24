@@ -1,4 +1,4 @@
-package com.activiti.demo.rest;
+package com.activiti.demo.controller;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,7 +22,7 @@ import com.activiti.demo.model.TaskObject;
 @CrossOrigin(origins = "http://localhost:4200")
 @Controller
 @RequestMapping("/api/process")
-public class MyFirstWorkFlow {
+public class WorkflowController {
 	
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
@@ -31,7 +31,7 @@ public class MyFirstWorkFlow {
 	private RepositoryService repositoryService;
 
 	@Autowired
-    public MyFirstWorkFlow(ProcessEngine processEngine, RepositoryService repositoryService) {
+    public WorkflowController(ProcessEngine processEngine, RepositoryService repositoryService) {
         this.processEngine = processEngine;
         this.repositoryService = repositoryService;
     }

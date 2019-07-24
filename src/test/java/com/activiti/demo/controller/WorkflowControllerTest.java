@@ -1,4 +1,4 @@
-package com.activiti.demo.rest;
+package com.activiti.demo.controller;
 
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -22,13 +22,13 @@ import net.minidev.json.JSONObject;
 @SpringBootTest
 @ActiveProfiles("test")
 @AutoConfigureMockMvc
-class MyFirstWorkFlowTest {
+class WorkflowControllerTest {
 
 	@Autowired
 	MockMvc mockMvc;
 	
 	@Autowired
-	MyFirstWorkFlow myFirstWorkFlow;
+    WorkflowController workflowController;
 	
 	@Test
 	void deployTest() throws Exception{
@@ -74,7 +74,7 @@ class MyFirstWorkFlowTest {
     
     @Test
 	void completeTask() throws Exception {
-    	String taskId = myFirstWorkFlow.getAllTasks().stream().findFirst().get().getId();
+    	String taskId = workflowController.getAllTasks().stream().findFirst().get().getId();
     	Map<String, String> variables = new HashMap<>();
     	variables.put("taskId", taskId);
     	JSONObject jsonObject = new JSONObject(variables);
