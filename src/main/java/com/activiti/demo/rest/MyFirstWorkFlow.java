@@ -25,14 +25,18 @@ import com.activiti.demo.model.TaskObject;
 public class MyFirstWorkFlow {
 	
 	private final Logger log = LoggerFactory.getLogger(this.getClass());
+
+	private ProcessEngine processEngine;
 	
+	private RepositoryService repositoryService;
+
 	@Autowired
-	ProcessEngine processEngine;
-	
-	@Autowired
-	RepositoryService repositoryService;
-	
-	@PostMapping(value = "/deploy", produces = MediaType.APPLICATION_JSON_VALUE)
+    public MyFirstWorkFlow(ProcessEngine processEngine, RepositoryService repositoryService) {
+        this.processEngine = processEngine;
+        this.repositoryService = repositoryService;
+    }
+
+    @PostMapping(value = "/deploy", produces = MediaType.APPLICATION_JSON_VALUE)
 	@ResponseStatus(value=HttpStatus.OK)
 	public void deploy(@RequestBody(required = true) Map<String, String> processName){
 		Deployment deployment = processEngine
