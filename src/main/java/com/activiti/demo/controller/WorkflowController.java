@@ -23,86 +23,98 @@ import com.activiti.demo.model.TaskObject;
 @Controller
 @RequestMapping("/api/process")
 public class WorkflowController {
-	
-	private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	private ProcessEngine processEngine;
-	
-	private RepositoryService repositoryService;
+    private final Logger log = LoggerFactory.getLogger(this.getClass());
 
-	@Autowired
+    private ProcessEngine processEngine;
+
+    private RepositoryService repositoryService;
+
+    @Autowired
     public WorkflowController(ProcessEngine processEngine, RepositoryService repositoryService) {
         this.processEngine = processEngine;
         this.repositoryService = repositoryService;
     }
 
     @PostMapping(value = "/deploy", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseStatus(value=HttpStatus.OK)
-	public void deploy(@RequestBody(required = true) Map<String, String> processName){
-		Deployment deployment = processEngine
-				.getRepositoryService().createDeployment()
+    @ResponseStatus(value = HttpStatus.OK)
+    public void deploy(@RequestBody(required = true) Map<String, String> processName) {
+        Deployment deployment = processEngine
+                .getRepositoryService().createDeployment()
                 .addClasspathResource("processes/my-process.bpmn20.xml")
                 .name(processName.get("processName"))
                 .deploy();
-		log.info("DEPLOYMENT ID:"+deployment.getId());
-		log.info("DEPLOYMENT NAME:"+deployment.getName());
-	}
-	
-	@ResponseStatus(value=HttpStatus.OK)
-	@PostMapping(value = "/start-task", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public void start(@RequestBody(required = true) Map<String, String> processInstanceKey){
-		ProcessInstance processInstance = processEngine.getRuntimeService()
-	            .startProcessInstanceByKey(processInstanceKey.get("processInstanceKey"));
-	        log.info("PROCESS INSTANCE ID:-->"+processInstance.getId());  
-	        log.info("PROCESS INSTANCE DEF ID:-->"+processInstance.getProcessDefinitionId());
-	}
-	
-	@ResponseStatus(value=HttpStatus.OK)
-	@PostMapping(value = "/find-task", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public List<TaskObject> findTask(@RequestBody(required = true) Map<String, String> taskAssignee){
-		List<TaskObject> assignee = new ArrayList<>();
-		List<Task> taskList = processEngine.getTaskService().createTaskQuery()
-				.taskAssignee(taskAssignee.get("taskAssignee")).list();
-		taskList.stream().forEach(task -> {
-			log.info("ID:" + task.getId());
-			log.info("TASK NAME：" + task.getName());
-			log.info("TASK CREATED TIME：" + task.getCreateTime());
-			log.info("TASK ASSIGNEE：" + task.getAssignee());
-			log.info("TASK PROCESS INSTANCE ID:" + task.getProcessInstanceId());
+        log.info("DEPLOYMENT ID:" + deployment.getId());
+        log.info("DEPLOYMENT NAME:" + deployment.getName());
+    }
 
-			assignee.add(createTaskObject(task));
-		});
-		return assignee;
-	}
-	
-	@ResponseStatus(value=HttpStatus.OK)
-	@GetMapping(value = "/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public List<TaskObject> getAllTasks(){
-		List<TaskObject> taskObjects = new ArrayList<>();
-		List<Task> tasks =  processEngine.getTaskService().createTaskQuery().list();
-		tasks.stream().forEach(task -> taskObjects.add(createTaskObject(task)));
-		
-		return taskObjects;
-	}
+    @ResponseStatus(value = HttpStatus.OK)
+    @PostMapping(value = "/start-task", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void start(@RequestBody(required = true) Map<String, String> processInstanceKey) {
+        ProcessInstance processInstance = processEngine.getRuntimeService()
+                .startProcessInstanceByKey(processInstanceKey.get("processInstanceKey"));
+        log.info("PROCESS INSTANCE ID:-->" + processInstance.getId());
+        log.info("PROCESS INSTANCE DEF ID:-->" + processInstance.getProcessDefinitionId());
+    }
 
-	@ResponseStatus(value=HttpStatus.OK)
-	@PostMapping(value = "/complete-task", produces = MediaType.APPLICATION_JSON_VALUE)
-	@ResponseBody
-	public void completeTask(@RequestBody(required = true) Map<String, String> taskId) {
-		log.info("ABOUT TO DELETE TASKID: " + taskId.get("taskId"));
-		processEngine.getTaskService().complete(taskId.get("taskId"));
-		log.info("DELETED TASKID: " + taskId.get("taskId"));
-	}
+    @ResponseStatus(value = HttpStatus.OK)
+    @PostMapping(value = "/find-task", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<TaskObject> findTask(@RequestBody(required = true) Map<String, String> taskAssignee) {
+        List<TaskObject> assignee = new ArrayList<>();
+        List<Task> taskList = processEngine.getTaskService().createTaskQuery()
+                .taskAssignee(taskAssignee.get("taskAssignee")).list();
+        taskList.stream().forEach(task -> {
+            log.info("ID:" + task.getId());
+            log.info("TASK NAME：" + task.getName());
+            log.info("TASK CREATED TIME：" + task.getCreateTime());
+            log.info("TASK ASSIGNEE：" + task.getAssignee());
+            log.info("TASK PROCESS INSTANCE ID:" + task.getProcessInstanceId());
 
-	private TaskObject createTaskObject(Task task) {
-		return new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
-				task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),
-				task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
-				task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
-				task.getDelegationState());
-	}
+            assignee.add(createTaskObject(task));
+        });
+        return assignee;
+    }
+
+    @ResponseStatus(value = HttpStatus.OK)
+    @PostMapping(value = "/task", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<TaskObject> findTaskById(@RequestBody Map<String, String> taskId) {
+        List<TaskObject> taskById = new ArrayList<>();
+        Task task = processEngine.getTaskService().createTaskQuery()
+                .taskId(taskId.get("taskId")).list().stream().findFirst().get();
+
+        taskById.add(createTaskObject(task));
+        return taskById;
+    }
+
+    @ResponseStatus(value = HttpStatus.OK)
+    @GetMapping(value = "/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public List<TaskObject> getAllTasks() {
+        List<TaskObject> taskObjects = new ArrayList<>();
+        List<Task> tasks = processEngine.getTaskService().createTaskQuery().list();
+        tasks.stream().forEach(task -> taskObjects.add(createTaskObject(task)));
+
+        return taskObjects;
+    }
+
+    @ResponseStatus(value = HttpStatus.OK)
+    @PostMapping(value = "/complete-task", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void completeTask(@RequestBody(required = true) Map<String, String> taskId) {
+        log.info("ABOUT TO DELETE TASKID: " + taskId.get("taskId"));
+        processEngine.getTaskService().complete(taskId.get("taskId"));
+        log.info("DELETED TASKID: " + taskId.get("taskId"));
+    }
+
+    private TaskObject createTaskObject(Task task) {
+        return new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
+                task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),
+                task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
+                task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
+                task.getDelegationState());
+    }
 
 }
