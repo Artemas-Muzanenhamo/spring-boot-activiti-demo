@@ -39,7 +39,7 @@ public class WorkflowController {
 
     @PostMapping(value = "/deploy", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
-    public void deploy(@RequestBody(required = true) Map<String, String> processName) {
+    public void deploy(@RequestBody Map<String, String> processName) {
         Deployment deployment = processEngine
                 .getRepositoryService().createDeployment()
                 .addClasspathResource("processes/my-process.bpmn20.xml")
@@ -52,7 +52,7 @@ public class WorkflowController {
     @ResponseStatus(value = HttpStatus.OK)
     @PostMapping(value = "/start-task", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public void start(@RequestBody(required = true) Map<String, String> processInstanceKey) {
+    public void start(@RequestBody Map<String, String> processInstanceKey) {
         ProcessInstance processInstance = processEngine.getRuntimeService()
                 .startProcessInstanceByKey(processInstanceKey.get("processInstanceKey"));
         log.info("PROCESS INSTANCE ID:-->" + processInstance.getId());
