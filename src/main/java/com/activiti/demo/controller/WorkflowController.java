@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
+import org.activiti.engine.impl.persistence.entity.TaskEntityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -63,52 +65,38 @@ public class WorkflowController {
     @PostMapping(value = "/find-task", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<TaskObject> findTask(@RequestBody(required = true) Map<String, String> taskAssignee) {
-        List<TaskObject> assignee = new ArrayList<>();
-        List<Task> taskList = processEngine.getTaskService().createTaskQuery()
-                .taskAssignee(taskAssignee.get("taskAssignee")).list();
-        taskList.stream().forEach(task -> {
-            log.info("ID:" + task.getId());
-            log.info("TASK NAME：" + task.getName());
-            log.info("TASK CREATED TIME：" + task.getCreateTime());
-            log.info("TASK ASSIGNEE：" + task.getAssignee());
-            log.info("TASK PROCESS INSTANCE ID:" + task.getProcessInstanceId());
-
-            assignee.add(createTaskObject(task));
-        });
-        return assignee;
+        return processEngine.getTaskService().createTaskQuery().taskAssignee(taskAssignee.get("taskAssignee")).list()
+                .stream()
+                .map(this::createTaskObject)
+                .collect(Collectors.toList());
     }
 
     @ResponseStatus(value = HttpStatus.OK)
     @PostMapping(value = "/task", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public TaskObject findTaskById(@RequestBody Map<String, String> taskId) {
-        TaskObject taskObject = new TaskObject();
-
-        Optional<Task> taskIdOptional = processEngine.getTaskService().createTaskQuery()
-                .taskId(taskId.get("taskId")).list().stream().findFirst();
-
-        if (taskIdOptional.isPresent()) {
-            taskObject = createTaskObject(taskIdOptional.get());
-        }
-
-        return taskObject;
+        return processEngine.getTaskService().createTaskQuery()
+                .taskId(taskId.get("taskId")).list()
+                .stream()
+                .map(this::createTaskObject)
+                .findFirst()
+                .orElse(new TaskObject());
     }
 
     @ResponseStatus(value = HttpStatus.OK)
     @GetMapping(value = "/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<TaskObject> getAllTasks() {
-        List<TaskObject> taskObjects = new ArrayList<>();
-        List<Task> tasks = processEngine.getTaskService().createTaskQuery().list();
-        tasks.stream().forEach(task -> taskObjects.add(createTaskObject(task)));
-
-        return taskObjects;
+        return processEngine.getTaskService().createTaskQuery().list()
+                .stream()
+                .map(this::createTaskObject)
+                .collect(Collectors.toList());
     }
 
     @ResponseStatus(value = HttpStatus.OK)
     @PostMapping(value = "/complete-task", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public void completeTask(@RequestBody(required = true) Map<String, String> taskId) {
+    public void completeTask(@RequestBody Map<String, String> taskId) {
         log.info("ABOUT TO DELETE TASKID: " + taskId.get("taskId"));
         processEngine.getTaskService().complete(taskId.get("taskId"));
         log.info("DELETED TASKID: " + taskId.get("taskId"));

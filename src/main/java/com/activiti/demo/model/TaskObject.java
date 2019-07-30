@@ -4,6 +4,7 @@ import java.util.Date;
 import java.util.Map;
 
 import org.activiti.engine.task.DelegationState;
+import org.activiti.engine.task.Task;
 
 public class TaskObject{
 
@@ -27,14 +28,14 @@ public class TaskObject{
 	public TaskObject() {
 	}
 
+	public TaskObject(Task task) {}
+
 	public TaskObject(String id, String name, String assignee) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.assignee = assignee;
 	}
-	
-	
 	
 	public TaskObject(String id, String name, String assignee, String description, String executionId,
 			String owner, String processInstanceId, Date createTime, String taskDefinitionKey, Date dueDate,
