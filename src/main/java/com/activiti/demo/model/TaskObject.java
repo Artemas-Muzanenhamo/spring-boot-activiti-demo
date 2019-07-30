@@ -25,10 +25,7 @@ public class TaskObject{
 	private String processDefinitionId;
 	private DelegationState delegationState;
 
-	public TaskObject() {
-	}
-
-	public TaskObject(Task task) {}
+	public TaskObject() {}
 
 	public TaskObject(String id, String name, String assignee) {
 		super();

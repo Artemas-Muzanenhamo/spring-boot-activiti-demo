@@ -1,14 +1,8 @@
 package com.activiti.demo.controller;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-import java.util.stream.Collectors;
-
+import com.activiti.demo.model.TaskObject;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
-import org.activiti.engine.impl.persistence.entity.TaskEntityImpl;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -20,7 +14,9 @@ import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
-import com.activiti.demo.model.TaskObject;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @Controller
@@ -28,9 +24,7 @@ import com.activiti.demo.model.TaskObject;
 public class WorkflowController {
 
     private final Logger log = LoggerFactory.getLogger(this.getClass());
-
     private ProcessEngine processEngine;
-
     private RepositoryService repositoryService;
 
     @Autowired
