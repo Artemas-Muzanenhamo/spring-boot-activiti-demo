@@ -3,6 +3,7 @@ package com.activiti.demo.controller;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
@@ -80,13 +81,17 @@ public class WorkflowController {
     @ResponseStatus(value = HttpStatus.OK)
     @PostMapping(value = "/task", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<TaskObject> findTaskById(@RequestBody Map<String, String> taskId) {
-        List<TaskObject> taskById = new ArrayList<>();
-        Task task = processEngine.getTaskService().createTaskQuery()
-                .taskId(taskId.get("taskId")).list().stream().findFirst().get();
+    public TaskObject findTaskById(@RequestBody Map<String, String> taskId) {
+        TaskObject taskObject = new TaskObject();
 
-        taskById.add(createTaskObject(task));
-        return taskById;
+        Optional<Task> taskIdOptional = processEngine.getTaskService().createTaskQuery()
+                .taskId(taskId.get("taskId")).list().stream().findFirst();
+
+        if (taskIdOptional.isPresent()) {
+            taskObject = createTaskObject(taskIdOptional.get());
+        }
+
+        return taskObject;
     }
 
     @ResponseStatus(value = HttpStatus.OK)

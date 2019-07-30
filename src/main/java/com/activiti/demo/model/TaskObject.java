@@ -23,7 +23,10 @@ public class TaskObject{
 	private Map<String, Object> processVariables;
 	private String processDefinitionId;
 	private DelegationState delegationState;
-	
+
+	public TaskObject() {
+	}
+
 	public TaskObject(String id, String name, String assignee) {
 		super();
 		this.id = id;
