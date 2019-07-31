@@ -28,6 +28,7 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -80,14 +81,20 @@ class WorkflowControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
+
+        verify(processEngine).getRepositoryService();
+        verify(repositoryService).createDeployment();
+        verify(deploymentBuilder).addClasspathResource(anyString());
+        verify(deploymentBuilder).name(anyString());
+        verify(deploymentBuilder).deploy();
+        verify(deployment).getId();
     }
 
     @Test
     void startWorkflowTest() throws Exception {
         Map<String, String> processInstanceKey = Map.of("processInstanceKey", "my-process");
-
         given(processEngine.getRuntimeService()).willReturn(runtimeService);
-        given(processEngine.getRuntimeService().startProcessInstanceByKey(processInstanceKey.get("processInstanceKey")))
+        given(runtimeService.startProcessInstanceByKey(processInstanceKey.get("processInstanceKey")))
                 .willReturn(processInstance);
         Map<String, String> variables = new HashMap<>();
         variables.put("processInstanceKey", "my-process");
@@ -97,6 +104,9 @@ class WorkflowControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
+
+        verify(processEngine).getRuntimeService();
+        verify(runtimeService).startProcessInstanceByKey(anyString());
     }
 
     @Test
@@ -114,6 +124,11 @@ class WorkflowControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
+
+        verify(processEngine).getTaskService();
+        verify(taskService).createTaskQuery();
+        verify(taskQuery).taskAssignee(anyString());
+        verify(taskQuery).list();
     }
 
     @Test
@@ -129,6 +144,10 @@ class WorkflowControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
+
+        verify(processEngine).getTaskService();
+        verify(taskService).createTaskQuery();
+        verify(taskQuery).taskId(anyString());
     }
 
     @Test
@@ -138,6 +157,9 @@ class WorkflowControllerTest {
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/process/tasks"))
                 .andExpect(status().isOk());
+
+        verify(processEngine).getTaskService();
+        verify(taskService).createTaskQuery();
     }
 
     @Test
@@ -145,13 +167,13 @@ class WorkflowControllerTest {
         Map<String, String> taskId = new HashMap<>();
         taskId.put("taskId", "123");
         given(processEngine.getTaskService()).willReturn(taskService);
-        given(taskService.createTaskQuery()).willReturn(taskQuery);
-        given(taskQuery.taskId(taskId.get("taskId"))).willReturn(taskQuery);
         JSONObject jsonObject = new JSONObject(taskId);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/process/complete-task")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
+
+        verify(processEngine).getTaskService();
     }
 }
