@@ -36,8 +36,8 @@ public class WorkflowController {
     @PostMapping(value = "/deploy", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public void deploy(@RequestBody Map<String, String> processName) {
-        Deployment deployment = processEngine
-                .getRepositoryService().createDeployment()
+        Deployment deployment = processEngine.getRepositoryService()
+                .createDeployment()
                 .addClasspathResource("processes/my-process.bpmn20.xml")
                 .name(processName.get("processName"))
                 .deploy();
@@ -59,7 +59,10 @@ public class WorkflowController {
     @PostMapping(value = "/find-task", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<TaskObject> findTask(@RequestBody(required = true) Map<String, String> taskAssignee) {
-        return processEngine.getTaskService().createTaskQuery().taskAssignee(taskAssignee.get("taskAssignee")).list()
+        return processEngine.getTaskService()
+                .createTaskQuery()
+                .taskAssignee(taskAssignee.get("taskAssignee"))
+                .list()
                 .stream()
                 .map(this::createTaskObject)
                 .collect(Collectors.toList());
@@ -81,7 +84,9 @@ public class WorkflowController {
     @GetMapping(value = "/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<TaskObject> getAllTasks() {
-        return processEngine.getTaskService().createTaskQuery().list()
+        return processEngine.getTaskService()
+                .createTaskQuery()
+                .list()
                 .stream()
                 .map(this::createTaskObject)
                 .collect(Collectors.toList());
@@ -92,7 +97,8 @@ public class WorkflowController {
     @ResponseBody
     public void completeTask(@RequestBody Map<String, String> taskId) {
         log.info("ABOUT TO DELETE TASKID: " + taskId.get("taskId"));
-        processEngine.getTaskService().complete(taskId.get("taskId"));
+        processEngine.getTaskService()
+                .complete(taskId.get("taskId"));
         log.info("DELETED TASKID: " + taskId.get("taskId"));
     }
 
