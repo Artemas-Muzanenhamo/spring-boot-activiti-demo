@@ -1,5 +1,6 @@
 package com.activiti.demo.controller;
 
+import com.activiti.demo.model.DeploymentObject;
 import com.activiti.demo.model.TaskObject;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
@@ -10,13 +11,14 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "http://localhost:4200")
 @Controller
@@ -33,7 +35,7 @@ public class WorkflowController {
         this.repositoryService = repositoryService;
     }
 
-    @PostMapping(value = "/deploy", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/deploy", produces = APPLICATION_JSON_VALUE)
     @ResponseStatus(value = HttpStatus.OK)
     public void deploy(@RequestBody Map<String, String> processName) {
         Deployment deployment = processEngine.getRepositoryService()
@@ -46,7 +48,7 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = HttpStatus.OK)
-    @PostMapping(value = "/start-task", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/start-task", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public void start(@RequestBody Map<String, String> processInstanceKey) {
         ProcessInstance processInstance = processEngine.getRuntimeService()
@@ -56,7 +58,7 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = HttpStatus.OK)
-    @PostMapping(value = "/find-task", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/find-task", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<TaskObject> findTask(@RequestBody(required = true) Map<String, String> taskAssignee) {
         return processEngine.getTaskService()
@@ -69,7 +71,7 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = HttpStatus.OK)
-    @PostMapping(value = "/task", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/task", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public TaskObject findTaskById(@RequestBody Map<String, String> taskId) {
         return processEngine.getTaskService().createTaskQuery()
@@ -81,7 +83,7 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = HttpStatus.OK)
-    @GetMapping(value = "/tasks", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/tasks", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<TaskObject> getAllTasks() {
         return processEngine.getTaskService()
@@ -93,13 +95,26 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = HttpStatus.OK)
-    @PostMapping(value = "/complete-task", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/complete-task", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public void completeTask(@RequestBody Map<String, String> taskId) {
         log.info("ABOUT TO DELETE TASKID: " + taskId.get("taskId"));
         processEngine.getTaskService()
                 .complete(taskId.get("taskId"));
         log.info("DELETED TASKID: " + taskId.get("taskId"));
+    }
+
+    @GetMapping(value = "deployed-processes", produces = APPLICATION_JSON_VALUE)
+    public List<DeploymentObject> getAllDeployedProcesses() {
+        return processEngine.getRepositoryService().createDeploymentQuery().list()
+                .stream()
+                .map(this::createDeploymentObject)
+                .collect(Collectors.toList());
+    }
+
+    private DeploymentObject createDeploymentObject(Deployment deployment) {
+        return new DeploymentObject(deployment.getId(), deployment.getName(),
+                deployment.getDeploymentTime(), deployment.getCategory(), deployment.getKey(), deployment.getTenantId());
     }
 
     private TaskObject createTaskObject(Task task) {

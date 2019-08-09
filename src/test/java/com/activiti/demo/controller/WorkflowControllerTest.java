@@ -7,6 +7,7 @@ import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.DeploymentBuilder;
+import org.activiti.engine.repository.DeploymentQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
@@ -65,6 +66,9 @@ class WorkflowControllerTest {
 
     @Mock
     private Deployment deployment;
+
+    @Mock
+    private DeploymentQuery deploymentQuery;
 
     @Test
     void deployTest() throws Exception {
@@ -175,5 +179,17 @@ class WorkflowControllerTest {
                 .andExpect(status().isOk());
 
         verify(processEngine).getTaskService();
+    }
+
+    @Test
+    void getAllDeployedProcesses() throws Exception {
+        given(processEngine.getRepositoryService()).willReturn(repositoryService);
+        given(repositoryService.createDeploymentQuery()).willReturn(deploymentQuery);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/process/deployed-processes"))
+                .andExpect(status().isOk());
+
+        verify(processEngine).getRepositoryService();
+        verify(repositoryService).createDeploymentQuery();
     }
 }
