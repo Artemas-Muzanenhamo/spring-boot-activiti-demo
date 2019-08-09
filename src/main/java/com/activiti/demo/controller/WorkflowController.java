@@ -104,7 +104,9 @@ public class WorkflowController {
         log.info("DELETED TASKID: " + taskId.get("taskId"));
     }
 
-    @GetMapping(value = "deployed-processes", produces = APPLICATION_JSON_VALUE)
+    @ResponseStatus(value = HttpStatus.OK)
+    @GetMapping(value = "/deployed-processes", produces = APPLICATION_JSON_VALUE)
+    @ResponseBody
     public List<DeploymentObject> getAllDeployedProcesses() {
         return processEngine.getRepositoryService().createDeploymentQuery().list()
                 .stream()
