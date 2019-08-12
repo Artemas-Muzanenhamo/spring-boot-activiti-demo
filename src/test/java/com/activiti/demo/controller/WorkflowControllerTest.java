@@ -37,6 +37,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @ActiveProfiles("test")
 class WorkflowControllerTest {
 
+    private static final String API_PROCESS_TASK_URL = "/api/process/task";
+    private static final String API_PROCESS_TASKS_URL = "/api/process/tasks";
+    private static final String API_PROCESS_COMPLETE_TASK_URL = "/api/process/complete-task";
+    private static final String API_PROCESS_DEPLOYED_PROCESSES_URL = "/api/process/deployed-processes";
+    private static final String API_PROCESS_FIND_TASK_URL = "/api/process/find-task";
+    private static final String API_PROCESS_START_TASK_URL = "/api/process/start-task";
     @Autowired
     private MockMvc mockMvc;
 
@@ -104,7 +110,7 @@ class WorkflowControllerTest {
         variables.put("processInstanceKey", "my-process");
         JSONObject jsonObject = new JSONObject(variables);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/process/start-task")
+        mockMvc.perform(MockMvcRequestBuilders.post(API_PROCESS_START_TASK_URL)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
@@ -124,7 +130,7 @@ class WorkflowControllerTest {
         given(taskQuery.list()).willReturn(tasks);
         JSONObject jsonObject = new JSONObject(assignee);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/process/find-task")
+        mockMvc.perform(MockMvcRequestBuilders.post(API_PROCESS_FIND_TASK_URL)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
@@ -144,7 +150,7 @@ class WorkflowControllerTest {
         given(taskQuery.taskId(taskId.get("taskId"))).willReturn(taskQuery);
         JSONObject jsonObject = new JSONObject(taskId);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/process/task")
+        mockMvc.perform(MockMvcRequestBuilders.post(API_PROCESS_TASK_URL)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
@@ -159,7 +165,7 @@ class WorkflowControllerTest {
         given(processEngine.getTaskService()).willReturn(taskService);
         given(taskService.createTaskQuery()).willReturn(taskQuery);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/process/tasks"))
+        mockMvc.perform(MockMvcRequestBuilders.get(API_PROCESS_TASKS_URL))
                 .andExpect(status().isOk());
 
         verify(processEngine).getTaskService();
@@ -173,7 +179,7 @@ class WorkflowControllerTest {
         given(processEngine.getTaskService()).willReturn(taskService);
         JSONObject jsonObject = new JSONObject(taskId);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/process/complete-task")
+        mockMvc.perform(MockMvcRequestBuilders.post(API_PROCESS_COMPLETE_TASK_URL)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
@@ -186,7 +192,7 @@ class WorkflowControllerTest {
         given(processEngine.getRepositoryService()).willReturn(repositoryService);
         given(repositoryService.createDeploymentQuery()).willReturn(deploymentQuery);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/process/deployed-processes"))
+        mockMvc.perform(MockMvcRequestBuilders.get(API_PROCESS_DEPLOYED_PROCESSES_URL))
                 .andExpect(status().isOk());
 
         verify(processEngine).getRepositoryService();
