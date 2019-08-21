@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "http://localhost:4200")
-@RestController
+@Controller
 @RequestMapping("/api/process")
 public class WorkflowController {
 
