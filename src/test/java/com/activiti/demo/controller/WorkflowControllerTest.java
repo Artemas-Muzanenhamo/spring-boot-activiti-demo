@@ -31,7 +31,9 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.*;
+import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -43,8 +45,10 @@ class WorkflowControllerTest {
     private static final String API_PROCESS_TASKS_URL = "/api/process/tasks";
     private static final String API_PROCESS_COMPLETE_TASK_URL = "/api/process/complete-task";
     private static final String API_PROCESS_DEPLOYED_PROCESSES_URL = "/api/process/deployed-processes";
+    private static final String API_PROCESS_DEPLOYED_PROCESSES_DELETE_URL = "/api/process/deployed-processes/delete";
     private static final String API_PROCESS_FIND_TASK_URL = "/api/process/find-task";
     private static final String API_PROCESS_START_TASK_URL = "/api/process/start-task";
+    private static final String DEPLOYMENT_ID = "34578";
     @Autowired
     private MockMvc mockMvc;
 
@@ -90,7 +94,7 @@ class WorkflowControllerTest {
         given(deploymentBuilder.deploy()).willReturn(deployment);
         JSONObject jsonObject = new JSONObject(processName);
 
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/process/deploy")
+        mockMvc.perform(post("/api/process/deploy")
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
@@ -114,7 +118,7 @@ class WorkflowControllerTest {
         variables.put("processInstanceKey", "my-process");
         JSONObject jsonObject = new JSONObject(variables);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(API_PROCESS_START_TASK_URL)
+        mockMvc.perform(post(API_PROCESS_START_TASK_URL)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
@@ -135,7 +139,7 @@ class WorkflowControllerTest {
         given(taskQuery.list()).willReturn(tasks);
         JSONObject jsonObject = new JSONObject(assignee);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(API_PROCESS_FIND_TASK_URL)
+        mockMvc.perform(post(API_PROCESS_FIND_TASK_URL)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
@@ -156,7 +160,7 @@ class WorkflowControllerTest {
         given(taskQuery.taskId(taskId.get("taskId"))).willReturn(taskQuery);
         JSONObject jsonObject = new JSONObject(taskId);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(API_PROCESS_TASK_URL)
+        mockMvc.perform(post(API_PROCESS_TASK_URL)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
@@ -172,7 +176,7 @@ class WorkflowControllerTest {
         given(processEngine.getTaskService()).willReturn(taskService);
         given(taskService.createTaskQuery()).willReturn(taskQuery);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(API_PROCESS_TASKS_URL))
+        mockMvc.perform(get(API_PROCESS_TASKS_URL))
                 .andExpect(status().isOk());
 
         verify(processEngine).getTaskService();
@@ -187,7 +191,7 @@ class WorkflowControllerTest {
         given(processEngine.getTaskService()).willReturn(taskService);
         JSONObject jsonObject = new JSONObject(taskId);
 
-        mockMvc.perform(MockMvcRequestBuilders.post(API_PROCESS_COMPLETE_TASK_URL)
+        mockMvc.perform(post(API_PROCESS_COMPLETE_TASK_URL)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
@@ -201,7 +205,7 @@ class WorkflowControllerTest {
         given(processEngine.getRepositoryService()).willReturn(repositoryService);
         given(repositoryService.createDeploymentQuery()).willReturn(deploymentQuery);
 
-        mockMvc.perform(MockMvcRequestBuilders.get(API_PROCESS_DEPLOYED_PROCESSES_URL))
+        mockMvc.perform(get(API_PROCESS_DEPLOYED_PROCESSES_URL))
                 .andExpect(status().isOk());
 
         verify(processEngine).getRepositoryService();
@@ -210,8 +214,14 @@ class WorkflowControllerTest {
 
     @Test
     @Disabled
-    @DisplayName("Should throw an exception when task object is null")
+    @DisplayName("Should delete a deployed process given a deployment Id")
     void testNullTaskObject() throws Exception {
-//        mockMvc.perform(MockMvcRequestBuilders.get())
+        Map<String, String> processId = Map.of("deploymentId", DEPLOYMENT_ID);
+        JSONObject deploymentIdJson = new JSONObject(processId);
+
+        mockMvc.perform(delete(API_PROCESS_DEPLOYED_PROCESSES_DELETE_URL)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(deploymentIdJson.toJSONString()))
+                .andExpect(status().isOk());
     }
 }

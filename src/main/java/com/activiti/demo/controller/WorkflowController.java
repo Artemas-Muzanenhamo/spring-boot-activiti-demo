@@ -17,7 +17,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -36,7 +38,7 @@ public class WorkflowController {
     }
 
     @PostMapping(value = "/deploy", produces = APPLICATION_JSON_VALUE)
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = OK)
     public void deploy(@RequestBody Map<String, String> processName) {
         Deployment deployment = processEngine.getRepositoryService()
                 .createDeployment()
@@ -47,7 +49,7 @@ public class WorkflowController {
         log.info("DEPLOYMENT NAME:" + deployment.getName());
     }
 
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = OK)
     @PostMapping(value = "/start-task", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public void start(@RequestBody Map<String, String> processInstanceKey) {
@@ -57,7 +59,7 @@ public class WorkflowController {
         log.info("PROCESS INSTANCE DEF ID:-->" + processInstance.getProcessDefinitionId());
     }
 
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = OK)
     @PostMapping(value = "/find-task", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<TaskObject> findTask(@RequestBody(required = true) Map<String, String> taskAssignee) {
@@ -70,7 +72,7 @@ public class WorkflowController {
                 .collect(Collectors.toList());
     }
 
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = OK)
     @PostMapping(value = "/task", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public TaskObject findTaskById(@RequestBody Map<String, String> taskId) {
@@ -82,7 +84,7 @@ public class WorkflowController {
                 .orElse(new TaskObject());
     }
 
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = OK)
     @GetMapping(value = "/tasks", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<TaskObject> getAllTasks() {
@@ -94,7 +96,7 @@ public class WorkflowController {
                 .collect(Collectors.toList());
     }
 
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = OK)
     @PostMapping(value = "/complete-task", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public void completeTask(@RequestBody Map<String, String> taskId) {
@@ -104,7 +106,7 @@ public class WorkflowController {
         log.info("DELETED TASKID: " + taskId.get("taskId"));
     }
 
-    @ResponseStatus(value = HttpStatus.OK)
+    @ResponseStatus(value = OK)
     @GetMapping(value = "/deployed-processes", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public List<DeploymentObject> getAllDeployedProcesses() {
@@ -112,6 +114,18 @@ public class WorkflowController {
                 .stream()
                 .map(this::createDeploymentObject)
                 .collect(Collectors.toList());
+    }
+
+    @ResponseStatus(value = OK)
+    @DeleteMapping(value = "/deployed-processes/delete", consumes = APPLICATION_JSON_VALUE)
+    @ResponseBody
+    public void deleteDeployedProcess(@RequestBody Map<String, String> deploymentId) {
+        log.info("ABOUT TO DELETE PROCESS: " + deploymentId.get("deploymentId"));
+        Stream.of(deploymentId.get("deploymentId"))
+                .mapToLong(Long::parseLong)
+                .findFirst()
+                .orElseThrow(NumberFormatException::new);
+        repositoryService.deleteDeployment(deploymentId.get("deploymentId"));
     }
 
     private DeploymentObject createDeploymentObject(Deployment deployment) {
