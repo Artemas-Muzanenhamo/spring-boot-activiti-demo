@@ -11,6 +11,8 @@ import org.activiti.engine.repository.DeploymentQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -77,7 +79,8 @@ class WorkflowControllerTest {
     private DeploymentQuery deploymentQuery;
 
     @Test
-    void deployTest() throws Exception {
+    @DisplayName("Should deploy a process given a process name")
+    void testDeployProcess() throws Exception {
         Map<String, String> processName = new HashMap<>();
         processName.put("processName", "say-hello-process");
         given(processEngine.getRepositoryService()).willReturn(repositoryService);
@@ -101,6 +104,7 @@ class WorkflowControllerTest {
     }
 
     @Test
+    @DisplayName("Should start a workflow given a processInstanceKey")
     void startWorkflowTest() throws Exception {
         Map<String, String> processInstanceKey = Map.of("processInstanceKey", "my-process");
         given(processEngine.getRuntimeService()).willReturn(runtimeService);
@@ -120,6 +124,7 @@ class WorkflowControllerTest {
     }
 
     @Test
+    @DisplayName("Should find a task given a task assignee")
     void findTask() throws Exception {
         Map<String, String> assignee = new HashMap<>();
         assignee.put("taskAssignee", "artemas");
@@ -142,6 +147,7 @@ class WorkflowControllerTest {
     }
 
     @Test
+    @DisplayName("Should find and retrieve a task given a task id")
     void findTaskById() throws Exception {
         Map<String, String> taskId = new HashMap<>();
         taskId.put("taskId", "1");
@@ -161,6 +167,7 @@ class WorkflowControllerTest {
     }
 
     @Test
+    @DisplayName("Should retrieve all tasks")
     void getAllTasks() throws Exception {
         given(processEngine.getTaskService()).willReturn(taskService);
         given(taskService.createTaskQuery()).willReturn(taskQuery);
@@ -173,6 +180,7 @@ class WorkflowControllerTest {
     }
 
     @Test
+    @DisplayName("Should complete a task given a task id")
     void completeTask() throws Exception {
         Map<String, String> taskId = new HashMap<>();
         taskId.put("taskId", "123");
@@ -188,6 +196,7 @@ class WorkflowControllerTest {
     }
 
     @Test
+    @DisplayName("Should get all deployed processes")
     void getAllDeployedProcesses() throws Exception {
         given(processEngine.getRepositoryService()).willReturn(repositoryService);
         given(repositoryService.createDeploymentQuery()).willReturn(deploymentQuery);
@@ -197,5 +206,12 @@ class WorkflowControllerTest {
 
         verify(processEngine).getRepositoryService();
         verify(repositoryService).createDeploymentQuery();
+    }
+
+    @Test
+    @Disabled
+    @DisplayName("Should throw an exception when task object is null")
+    void testNullTaskObject() throws Exception {
+//        mockMvc.perform(MockMvcRequestBuilders.get())
     }
 }
