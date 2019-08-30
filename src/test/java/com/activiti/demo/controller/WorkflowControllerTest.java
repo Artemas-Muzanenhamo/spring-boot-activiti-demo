@@ -247,4 +247,20 @@ class WorkflowControllerTest {
                 .andExpect(content().string("Deployment Id is not valid"));
 
     }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when trying to find a task id with an invalid id")
+    void testNullTaskId() throws Exception {
+        Map<String, String> taskId = new HashMap<>();
+        taskId.put("taskId", "some task id");
+        given(processEngine.getTaskService()).willReturn(taskService);
+        given(taskService.createTaskQuery()).willReturn(taskQuery);
+        given(taskQuery.taskId(taskId.get("taskId"))).willReturn(taskQuery);
+        JSONObject jsonObject = new JSONObject(taskId);
+
+        mockMvc.perform(post(API_PROCESS_TASK_URL)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest());
+    }
 }
