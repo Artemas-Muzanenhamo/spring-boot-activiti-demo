@@ -34,6 +34,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -224,7 +225,26 @@ class WorkflowControllerTest {
                 .andExpect(status().isOk());
     }
 
-    void testNullTaskObject() {
+    @Test
+    @DisplayName("Should throw a content bad request exception when no content trying to find task")
+    void testNullTaskObject() throws Exception {
+        mockMvc.perform(post(API_PROCESS_FIND_TASK_URL)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when deployment id is not a number")
+    void testNullDeploymentIDValue() throws Exception {
+        Map<String, String> processId = Map.of("deploymentId", "some deployment id");
+        JSONObject deploymentIdJson = new JSONObject(processId);
+
+        mockMvc.perform(delete(API_PROCESS_DEPLOYED_PROCESSES_DELETE_URL)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(deploymentIdJson.toJSONString()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Deployment Id is not valid"));
 
     }
 }
