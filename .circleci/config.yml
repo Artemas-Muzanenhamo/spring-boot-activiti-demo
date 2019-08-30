@@ -39,6 +39,8 @@ workflows:
               paths:
                 - ~/.gradle
               key: v1-dependencies-{{ checksum "build.gradle" }}
-
-          # run tests!
-          - run: gradle test -Dspring.profiles.active=development
+      - test1:
+          - requires:
+              build:
+                # run tests!
+                - run: gradle test -Dspring.profiles.active=development
