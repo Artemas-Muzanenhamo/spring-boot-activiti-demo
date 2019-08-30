@@ -213,9 +213,8 @@ class WorkflowControllerTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("Should delete a deployed process given a deployment Id")
-    void testNullTaskObject() throws Exception {
+    void testDeleteDeployedProcess() throws Exception {
         Map<String, String> processId = Map.of("deploymentId", DEPLOYMENT_ID);
         JSONObject deploymentIdJson = new JSONObject(processId);
 
@@ -223,5 +222,9 @@ class WorkflowControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(deploymentIdJson.toJSONString()))
                 .andExpect(status().isOk());
+    }
+
+    void testNullTaskObject() {
+
     }
 }

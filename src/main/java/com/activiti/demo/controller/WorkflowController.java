@@ -10,7 +10,6 @@ import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,7 +61,7 @@ public class WorkflowController {
     @ResponseStatus(value = OK)
     @PostMapping(value = "/find-task", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<TaskObject> findTask(@RequestBody(required = true) Map<String, String> taskAssignee) {
+    public List<TaskObject> findTask(@RequestBody() Map<String, String> taskAssignee) {
         return processEngine.getTaskService()
                 .createTaskQuery()
                 .taskAssignee(taskAssignee.get("taskAssignee"))
