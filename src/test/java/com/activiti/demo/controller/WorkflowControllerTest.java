@@ -258,6 +258,7 @@ class WorkflowControllerTest {
         mockMvc.perform(post(API_PROCESS_TASK_URL)
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Task Id is not valid"));
     }
 }

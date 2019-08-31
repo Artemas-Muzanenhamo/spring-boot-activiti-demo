@@ -1,5 +1,6 @@
 package com.activiti.demo.controller;
 
+import com.activiti.demo.InvalidTaskIdException;
 import com.activiti.demo.model.DeploymentObject;
 import com.activiti.demo.model.TaskObject;
 import org.activiti.engine.ProcessEngine;
@@ -88,7 +89,7 @@ public class WorkflowController {
         try {
             Long.valueOf(taskId.get("taskId"));
         } catch (NumberFormatException e) {
-            throw new NumberFormatException("Task Id is not valid");
+            throw new InvalidTaskIdException("Task Id is not valid");
         }
     }
 

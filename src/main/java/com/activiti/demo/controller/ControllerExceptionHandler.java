@@ -1,5 +1,6 @@
 package com.activiti.demo.controller;
 
+import com.activiti.demo.InvalidTaskIdException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -17,6 +18,12 @@ public class ControllerExceptionHandler {
     public ResponseEntity<String> invalidParametersException(NumberFormatException e) {
         logger.error(e.getMessage(), e);
         return new ResponseEntity<>("Deployment Id is not valid", BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidTaskIdException.class)
+    public ResponseEntity<String> invalidParametersException(InvalidTaskIdException e) {
+        logger.error(e.getMessage(), e);
+        return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
     }
 
 }
