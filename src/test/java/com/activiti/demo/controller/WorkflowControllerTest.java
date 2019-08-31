@@ -34,6 +34,7 @@ import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.*;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @ExtendWith(SpringExtension.class)
@@ -213,9 +214,8 @@ class WorkflowControllerTest {
     }
 
     @Test
-    @Disabled
     @DisplayName("Should delete a deployed process given a deployment Id")
-    void testNullTaskObject() throws Exception {
+    void testDeleteDeployedProcess() throws Exception {
         Map<String, String> processId = Map.of("deploymentId", DEPLOYMENT_ID);
         JSONObject deploymentIdJson = new JSONObject(processId);
 
@@ -223,5 +223,42 @@ class WorkflowControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_VALUE)
                 .content(deploymentIdJson.toJSONString()))
                 .andExpect(status().isOk());
+    }
+
+    @Test
+    @DisplayName("Should throw a content bad request exception when no content trying to find task")
+    void testNullTaskObject() throws Exception {
+        mockMvc.perform(post(API_PROCESS_FIND_TASK_URL)
+                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .andExpect(status().isBadRequest());
+
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when deployment id is not a number")
+    void testNullDeploymentIDValue() throws Exception {
+        Map<String, String> processId = Map.of("deploymentId", "some deployment id");
+        JSONObject deploymentIdJson = new JSONObject(processId);
+
+        mockMvc.perform(delete(API_PROCESS_DEPLOYED_PROCESSES_DELETE_URL)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(deploymentIdJson.toJSONString()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Deployment Id is not valid"));
+
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when trying to find a task id with an invalid id")
+    void testNullTaskId() throws Exception {
+        Map<String, String> taskId = new HashMap<>();
+        taskId.put("taskId", "some task id");
+        JSONObject jsonObject = new JSONObject(taskId);
+
+        mockMvc.perform(post(API_PROCESS_TASK_URL)
+                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Task Id is not valid"));
     }
 }

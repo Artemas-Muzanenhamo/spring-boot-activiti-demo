@@ -40,3 +40,11 @@ jobs:
 
       # run tests!
       - run: gradle test -Dspring.profiles.active=development
+
+# WORKFLOW
+workflows:
+  version: 2
+
+  my_workflow:
+    jobs:
+      - build

@@ -1,5 +1,6 @@
 package com.activiti.demo.controller;
 
+import com.activiti.demo.InvalidTaskIdException;
 import com.activiti.demo.model.DeploymentObject;
 import com.activiti.demo.model.TaskObject;
 import org.activiti.engine.ProcessEngine;
@@ -10,7 +11,6 @@ import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
@@ -62,7 +62,7 @@ public class WorkflowController {
     @ResponseStatus(value = OK)
     @PostMapping(value = "/find-task", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
-    public List<TaskObject> findTask(@RequestBody(required = true) Map<String, String> taskAssignee) {
+    public List<TaskObject> findTask(@RequestBody() Map<String, String> taskAssignee) {
         return processEngine.getTaskService()
                 .createTaskQuery()
                 .taskAssignee(taskAssignee.get("taskAssignee"))
@@ -76,6 +76,7 @@ public class WorkflowController {
     @PostMapping(value = "/task", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public TaskObject findTaskById(@RequestBody Map<String, String> taskId) {
+        validateTaskIdIsNumeric(taskId);
         return processEngine.getTaskService().createTaskQuery()
                 .taskId(taskId.get("taskId")).list()
                 .stream()
@@ -139,6 +140,14 @@ public class WorkflowController {
                 task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
                 task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
                 task.getDelegationState());
+    }
+
+    private void validateTaskIdIsNumeric(Map<String, String> taskId) {
+        try {
+            Long.valueOf(taskId.get("taskId"));
+        } catch (NumberFormatException e) {
+            throw new InvalidTaskIdException("Task Id is not valid");
+        }
     }
 
 }
