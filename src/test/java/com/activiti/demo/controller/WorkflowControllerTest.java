@@ -253,9 +253,6 @@ class WorkflowControllerTest {
     void testNullTaskId() throws Exception {
         Map<String, String> taskId = new HashMap<>();
         taskId.put("taskId", "some task id");
-        given(processEngine.getTaskService()).willReturn(taskService);
-        given(taskService.createTaskQuery()).willReturn(taskQuery);
-        given(taskQuery.taskId(taskId.get("taskId"))).willReturn(taskQuery);
         JSONObject jsonObject = new JSONObject(taskId);
 
         mockMvc.perform(post(API_PROCESS_TASK_URL)

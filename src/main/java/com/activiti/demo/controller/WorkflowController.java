@@ -75,12 +75,21 @@ public class WorkflowController {
     @PostMapping(value = "/task", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
     public TaskObject findTaskById(@RequestBody Map<String, String> taskId) {
+        validateTaskIdIsNumeric(taskId);
         return processEngine.getTaskService().createTaskQuery()
                 .taskId(taskId.get("taskId")).list()
                 .stream()
                 .map(this::createTaskObject)
                 .findFirst()
                 .orElse(new TaskObject());
+    }
+
+    private void validateTaskIdIsNumeric(Map<String, String> taskId) {
+        try {
+            Long.valueOf(taskId.get("taskId"));
+        } catch (NumberFormatException e) {
+            throw new NumberFormatException("Task Id is not valid");
+        }
     }
 
     @ResponseStatus(value = OK)
