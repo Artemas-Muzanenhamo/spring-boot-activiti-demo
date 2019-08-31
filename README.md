@@ -2,6 +2,7 @@
 
 [![CircleCI](https://circleci.com/gh/Artemas-Muzanenhamo/spring-boot-activiti-demo/tree/develop.svg?style=svg)](https://circleci.com/gh/Artemas-Muzanenhamo/spring-boot-activiti-demo/tree/develop)
 [![Build Status](https://travis-ci.org/Artemas-Muzanenhamo/spring-boot-activiti-demo.svg?branch=develop)](https://travis-ci.org/Artemas-Muzanenhamo/spring-boot-activiti-demo)
+![Docker Pulls](https://img.shields.io/docker/pulls/artemas/activiti-demo?style=for-the-badge)
 
 ## About
 
@@ -26,3 +27,5 @@ Url | Request | Req. Body | Description
  `localhost:8080/find-task` | **POST** | Task Assignee **String** | `Returns a List of Tasks given an Assignee.`
  `localhost:8080/complete-task` | **POST** | Task Id **String** | `Completes a task passing a Task Id.`
  `localhost:8080/tasks` | **GET** | | `Returns a List of All the Tasks.`
+ `localhost:8080/deployed-processes` | **GET** | | `Returns a List of all deployed processes.`
+ `localhost:8080/deployed-processes/delete` | **DELETE** | Deployment Id: **String**| `Deletes a deployed processes given a valid/existing deployment id.`
