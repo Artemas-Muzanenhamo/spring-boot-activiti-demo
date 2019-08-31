@@ -85,14 +85,6 @@ public class WorkflowController {
                 .orElse(new TaskObject());
     }
 
-    private void validateTaskIdIsNumeric(Map<String, String> taskId) {
-        try {
-            Long.valueOf(taskId.get("taskId"));
-        } catch (NumberFormatException e) {
-            throw new InvalidTaskIdException("Task Id is not valid");
-        }
-    }
-
     @ResponseStatus(value = OK)
     @GetMapping(value = "/tasks", produces = APPLICATION_JSON_VALUE)
     @ResponseBody
@@ -148,6 +140,14 @@ public class WorkflowController {
                 task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
                 task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
                 task.getDelegationState());
+    }
+
+    private void validateTaskIdIsNumeric(Map<String, String> taskId) {
+        try {
+            Long.valueOf(taskId.get("taskId"));
+        } catch (NumberFormatException e) {
+            throw new InvalidTaskIdException("Task Id is not valid");
+        }
     }
 
 }
