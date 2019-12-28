@@ -2,10 +2,7 @@ package com.activiti.demo.web;
 
 import com.activiti.demo.InvalidTaskIdException;
 import com.activiti.demo.json.*;
-import com.activiti.demo.model.DeploymentObject;
-import com.activiti.demo.model.ProcessInstanceKey;
-import com.activiti.demo.model.TaskId;
-import com.activiti.demo.model.TaskObject;
+import com.activiti.demo.model.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
@@ -20,6 +17,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import static com.activiti.demo.converter.ProcessInstanceKeyConverter.processInstanceKeyJsonToDto;
+import static com.activiti.demo.converter.ProcessNameConverter.processNameJsonToDto;
 import static com.activiti.demo.converter.TaskIdConverter.taskIdJsonToDto;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
@@ -42,10 +40,11 @@ public class WorkflowController {
     @PostMapping(value = "/deploy", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(value = OK)
     public void deploy(@RequestBody ProcessNameJson processNameJson) {
+        ProcessName processName = processNameJsonToDto(processNameJson);
         Deployment deployment = processEngine.getRepositoryService()
                 .createDeployment()
                 .addClasspathResource("processes/my-process.bpmn20.xml")
-                .name(processNameJson.getProcessName())
+                .name(processName.getProcessName())
                 .deploy();
         log.info("DEPLOYMENT ID:" + deployment.getId());
         log.info("DEPLOYMENT NAME:" + deployment.getName());
