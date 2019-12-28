@@ -1,8 +1,5 @@
 package com.activiti.demo.json;
 
-import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
-
-@JsonDeserialize
 public class ProcessNameJson {
     private String processName;
 

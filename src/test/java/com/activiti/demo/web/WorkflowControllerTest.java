@@ -1,6 +1,5 @@
 package com.activiti.demo.web;
 
-import com.activiti.demo.service.WorkflowService;
 import net.minidev.json.JSONObject;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
@@ -51,8 +50,6 @@ class WorkflowControllerTest {
     private static final String DEPLOYMENT_ID = "34578";
     @Autowired
     private MockMvc mockMvc;
-    @MockBean
-    private WorkflowService workflowService;
     @MockBean
     private ProcessEngine processEngine;
     @MockBean

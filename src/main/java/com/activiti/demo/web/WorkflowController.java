@@ -1,6 +1,7 @@
 package com.activiti.demo.web;
 
 import com.activiti.demo.InvalidTaskIdException;
+import com.activiti.demo.json.ProcessInstanceKeyJson;
 import com.activiti.demo.json.ProcessNameJson;
 import com.activiti.demo.model.DeploymentObject;
 import com.activiti.demo.model.TaskObject;
@@ -12,7 +13,6 @@ import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -22,10 +22,9 @@ import java.util.stream.Stream;
 
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "http://localhost:4200")
-@Controller
+@RestController
 @RequestMapping("/api/process")
 public class WorkflowController {
 
@@ -52,19 +51,19 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = OK)
-    @PostMapping(value = "/start-task", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/start-task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public void start(@RequestBody Map<String, String> processInstanceKey) {
+    public void start(@RequestBody ProcessInstanceKeyJson processInstanceKeyJson) {
         ProcessInstance processInstance = processEngine.getRuntimeService()
-                .startProcessInstanceByKey(processInstanceKey.get("processInstanceKey"));
+                .startProcessInstanceByKey(processInstanceKeyJson.getProcessInstanceKey());
         log.info("PROCESS INSTANCE ID:-->" + processInstance.getId());
         log.info("PROCESS INSTANCE DEF ID:-->" + processInstance.getProcessDefinitionId());
     }
 
     @ResponseStatus(value = OK)
-    @PostMapping(value = "/find-task", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/find-task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public List<TaskObject> findTask(@RequestBody() Map<String, String> taskAssignee) {
+    public List<TaskObject> findTask(@RequestBody Map<String, String> taskAssignee) {
         return processEngine.getTaskService()
                 .createTaskQuery()
                 .taskAssignee(taskAssignee.get("taskAssignee"))
@@ -75,7 +74,7 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = OK)
-    @PostMapping(value = "/task", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public TaskObject findTaskById(@RequestBody Map<String, String> taskId) {
         validateTaskIdIsNumeric(taskId);
@@ -88,7 +87,7 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = OK)
-    @GetMapping(value = "/tasks", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/tasks", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public List<TaskObject> getAllTasks() {
         return processEngine.getTaskService()
@@ -100,7 +99,7 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = OK)
-    @PostMapping(value = "/complete-task", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/complete-task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public void completeTask(@RequestBody Map<String, String> taskId) {
         log.info("ABOUT TO DELETE TASKID: " + taskId.get("taskId"));
@@ -110,7 +109,7 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = OK)
-    @GetMapping(value = "/deployed-processes", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/deployed-processes", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public List<DeploymentObject> getAllDeployedProcesses() {
         return processEngine.getRepositoryService().createDeploymentQuery().list()
@@ -120,7 +119,7 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = OK)
-    @DeleteMapping(value = "/deployed-processes/delete", consumes = APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/deployed-processes/delete", consumes = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public void deleteDeployedProcess(@RequestBody Map<String, String> deploymentId) {
         log.info("ABOUT TO DELETE PROCESS: " + deploymentId.get("deploymentId"));
