@@ -19,7 +19,6 @@ import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
-import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
@@ -31,6 +30,8 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -78,15 +79,16 @@ class WorkflowControllerTest {
     void testDeployProcess() throws Exception {
         Map<String, String> processName = new HashMap<>();
         processName.put("processName", "say-hello-process");
+        JSONObject jsonObject = new JSONObject(processName);
         given(processEngine.getRepositoryService()).willReturn(repositoryService);
         given(repositoryService.createDeployment()).willReturn(deploymentBuilder);
         given(deploymentBuilder.addClasspathResource(anyString())).willReturn(deploymentBuilder);
         given(deploymentBuilder.name(anyString())).willReturn(deploymentBuilder);
         given(deploymentBuilder.deploy()).willReturn(deployment);
-        JSONObject jsonObject = new JSONObject(processName);
 
         mockMvc.perform(post("/api/process/deploy")
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .accept(APPLICATION_JSON_UTF8_VALUE)
+                .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
 
@@ -110,7 +112,7 @@ class WorkflowControllerTest {
         JSONObject jsonObject = new JSONObject(variables);
 
         mockMvc.perform(post(API_PROCESS_START_TASK_URL)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
 
@@ -131,7 +133,7 @@ class WorkflowControllerTest {
         JSONObject jsonObject = new JSONObject(assignee);
 
         mockMvc.perform(post(API_PROCESS_FIND_TASK_URL)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
 
@@ -152,7 +154,7 @@ class WorkflowControllerTest {
         JSONObject jsonObject = new JSONObject(taskId);
 
         mockMvc.perform(post(API_PROCESS_TASK_URL)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
 
@@ -183,7 +185,7 @@ class WorkflowControllerTest {
         JSONObject jsonObject = new JSONObject(taskId);
 
         mockMvc.perform(post(API_PROCESS_COMPLETE_TASK_URL)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
 
@@ -210,7 +212,7 @@ class WorkflowControllerTest {
         JSONObject deploymentIdJson = new JSONObject(processId);
 
         mockMvc.perform(delete(API_PROCESS_DEPLOYED_PROCESSES_DELETE_URL)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .content(deploymentIdJson.toJSONString()))
                 .andExpect(status().isOk());
     }
@@ -219,7 +221,7 @@ class WorkflowControllerTest {
     @DisplayName("Should throw a content bad request exception when no content trying to find task")
     void testNullTaskObject() throws Exception {
         mockMvc.perform(post(API_PROCESS_FIND_TASK_URL)
-                .contentType(MediaType.APPLICATION_JSON_VALUE))
+                .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
 
     }
@@ -231,7 +233,7 @@ class WorkflowControllerTest {
         JSONObject deploymentIdJson = new JSONObject(processId);
 
         mockMvc.perform(delete(API_PROCESS_DEPLOYED_PROCESSES_DELETE_URL)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .content(deploymentIdJson.toJSONString()))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Deployment Id is not valid"));
@@ -246,7 +248,7 @@ class WorkflowControllerTest {
         JSONObject jsonObject = new JSONObject(taskId);
 
         mockMvc.perform(post(API_PROCESS_TASK_URL)
-                .contentType(MediaType.APPLICATION_JSON_VALUE)
+                .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Task Id is not valid"));

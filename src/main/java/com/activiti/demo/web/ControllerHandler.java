@@ -10,9 +10,9 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import static org.springframework.http.HttpStatus.BAD_REQUEST;
 
 @ControllerAdvice
-public class ControllerExceptionHandler {
+public class ControllerHandler {
 
-    private static final Logger logger = LoggerFactory.getLogger(ControllerExceptionHandler.class);
+    private static final Logger logger = LoggerFactory.getLogger(ControllerHandler.class);
 
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<String> invalidParametersException(NumberFormatException e) {

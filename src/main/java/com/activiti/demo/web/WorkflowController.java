@@ -1,6 +1,7 @@
 package com.activiti.demo.web;
 
 import com.activiti.demo.InvalidTaskIdException;
+import com.activiti.demo.json.ProcessNameJson;
 import com.activiti.demo.model.DeploymentObject;
 import com.activiti.demo.model.TaskObject;
 import org.activiti.engine.ProcessEngine;
@@ -20,6 +21,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @CrossOrigin(origins = "http://localhost:4200")
@@ -37,13 +39,13 @@ public class WorkflowController {
         this.repositoryService = repositoryService;
     }
 
-    @PostMapping(value = "/deploy", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/deploy", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(value = OK)
-    public void deploy(@RequestBody Map<String, String> processName) {
+    public void deploy(@RequestBody ProcessNameJson processNameJson) {
         Deployment deployment = processEngine.getRepositoryService()
                 .createDeployment()
                 .addClasspathResource("processes/my-process.bpmn20.xml")
-                .name(processName.get("processName"))
+                .name(processNameJson.getProcessName())
                 .deploy();
         log.info("DEPLOYMENT ID:" + deployment.getId());
         log.info("DEPLOYMENT NAME:" + deployment.getName());
