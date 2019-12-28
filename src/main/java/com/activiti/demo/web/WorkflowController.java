@@ -1,10 +1,7 @@
 package com.activiti.demo.web;
 
 import com.activiti.demo.InvalidTaskIdException;
-import com.activiti.demo.json.ProcessInstanceKeyJson;
-import com.activiti.demo.json.ProcessNameJson;
-import com.activiti.demo.json.TaskAssigneeJson;
-import com.activiti.demo.json.TaskIdJson;
+import com.activiti.demo.json.*;
 import com.activiti.demo.model.DeploymentObject;
 import com.activiti.demo.model.TaskObject;
 import org.activiti.engine.ProcessEngine;
@@ -18,9 +15,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
@@ -123,13 +118,9 @@ public class WorkflowController {
     @ResponseStatus(value = OK)
     @DeleteMapping(value = "/deployed-processes/delete", consumes = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public void deleteDeployedProcess(@RequestBody Map<String, String> deploymentId) {
-        log.info("ABOUT TO DELETE PROCESS: " + deploymentId.get("deploymentId"));
-        Stream.of(deploymentId.get("deploymentId"))
-                .mapToLong(Long::parseLong)
-                .findFirst()
-                .orElseThrow(NumberFormatException::new);
-        repositoryService.deleteDeployment(deploymentId.get("deploymentId"));
+    public void deleteDeployedProcess(@RequestBody DeploymentIdJson deploymentIdJson) {
+        log.info("ABOUT TO DELETE PROCESS: " + deploymentIdJson.getDeploymentId());
+        repositoryService.deleteDeployment(deploymentIdJson.getDeploymentId());
     }
 
     private DeploymentObject createDeploymentObject(Deployment deployment) {
