@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.activiti.demo.converter.DeploymentIdConverter.deploymentIdJsonToDto;
 import static com.activiti.demo.converter.ProcessInstanceKeyConverter.processInstanceKeyJsonToDto;
 import static com.activiti.demo.converter.ProcessNameConverter.processNameJsonToDto;
 import static com.activiti.demo.converter.TaskAssigneeConverter.taskAssigneeJsonToDto;
@@ -128,9 +129,10 @@ public class WorkflowController {
     @DeleteMapping(value = "/deployed-processes/delete", consumes = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public void deleteDeployedProcess(@RequestBody DeploymentIdJson deploymentIdJson) {
-        log.info("ABOUT TO DELETE PROCESS: " + deploymentIdJson.getDeploymentId());
-        validateDeploymentIdIsNumeric(deploymentIdJson);
-        repositoryService.deleteDeployment(deploymentIdJson.getDeploymentId());
+        DeploymentId deploymentId = deploymentIdJsonToDto(deploymentIdJson);
+        log.info("ABOUT TO DELETE PROCESS: " + deploymentId.getDeploymentId());
+        validateDeploymentIdIsNumeric(deploymentId);
+        repositoryService.deleteDeployment(deploymentId.getDeploymentId());
     }
 
     private DeploymentObject createDeploymentObject(Deployment deployment) {
@@ -154,7 +156,7 @@ public class WorkflowController {
         }
     }
 
-    private void validateDeploymentIdIsNumeric(DeploymentIdJson json) {
+    private void validateDeploymentIdIsNumeric(DeploymentId json) {
         try {
             Long.valueOf(json.getDeploymentId());
         } catch (NumberFormatException e) {
