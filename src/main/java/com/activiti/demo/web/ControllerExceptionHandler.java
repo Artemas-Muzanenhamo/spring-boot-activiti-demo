@@ -1,4 +1,4 @@
-package com.activiti.demo.controller;
+package com.activiti.demo.web;
 
 import com.activiti.demo.InvalidTaskIdException;
 import org.slf4j.Logger;

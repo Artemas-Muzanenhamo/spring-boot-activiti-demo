@@ -1,5 +1,6 @@
-package com.activiti.demo.controller;
+package com.activiti.demo.web;
 
+import com.activiti.demo.service.WorkflowService;
 import net.minidev.json.JSONObject;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
@@ -11,7 +12,6 @@ import org.activiti.engine.repository.DeploymentQuery;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -23,7 +23,6 @@ import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 
 import java.util.HashMap;
 import java.util.List;
@@ -31,8 +30,7 @@ import java.util.Map;
 
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.*;
-import static org.springframework.http.HttpStatus.OK;
+import static org.mockito.Mockito.verify;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -52,34 +50,26 @@ class WorkflowControllerTest {
     private static final String DEPLOYMENT_ID = "34578";
     @Autowired
     private MockMvc mockMvc;
-
+    @MockBean
+    private WorkflowService workflowService;
     @MockBean
     private ProcessEngine processEngine;
-
     @MockBean
     private RepositoryService repositoryService;
-
     @Mock
     private RuntimeService runtimeService;
-
     @Mock
     private TaskService taskService;
-
     @Mock
     private ProcessInstance processInstance;
-
     @Mock
     private TaskQuery taskQuery;
-
     @Mock
     private Task task;
-
     @Mock
     private DeploymentBuilder deploymentBuilder;
-
     @Mock
     private Deployment deployment;
-
     @Mock
     private DeploymentQuery deploymentQuery;
 
