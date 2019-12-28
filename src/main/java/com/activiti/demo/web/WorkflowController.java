@@ -103,8 +103,10 @@ public class WorkflowController {
     @ResponseBody
     public void completeTask(@RequestBody TaskIdJson taskIdJson) {
         log.info("ABOUT TO DELETE TASKID: " + taskIdJson.getTaskId());
+        TaskId taskId = taskIdJsonToDto(taskIdJson);
+        validateTaskIdIsNumeric(taskId);
         processEngine.getTaskService()
-                .complete(taskIdJson.getTaskId());
+                .complete(taskId.getTaskId());
         log.info("DELETED TASKID: " + taskIdJson.getTaskId());
     }
 
