@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 
 import static com.activiti.demo.converter.ProcessInstanceKeyConverter.processInstanceKeyJsonToDto;
 import static com.activiti.demo.converter.ProcessNameConverter.processNameJsonToDto;
+import static com.activiti.demo.converter.TaskAssigneeConverter.taskAssigneeJsonToDto;
 import static com.activiti.demo.converter.TaskIdConverter.taskIdJsonToDto;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
@@ -65,9 +66,10 @@ public class WorkflowController {
     @PostMapping(value = "/find-task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public List<TaskObject> findTask(@RequestBody TaskAssigneeJson taskAssigneeJson) {
+        TaskAssignee taskAssignee = taskAssigneeJsonToDto(taskAssigneeJson);
         return processEngine.getTaskService()
                 .createTaskQuery()
-                .taskAssignee(taskAssigneeJson.getTaskAssignee())
+                .taskAssignee(taskAssignee.getTaskAssignee())
                 .list()
                 .stream()
                 .map(this::createTaskObject)
