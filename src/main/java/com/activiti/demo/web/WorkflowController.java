@@ -3,6 +3,7 @@ package com.activiti.demo.web;
 import com.activiti.demo.InvalidTaskIdException;
 import com.activiti.demo.json.*;
 import com.activiti.demo.model.DeploymentObject;
+import com.activiti.demo.model.TaskId;
 import com.activiti.demo.model.TaskObject;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
@@ -17,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.activiti.demo.converter.TaskIdConverter.taskIdJsonToDto;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
@@ -74,9 +76,10 @@ public class WorkflowController {
     @PostMapping(value = "/task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public TaskObject findTaskById(@RequestBody TaskIdJson taskIdJson) {
-        validateTaskIdIsNumeric(taskIdJson);
+        TaskId taskId = taskIdJsonToDto(taskIdJson);
+        validateTaskIdIsNumeric(taskId);
         return processEngine.getTaskService().createTaskQuery()
-                .taskId(taskIdJson.getTaskId()).list()
+                .taskId(taskId.getTaskId()).list()
                 .stream()
                 .map(this::createTaskObject)
                 .findFirst()
@@ -137,7 +140,7 @@ public class WorkflowController {
                 task.getDelegationState());
     }
 
-    private void validateTaskIdIsNumeric(TaskIdJson taskId) {
+    private void validateTaskIdIsNumeric(TaskId taskId) {
         try {
             Long.valueOf(taskId.getTaskId());
         } catch (NumberFormatException e) {
