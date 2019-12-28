@@ -3,6 +3,7 @@ package com.activiti.demo.web;
 import com.activiti.demo.InvalidTaskIdException;
 import com.activiti.demo.json.ProcessInstanceKeyJson;
 import com.activiti.demo.json.ProcessNameJson;
+import com.activiti.demo.json.TaskAssigneeJson;
 import com.activiti.demo.model.DeploymentObject;
 import com.activiti.demo.model.TaskObject;
 import org.activiti.engine.ProcessEngine;
@@ -63,10 +64,10 @@ public class WorkflowController {
     @ResponseStatus(value = OK)
     @PostMapping(value = "/find-task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public List<TaskObject> findTask(@RequestBody Map<String, String> taskAssignee) {
+    public List<TaskObject> findTask(@RequestBody TaskAssigneeJson taskAssigneeJson) {
         return processEngine.getTaskService()
                 .createTaskQuery()
-                .taskAssignee(taskAssignee.get("taskAssignee"))
+                .taskAssignee(taskAssigneeJson.getTaskAssignee())
                 .list()
                 .stream()
                 .map(this::createTaskObject)
