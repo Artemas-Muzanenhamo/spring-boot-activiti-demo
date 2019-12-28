@@ -120,6 +120,7 @@ public class WorkflowController {
     @ResponseBody
     public void deleteDeployedProcess(@RequestBody DeploymentIdJson deploymentIdJson) {
         log.info("ABOUT TO DELETE PROCESS: " + deploymentIdJson.getDeploymentId());
+        validateDeploymentIdIsNumeric(deploymentIdJson);
         repositoryService.deleteDeployment(deploymentIdJson.getDeploymentId());
     }
 
@@ -144,4 +145,11 @@ public class WorkflowController {
         }
     }
 
+    private void validateDeploymentIdIsNumeric(DeploymentIdJson json) {
+        try {
+            Long.valueOf(json.getDeploymentId());
+        } catch (NumberFormatException e) {
+            throw new InvalidTaskIdException("Deployment Id is not valid");
+        }
+    }
 }
