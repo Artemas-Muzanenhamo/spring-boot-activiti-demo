@@ -1,8 +1,8 @@
-package com.activiti.demo.controller;
+package com.activiti.demo.web;
 
 import com.activiti.demo.InvalidTaskIdException;
-import com.activiti.demo.model.DeploymentObject;
-import com.activiti.demo.model.TaskObject;
+import com.activiti.demo.json.*;
+import com.activiti.demo.model.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
@@ -11,19 +11,21 @@ import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
+import static com.activiti.demo.converter.DeploymentIdConverter.deploymentIdJsonToDto;
+import static com.activiti.demo.converter.ProcessInstanceKeyConverter.processInstanceKeyJsonToDto;
+import static com.activiti.demo.converter.ProcessNameConverter.processNameJsonToDto;
+import static com.activiti.demo.converter.TaskAssigneeConverter.taskAssigneeJsonToDto;
+import static com.activiti.demo.converter.TaskIdConverter.taskIdJsonToDto;
 import static org.springframework.http.HttpStatus.OK;
-import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
+import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 
 @CrossOrigin(origins = "http://localhost:4200")
-@Controller
+@RestController
 @RequestMapping("/api/process")
 public class WorkflowController {
 
@@ -37,35 +39,38 @@ public class WorkflowController {
         this.repositoryService = repositoryService;
     }
 
-    @PostMapping(value = "/deploy", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/deploy", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(value = OK)
-    public void deploy(@RequestBody Map<String, String> processName) {
+    public void deploy(@RequestBody ProcessNameJson processNameJson) {
+        ProcessName processName = processNameJsonToDto(processNameJson);
         Deployment deployment = processEngine.getRepositoryService()
                 .createDeployment()
                 .addClasspathResource("processes/my-process.bpmn20.xml")
-                .name(processName.get("processName"))
+                .name(processName.getProcessName())
                 .deploy();
         log.info("DEPLOYMENT ID:" + deployment.getId());
         log.info("DEPLOYMENT NAME:" + deployment.getName());
     }
 
     @ResponseStatus(value = OK)
-    @PostMapping(value = "/start-task", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/start-task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public void start(@RequestBody Map<String, String> processInstanceKey) {
+    public void start(@RequestBody ProcessInstanceKeyJson processInstanceKeyJson) {
+        ProcessInstanceKey processInstanceKey = processInstanceKeyJsonToDto(processInstanceKeyJson);
         ProcessInstance processInstance = processEngine.getRuntimeService()
-                .startProcessInstanceByKey(processInstanceKey.get("processInstanceKey"));
+                .startProcessInstanceByKey(processInstanceKey.getProcessInstanceKey());
         log.info("PROCESS INSTANCE ID:-->" + processInstance.getId());
         log.info("PROCESS INSTANCE DEF ID:-->" + processInstance.getProcessDefinitionId());
     }
 
     @ResponseStatus(value = OK)
-    @PostMapping(value = "/find-task", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/find-task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public List<TaskObject> findTask(@RequestBody() Map<String, String> taskAssignee) {
+    public List<TaskObject> findTask(@RequestBody TaskAssigneeJson taskAssigneeJson) {
+        TaskAssignee taskAssignee = taskAssigneeJsonToDto(taskAssigneeJson);
         return processEngine.getTaskService()
                 .createTaskQuery()
-                .taskAssignee(taskAssignee.get("taskAssignee"))
+                .taskAssignee(taskAssignee.getTaskAssignee())
                 .list()
                 .stream()
                 .map(this::createTaskObject)
@@ -73,12 +78,13 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = OK)
-    @PostMapping(value = "/task", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public TaskObject findTaskById(@RequestBody Map<String, String> taskId) {
+    public TaskObject findTaskById(@RequestBody TaskIdJson taskIdJson) {
+        TaskId taskId = taskIdJsonToDto(taskIdJson);
         validateTaskIdIsNumeric(taskId);
         return processEngine.getTaskService().createTaskQuery()
-                .taskId(taskId.get("taskId")).list()
+                .taskId(taskId.getTaskId()).list()
                 .stream()
                 .map(this::createTaskObject)
                 .findFirst()
@@ -86,7 +92,7 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = OK)
-    @GetMapping(value = "/tasks", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/tasks", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public List<TaskObject> getAllTasks() {
         return processEngine.getTaskService()
@@ -98,17 +104,19 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = OK)
-    @PostMapping(value = "/complete-task", produces = APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/complete-task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public void completeTask(@RequestBody Map<String, String> taskId) {
-        log.info("ABOUT TO DELETE TASKID: " + taskId.get("taskId"));
+    public void completeTask(@RequestBody TaskIdJson taskIdJson) {
+        log.info("ABOUT TO DELETE TASKID: " + taskIdJson.getTaskId());
+        TaskId taskId = taskIdJsonToDto(taskIdJson);
+        validateTaskIdIsNumeric(taskId);
         processEngine.getTaskService()
-                .complete(taskId.get("taskId"));
-        log.info("DELETED TASKID: " + taskId.get("taskId"));
+                .complete(taskId.getTaskId());
+        log.info("DELETED TASKID: " + taskIdJson.getTaskId());
     }
 
     @ResponseStatus(value = OK)
-    @GetMapping(value = "/deployed-processes", produces = APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/deployed-processes", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public List<DeploymentObject> getAllDeployedProcesses() {
         return processEngine.getRepositoryService().createDeploymentQuery().list()
@@ -118,15 +126,13 @@ public class WorkflowController {
     }
 
     @ResponseStatus(value = OK)
-    @DeleteMapping(value = "/deployed-processes/delete", consumes = APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/deployed-processes/delete", consumes = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public void deleteDeployedProcess(@RequestBody Map<String, String> deploymentId) {
-        log.info("ABOUT TO DELETE PROCESS: " + deploymentId.get("deploymentId"));
-        Stream.of(deploymentId.get("deploymentId"))
-                .mapToLong(Long::parseLong)
-                .findFirst()
-                .orElseThrow(NumberFormatException::new);
-        repositoryService.deleteDeployment(deploymentId.get("deploymentId"));
+    public void deleteDeployedProcess(@RequestBody DeploymentIdJson deploymentIdJson) {
+        DeploymentId deploymentId = deploymentIdJsonToDto(deploymentIdJson);
+        log.info("ABOUT TO DELETE PROCESS: " + deploymentId.getDeploymentId());
+        validateDeploymentIdIsNumeric(deploymentId);
+        repositoryService.deleteDeployment(deploymentId.getDeploymentId());
     }
 
     private DeploymentObject createDeploymentObject(Deployment deployment) {
@@ -142,12 +148,19 @@ public class WorkflowController {
                 task.getDelegationState());
     }
 
-    private void validateTaskIdIsNumeric(Map<String, String> taskId) {
+    private void validateTaskIdIsNumeric(TaskId taskId) {
         try {
-            Long.valueOf(taskId.get("taskId"));
+            Long.valueOf(taskId.getTaskId());
         } catch (NumberFormatException e) {
             throw new InvalidTaskIdException("Task Id is not valid");
         }
     }
 
+    private void validateDeploymentIdIsNumeric(DeploymentId json) {
+        try {
+            Long.valueOf(json.getDeploymentId());
+        } catch (NumberFormatException e) {
+            throw new InvalidTaskIdException("Deployment Id is not valid");
+        }
+    }
 }
