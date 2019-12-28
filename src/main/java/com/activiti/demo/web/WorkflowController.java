@@ -4,6 +4,7 @@ import com.activiti.demo.InvalidTaskIdException;
 import com.activiti.demo.json.ProcessInstanceKeyJson;
 import com.activiti.demo.json.ProcessNameJson;
 import com.activiti.demo.json.TaskAssigneeJson;
+import com.activiti.demo.json.TaskIdJson;
 import com.activiti.demo.model.DeploymentObject;
 import com.activiti.demo.model.TaskObject;
 import org.activiti.engine.ProcessEngine;
@@ -77,10 +78,10 @@ public class WorkflowController {
     @ResponseStatus(value = OK)
     @PostMapping(value = "/task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public TaskObject findTaskById(@RequestBody Map<String, String> taskId) {
-        validateTaskIdIsNumeric(taskId);
+    public TaskObject findTaskById(@RequestBody TaskIdJson taskIdJson) {
+        validateTaskIdIsNumeric(taskIdJson);
         return processEngine.getTaskService().createTaskQuery()
-                .taskId(taskId.get("taskId")).list()
+                .taskId(taskIdJson.getTaskId()).list()
                 .stream()
                 .map(this::createTaskObject)
                 .findFirst()
@@ -144,9 +145,9 @@ public class WorkflowController {
                 task.getDelegationState());
     }
 
-    private void validateTaskIdIsNumeric(Map<String, String> taskId) {
+    private void validateTaskIdIsNumeric(TaskIdJson taskId) {
         try {
-            Long.valueOf(taskId.get("taskId"));
+            Long.valueOf(taskId.getTaskId());
         } catch (NumberFormatException e) {
             throw new InvalidTaskIdException("Task Id is not valid");
         }
