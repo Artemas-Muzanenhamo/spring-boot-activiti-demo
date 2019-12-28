@@ -16,7 +16,7 @@ public class ControllerExceptionHandler {
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<String> invalidParametersException(NumberFormatException e) {
         logger.error(e.getMessage(), e);
-        return new ResponseEntity<>("Deployment Id is not valid", BAD_REQUEST);
+        return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
     }
 
     @ExceptionHandler(InvalidTaskIdException.class)
