@@ -1,6 +1,6 @@
 package com.activiti.demo.converter;
 
-import com.activiti.demo.json.ProcessNameJson;
+import com.activiti.demo.web.json.ProcessNameJson;
 import com.activiti.demo.model.ProcessName;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

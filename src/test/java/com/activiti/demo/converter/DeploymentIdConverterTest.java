@@ -1,6 +1,6 @@
 package com.activiti.demo.converter;
 
-import com.activiti.demo.json.DeploymentIdJson;
+import com.activiti.demo.web.json.DeploymentIdJson;
 import com.activiti.demo.model.DeploymentId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;

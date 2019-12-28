@@ -1,6 +1,6 @@
 package com.activiti.demo.converter;
 
-import com.activiti.demo.json.TaskIdJson;
+import com.activiti.demo.web.json.TaskIdJson;
 import com.activiti.demo.model.TaskId;
 
 public class TaskIdConverter {

@@ -1,4 +1,4 @@
-package com.activiti.demo.json;
+package com.activiti.demo.web.json;
 
 public class TaskAssigneeJson {
     private String taskAssignee;

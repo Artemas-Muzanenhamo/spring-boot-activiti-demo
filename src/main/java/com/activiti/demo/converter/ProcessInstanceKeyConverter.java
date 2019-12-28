@@ -1,6 +1,6 @@
 package com.activiti.demo.converter;
 
-import com.activiti.demo.json.ProcessInstanceKeyJson;
+import com.activiti.demo.web.json.ProcessInstanceKeyJson;
 import com.activiti.demo.model.ProcessInstanceKey;
 
 public class ProcessInstanceKeyConverter {
