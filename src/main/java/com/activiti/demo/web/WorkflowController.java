@@ -3,6 +3,7 @@ package com.activiti.demo.web;
 import com.activiti.demo.InvalidTaskIdException;
 import com.activiti.demo.json.*;
 import com.activiti.demo.model.DeploymentObject;
+import com.activiti.demo.model.ProcessInstanceKey;
 import com.activiti.demo.model.TaskId;
 import com.activiti.demo.model.TaskObject;
 import org.activiti.engine.ProcessEngine;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.activiti.demo.converter.ProcessInstanceKeyConverter.processInstanceKeyJsonToDto;
 import static com.activiti.demo.converter.TaskIdConverter.taskIdJsonToDto;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
@@ -53,8 +55,9 @@ public class WorkflowController {
     @PostMapping(value = "/start-task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public void start(@RequestBody ProcessInstanceKeyJson processInstanceKeyJson) {
+        ProcessInstanceKey processInstanceKey = processInstanceKeyJsonToDto(processInstanceKeyJson);
         ProcessInstance processInstance = processEngine.getRuntimeService()
-                .startProcessInstanceByKey(processInstanceKeyJson.getProcessInstanceKey());
+                .startProcessInstanceByKey(processInstanceKey.getProcessInstanceKey());
         log.info("PROCESS INSTANCE ID:-->" + processInstance.getId());
         log.info("PROCESS INSTANCE DEF ID:-->" + processInstance.getProcessDefinitionId());
     }
