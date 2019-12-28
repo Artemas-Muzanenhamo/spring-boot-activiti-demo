@@ -220,7 +220,6 @@ class WorkflowControllerTest {
         mockMvc.perform(post(API_PROCESS_FIND_TASK_URL)
                 .contentType(APPLICATION_JSON_VALUE))
                 .andExpect(status().isBadRequest());
-
     }
 
     @Test
@@ -234,7 +233,6 @@ class WorkflowControllerTest {
                 .content(deploymentIdJson.toJSONString()))
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("Deployment Id is not valid"));
-
     }
 
     @Test
