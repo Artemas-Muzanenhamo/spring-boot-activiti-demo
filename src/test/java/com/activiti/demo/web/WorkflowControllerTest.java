@@ -98,6 +98,20 @@ class WorkflowControllerTest {
     }
 
     @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when process name passed is not valid")
+    void throwExceptionWhenProcessNameIsInvalid() throws Exception {
+        Map<String, String> processName = new HashMap<>();
+        processName.put("processName", null);
+        JSONObject jsonObject = new JSONObject(processName);
+
+        mockMvc.perform(post("/api/process/deploy")
+                .accept(APPLICATION_JSON_UTF8_VALUE)
+                .contentType(APPLICATION_JSON_UTF8_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     @DisplayName("Should start a workflow given a processInstanceKey")
     void startWorkflowTest() throws Exception {
         Map<String, String> processInstanceKey = Map.of("processInstanceKey", "my-process");

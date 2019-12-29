@@ -1,5 +1,7 @@
 package com.activiti.demo;
 
+import com.activiti.demo.exception.InvalidProcessNameException;
+import com.activiti.demo.exception.InvalidTaskIdException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -21,6 +23,12 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(InvalidTaskIdException.class)
     public ResponseEntity<String> invalidParametersException(InvalidTaskIdException e) {
+        logger.error(e.getMessage(), e);
+        return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidProcessNameException.class)
+    public ResponseEntity<String> invalidProcessNameException(InvalidProcessNameException e) {
         logger.error(e.getMessage(), e);
         return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
     }

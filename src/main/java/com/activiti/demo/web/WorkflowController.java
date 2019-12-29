@@ -1,6 +1,6 @@
 package com.activiti.demo.web;
 
-import com.activiti.demo.InvalidTaskIdException;
+import com.activiti.demo.exception.InvalidTaskIdException;
 import com.activiti.demo.web.json.*;
 import com.activiti.demo.model.*;
 import org.activiti.engine.ProcessEngine;
