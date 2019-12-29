@@ -35,4 +35,12 @@ class ProcessNameConverterTest {
         assertThat(exception).hasMessage("Process name supplied is not valid");
     }
 
+    @Test
+    @DisplayName("Should throw an Exception when the ProcessNameJson is null")
+    void throwExceptionWhenProcessNameIsNull() {
+        InvalidProcessNameException exception = assertThrows(InvalidProcessNameException.class, () -> processNameJsonToDto(null));
+
+        assertThat(exception).hasMessage("Process name supplied is not valid");
+    }
+
 }
