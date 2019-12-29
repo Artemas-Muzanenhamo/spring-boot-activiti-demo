@@ -34,4 +34,12 @@ class ProcessInstanceKeyConverterTest {
 
         assertThat(exception).hasMessage("Process instance key supplied is not valid");
     }
+
+    @Test
+    @DisplayName("Should throw an Exception when the ProcessInstanceKeyJson is null")
+    void throwExceptionWhenProcessInstanceKeyIsNull() {
+        InvalidProcessInstanceKey exception = assertThrows(InvalidProcessInstanceKey.class, () -> processInstanceKeyJsonToDto(null));
+
+        assertThat(exception).hasMessage("Process instance key supplied is not valid");
+    }
 }

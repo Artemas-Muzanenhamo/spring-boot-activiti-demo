@@ -158,6 +158,18 @@ class WorkflowControllerTest {
     }
 
     @Test
+    @DisplayName("Should throw a BAD_REQUEST when the processInstanceKey is null")
+    void throwExceptionWhenProcessInstanceKeyIsNull() throws Exception {
+        Map<String, String> variables = new HashMap<>();
+        JSONObject jsonObject = new JSONObject(variables);
+
+        mockMvc.perform(post(API_PROCESS_START_TASK_URL)
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
     @DisplayName("Should find a task given a task assignee")
     void findTask() throws Exception {
         Map<String, String> assignee = new HashMap<>();
