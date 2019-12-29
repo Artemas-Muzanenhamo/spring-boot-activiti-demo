@@ -29,6 +29,7 @@ import java.util.Map;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -109,6 +110,13 @@ class WorkflowControllerTest {
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
+
+        verifyZeroInteractions(processEngine);
+        verifyZeroInteractions(repositoryService);
+        verifyZeroInteractions(deploymentBuilder);
+        verifyZeroInteractions(deploymentBuilder);
+        verifyZeroInteractions(deploymentBuilder);
+        verifyZeroInteractions(deployment);
     }
 
     @Test
@@ -122,6 +130,13 @@ class WorkflowControllerTest {
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
+
+        verifyZeroInteractions(processEngine);
+        verifyZeroInteractions(repositoryService);
+        verifyZeroInteractions(deploymentBuilder);
+        verifyZeroInteractions(deploymentBuilder);
+        verifyZeroInteractions(deploymentBuilder);
+        verifyZeroInteractions(deployment);
     }
 
     @Test
@@ -155,6 +170,9 @@ class WorkflowControllerTest {
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
+
+        verifyZeroInteractions(processEngine);
+        verifyZeroInteractions(runtimeService);
     }
 
     @Test
@@ -167,6 +185,9 @@ class WorkflowControllerTest {
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
+
+        verifyZeroInteractions(processEngine);
+        verifyZeroInteractions(runtimeService);
     }
 
     @Test
@@ -174,12 +195,12 @@ class WorkflowControllerTest {
     void findTask() throws Exception {
         Map<String, String> assignee = new HashMap<>();
         assignee.put("taskAssignee", "artemas");
+        JSONObject jsonObject = new JSONObject(assignee);
         List<Task> tasks = List.of(this.task);
         given(processEngine.getTaskService()).willReturn(taskService);
         given(taskService.createTaskQuery()).willReturn(taskQuery);
         given(taskQuery.taskAssignee(assignee.get("taskAssignee"))).willReturn(taskQuery);
         given(taskQuery.list()).willReturn(tasks);
-        JSONObject jsonObject = new JSONObject(assignee);
 
         mockMvc.perform(post(API_PROCESS_FIND_TASK_URL)
                 .contentType(APPLICATION_JSON_VALUE)
@@ -190,6 +211,41 @@ class WorkflowControllerTest {
         verify(taskService).createTaskQuery();
         verify(taskQuery).taskAssignee(anyString());
         verify(taskQuery).list();
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when the TaskAssignee value is null")
+    void throwExceptionWhenTaskAssigneeValueIsNull() throws Exception {
+        Map<String, String> assignee = new HashMap<>();
+        assignee.put("taskAssignee", null);
+        JSONObject jsonObject = new JSONObject(assignee);
+
+        mockMvc.perform(post(API_PROCESS_FIND_TASK_URL)
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest());
+
+        verifyZeroInteractions(processEngine);
+        verifyZeroInteractions(taskService);
+        verifyZeroInteractions(taskQuery);
+        verifyZeroInteractions(taskQuery);
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when the TaskAssignee is null")
+    void throwExceptionWhenTaskAssigneeIsNull() throws Exception {
+        Map<String, String> assignee = new HashMap<>();
+        JSONObject jsonObject = new JSONObject(assignee);
+
+        mockMvc.perform(post(API_PROCESS_FIND_TASK_URL)
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest());
+
+        verifyZeroInteractions(processEngine);
+        verifyZeroInteractions(taskService);
+        verifyZeroInteractions(taskQuery);
+        verifyZeroInteractions(taskQuery);
     }
 
     @Test
