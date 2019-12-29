@@ -1,5 +1,6 @@
 package com.activiti.demo;
 
+import com.activiti.demo.exception.InvalidProcessInstanceKey;
 import com.activiti.demo.exception.InvalidProcessNameException;
 import com.activiti.demo.exception.InvalidTaskIdException;
 import org.slf4j.Logger;
@@ -29,6 +30,12 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(InvalidProcessNameException.class)
     public ResponseEntity<String> invalidProcessNameException(InvalidProcessNameException e) {
+        logger.error(e.getMessage(), e);
+        return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidProcessInstanceKey.class)
+    public ResponseEntity<String> invalidProcessNameException(InvalidProcessInstanceKey e) {
         logger.error(e.getMessage(), e);
         return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
     }
