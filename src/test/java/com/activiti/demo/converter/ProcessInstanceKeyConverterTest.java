@@ -1,6 +1,6 @@
 package com.activiti.demo.converter;
 
-import com.activiti.demo.exception.InvalidProcessInstanceKey;
+import com.activiti.demo.exception.InvalidProcessInstanceKeyException;
 import com.activiti.demo.model.ProcessInstanceKey;
 import com.activiti.demo.web.json.ProcessInstanceKeyJson;
 import org.junit.jupiter.api.DisplayName;
@@ -30,7 +30,7 @@ class ProcessInstanceKeyConverterTest {
     void throwExceptionWhenProcessInstanceKeyValueIsNull() {
         ProcessInstanceKeyJson processInstanceKeyJson = new ProcessInstanceKeyJson(null);
 
-        InvalidProcessInstanceKey exception = assertThrows(InvalidProcessInstanceKey.class, () -> processInstanceKeyJsonToDto(processInstanceKeyJson));
+        InvalidProcessInstanceKeyException exception = assertThrows(InvalidProcessInstanceKeyException.class, () -> processInstanceKeyJsonToDto(processInstanceKeyJson));
 
         assertThat(exception).hasMessage("Process instance key supplied is not valid");
     }
@@ -38,7 +38,7 @@ class ProcessInstanceKeyConverterTest {
     @Test
     @DisplayName("Should throw an Exception when the ProcessInstanceKeyJson is null")
     void throwExceptionWhenProcessInstanceKeyIsNull() {
-        InvalidProcessInstanceKey exception = assertThrows(InvalidProcessInstanceKey.class, () -> processInstanceKeyJsonToDto(null));
+        InvalidProcessInstanceKeyException exception = assertThrows(InvalidProcessInstanceKeyException.class, () -> processInstanceKeyJsonToDto(null));
 
         assertThat(exception).hasMessage("Process instance key supplied is not valid");
     }

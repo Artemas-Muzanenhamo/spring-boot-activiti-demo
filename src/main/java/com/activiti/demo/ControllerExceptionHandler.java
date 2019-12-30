@@ -1,6 +1,6 @@
 package com.activiti.demo;
 
-import com.activiti.demo.exception.InvalidProcessInstanceKey;
+import com.activiti.demo.exception.InvalidProcessInstanceKeyException;
 import com.activiti.demo.exception.InvalidProcessNameException;
 import com.activiti.demo.exception.InvalidTaskAssigneeException;
 import com.activiti.demo.exception.InvalidTaskIdException;
@@ -35,8 +35,8 @@ public class ControllerExceptionHandler {
         return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
     }
 
-    @ExceptionHandler(InvalidProcessInstanceKey.class)
-    public ResponseEntity<String> invalidProcessInstanceKey(InvalidProcessInstanceKey e) {
+    @ExceptionHandler(InvalidProcessInstanceKeyException.class)
+    public ResponseEntity<String> invalidProcessInstanceKey(InvalidProcessInstanceKeyException e) {
         logger.error(e.getMessage(), e);
         return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
     }
