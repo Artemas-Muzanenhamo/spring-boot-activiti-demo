@@ -253,10 +253,10 @@ class WorkflowControllerTest {
     void findTaskById() throws Exception {
         Map<String, String> taskId = new HashMap<>();
         taskId.put("taskId", "1");
+        JSONObject jsonObject = new JSONObject(taskId);
         given(processEngine.getTaskService()).willReturn(taskService);
         given(taskService.createTaskQuery()).willReturn(taskQuery);
         given(taskQuery.taskId(taskId.get("taskId"))).willReturn(taskQuery);
-        JSONObject jsonObject = new JSONObject(taskId);
 
         mockMvc.perform(post(API_PROCESS_TASK_URL)
                 .contentType(APPLICATION_JSON_VALUE)
@@ -266,6 +266,39 @@ class WorkflowControllerTest {
         verify(processEngine).getTaskService();
         verify(taskService).createTaskQuery();
         verify(taskQuery).taskId(anyString());
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when the taskId value is null")
+    void throwExceptionWhenTaskIdValueIsNull() throws Exception {
+        Map<String, String> taskId = new HashMap<>();
+        taskId.put("taskId", null);
+        JSONObject jsonObject = new JSONObject(taskId);
+
+        mockMvc.perform(post(API_PROCESS_TASK_URL)
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest());
+
+        verifyZeroInteractions(processEngine);
+        verifyZeroInteractions(taskService);
+        verifyZeroInteractions(taskQuery);
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when the taskId is null")
+    void throwExceptionWhenTaskIdIsNull() throws Exception {
+        Map<String, String> taskId = new HashMap<>();
+        JSONObject jsonObject = new JSONObject(taskId);
+
+        mockMvc.perform(post(API_PROCESS_TASK_URL)
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest());
+
+        verifyZeroInteractions(processEngine);
+        verifyZeroInteractions(taskService);
+        verifyZeroInteractions(taskQuery);
     }
 
     @Test
