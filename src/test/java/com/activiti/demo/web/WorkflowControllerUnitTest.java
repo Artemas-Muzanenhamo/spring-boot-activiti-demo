@@ -35,6 +35,8 @@ class WorkflowControllerUnitTest {
     private ProcessEngine processEngine;
     @Mock
     private RepositoryService repositoryService;
+    @Mock
+    private TaskObject taskObject;
 
     @BeforeEach
     void setUp() {
@@ -68,8 +70,8 @@ class WorkflowControllerUnitTest {
     void findTasks() {
         TaskAssigneeJson taskAssigneeJson = new TaskAssigneeJson(TASK_ASSIGNEE);
         TaskAssignee taskAssignee = new TaskAssignee(TASK_ASSIGNEE);
-        TaskObject taskObject = new TaskObject("some-id", "some-name", TASK_ASSIGNEE);
         List<TaskObject> taskObjects = List.of(taskObject);
+        given(taskObject.getAssignee()).willReturn(TASK_ASSIGNEE);
         given(workflowService.findTaskByAssignee(taskAssignee)).willReturn(taskObjects);
 
         List<TaskObject> tasks = workflowController.findTasks(taskAssigneeJson);
