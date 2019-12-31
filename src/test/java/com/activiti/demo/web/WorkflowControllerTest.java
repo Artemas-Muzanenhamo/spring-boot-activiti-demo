@@ -153,8 +153,7 @@ class WorkflowControllerTest {
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
 
-        verifyZeroInteractions(processEngine);
-        verifyZeroInteractions(runtimeService);
+        verifyZeroInteractions(workflowService);
     }
 
     @Test
@@ -168,8 +167,7 @@ class WorkflowControllerTest {
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
 
-        verifyZeroInteractions(processEngine);
-        verifyZeroInteractions(runtimeService);
+        verifyZeroInteractions(workflowService);
     }
 
     @Test
