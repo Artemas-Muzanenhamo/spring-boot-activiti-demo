@@ -78,7 +78,11 @@ class WorkflowControllerUnitTest {
 
         assertThat(tasks).isNotNull();
         assertThat(tasks).hasSize(1);
+
         TaskObject task = tasks.get(0);
         assertThat(task.getAssignee()).isEqualTo(TASK_ASSIGNEE);
+
+        verify(taskObject).getAssignee();
+        verify(workflowService).findTaskByAssignee(taskAssignee);
     }
 }
