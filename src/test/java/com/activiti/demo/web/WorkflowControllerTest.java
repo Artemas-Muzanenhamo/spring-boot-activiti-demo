@@ -419,14 +419,6 @@ class WorkflowControllerTest {
     }
 
     @Test
-    @DisplayName("Should throw a content bad request exception when no content trying to find task")
-    void testNullTaskObject() throws Exception {
-        mockMvc.perform(post(API_PROCESS_FIND_TASK_URL)
-                .contentType(APPLICATION_JSON_VALUE))
-                .andExpect(status().isBadRequest());
-    }
-
-    @Test
     @DisplayName("Should throw a BAD_REQUEST exception when deployment id is not a number")
     void testNullDeploymentIDValue() throws Exception {
         Map<String, String> processId = Map.of("deploymentId", "some deployment id");
@@ -440,8 +432,8 @@ class WorkflowControllerTest {
     }
 
     @Test
-    @DisplayName("Should throw a BAD_REQUEST exception when trying to find a task id with an invalid id")
-    void testNullTaskId() throws Exception {
+    @DisplayName("Should throw a BAD_REQUEST exception when trying to find a task with a non numeric id")
+    void testNonNumericTaskId() throws Exception {
         Map<String, String> taskId = new HashMap<>();
         taskId.put("taskId", "some task id");
         JSONObject jsonObject = new JSONObject(taskId);
