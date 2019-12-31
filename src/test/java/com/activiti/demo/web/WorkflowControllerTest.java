@@ -1,5 +1,6 @@
 package com.activiti.demo.web;
 
+import com.activiti.demo.model.ProcessInstanceKey;
 import com.activiti.demo.model.ProcessName;
 import com.activiti.demo.service.WorkflowService;
 import net.minidev.json.JSONObject;
@@ -107,12 +108,7 @@ class WorkflowControllerTest {
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
 
-        verifyZeroInteractions(processEngine);
-        verifyZeroInteractions(repositoryService);
-        verifyZeroInteractions(deploymentBuilder);
-        verifyZeroInteractions(deploymentBuilder);
-        verifyZeroInteractions(deploymentBuilder);
-        verifyZeroInteractions(deployment);
+        verifyZeroInteractions(workflowService);
     }
 
     @Test
@@ -127,21 +123,12 @@ class WorkflowControllerTest {
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
 
-        verifyZeroInteractions(processEngine);
-        verifyZeroInteractions(repositoryService);
-        verifyZeroInteractions(deploymentBuilder);
-        verifyZeroInteractions(deploymentBuilder);
-        verifyZeroInteractions(deploymentBuilder);
-        verifyZeroInteractions(deployment);
+        verifyZeroInteractions(workflowService);
     }
 
     @Test
     @DisplayName("Should start a workflow given a processInstanceKey")
     void startWorkflowTest() throws Exception {
-        Map<String, String> processInstanceKey = Map.of("processInstanceKey", "my-process");
-        given(processEngine.getRuntimeService()).willReturn(runtimeService);
-        given(runtimeService.startProcessInstanceByKey(processInstanceKey.get("processInstanceKey")))
-                .willReturn(processInstance);
         Map<String, String> variables = new HashMap<>();
         variables.put("processInstanceKey", "my-process");
         JSONObject jsonObject = new JSONObject(variables);
@@ -151,8 +138,7 @@ class WorkflowControllerTest {
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
 
-        verify(processEngine).getRuntimeService();
-        verify(runtimeService).startProcessInstanceByKey(anyString());
+        verify(workflowService).startProcess(any(ProcessInstanceKey.class));
     }
 
     @Test

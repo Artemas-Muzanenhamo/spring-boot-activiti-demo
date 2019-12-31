@@ -1,5 +1,6 @@
 package com.activiti.demo.service;
 
+import com.activiti.demo.model.ProcessInstanceKey;
 import com.activiti.demo.model.ProcessName;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
@@ -48,7 +49,7 @@ class WorkflowServiceImplTest {
     private DeploymentQuery deploymentQuery;
 
     @Test
-    @DisplayName("Should deploy a process given a valid ProcessName")
+    @DisplayName("Should deploy a process given a valid Process Name")
     void deployProcess() {
         ProcessName processName = new ProcessName("some-process-name");
         given(processEngine.getRepositoryService()).willReturn(repositoryService);
@@ -65,5 +66,19 @@ class WorkflowServiceImplTest {
         verify(deploymentBuilder).name(anyString());
         verify(deploymentBuilder).deploy();
         verify(deployment).getId();
+    }
+
+    @Test
+    @DisplayName("Should start a process given a valid Process Instance Key")
+    void startProcess() {
+        ProcessInstanceKey processInstanceKey = new ProcessInstanceKey("some-process-instance-key");
+        given(processEngine.getRuntimeService()).willReturn(runtimeService);
+        given(runtimeService.startProcessInstanceByKey(processInstanceKey.getProcessInstanceKey()))
+                .willReturn(processInstance);
+
+        workflowService.startProcess(processInstanceKey);
+
+        verify(processEngine).getRuntimeService();
+        verify(runtimeService).startProcessInstanceByKey(anyString());
     }
 }

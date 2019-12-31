@@ -7,7 +7,6 @@ import com.activiti.demo.web.json.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -54,10 +53,7 @@ public class WorkflowController {
     @ResponseBody
     public void start(@RequestBody ProcessInstanceKeyJson processInstanceKeyJson) {
         ProcessInstanceKey processInstanceKey = processInstanceKeyJsonToDto(processInstanceKeyJson);
-        ProcessInstance processInstance = processEngine.getRuntimeService()
-                .startProcessInstanceByKey(processInstanceKey.getProcessInstanceKey());
-        log.info("PROCESS INSTANCE ID:-->" + processInstance.getId());
-        log.info("PROCESS INSTANCE DEF ID:-->" + processInstance.getProcessDefinitionId());
+        workflowServiceImpl.startProcess(processInstanceKey);
     }
 
     @ResponseStatus(value = OK)
