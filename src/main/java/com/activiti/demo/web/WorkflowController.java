@@ -152,15 +152,15 @@ public class WorkflowController {
         try {
             Long.valueOf(taskId.getTaskId());
         } catch (NumberFormatException e) {
-            throw new InvalidTaskIdException("Task Id is not valid");
+            throw new InvalidTaskIdException("Task Id must be a number");
         }
     }
 
-    private void validateDeploymentIdIsNumeric(DeploymentId json) {
+    private void validateDeploymentIdIsNumeric(DeploymentId deploymentId) {
         try {
-            Long.valueOf(json.getDeploymentId());
+            Long.valueOf(deploymentId.getDeploymentId());
         } catch (NumberFormatException e) {
-            throw new InvalidTaskIdException("Deployment Id is not valid");
+            throw new InvalidTaskIdException("Deployment Id must be a number");
         }
     }
 }

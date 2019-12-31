@@ -26,6 +26,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static java.util.Collections.emptyMap;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -319,8 +320,8 @@ class WorkflowControllerTest {
     void completeTask() throws Exception {
         Map<String, String> taskId = new HashMap<>();
         taskId.put("taskId", "123");
-        given(processEngine.getTaskService()).willReturn(taskService);
         JSONObject jsonObject = new JSONObject(taskId);
+        given(processEngine.getTaskService()).willReturn(taskService);
 
         mockMvc.perform(post(API_PROCESS_COMPLETE_TASK_URL)
                 .contentType(APPLICATION_JSON_VALUE)
@@ -328,6 +329,35 @@ class WorkflowControllerTest {
                 .andExpect(status().isOk());
 
         verify(processEngine).getTaskService();
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when TaskId value is null when completing a task")
+    void invalidTaskIdValueForCompleteTask() throws Exception {
+        Map<String, String> taskId = new HashMap<>();
+        taskId.put("taskId", null);
+        JSONObject jsonObject = new JSONObject(taskId);
+
+        mockMvc.perform(post(API_PROCESS_COMPLETE_TASK_URL)
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest());
+
+        verifyZeroInteractions(processEngine);
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when TaskId is null when completing a task")
+    void invalidTaskIdForCompleteTask() throws Exception {
+        Map<String, String> taskId = emptyMap();
+        JSONObject jsonObject = new JSONObject(taskId);
+
+        mockMvc.perform(post(API_PROCESS_COMPLETE_TASK_URL)
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest());
+
+        verifyZeroInteractions(processEngine);
     }
 
     @Test
@@ -353,6 +383,39 @@ class WorkflowControllerTest {
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(deploymentIdJson.toJSONString()))
                 .andExpect(status().isOk());
+
+        verify(repositoryService).deleteDeployment(DEPLOYMENT_ID);
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when the DeploymentIdJson value is null")
+    void testDeploymentJsonValueIsNull() throws Exception {
+        Map<String, String> processId = new HashMap<>();
+        processId.put("deploymentId", null);
+        JSONObject deploymentIdJson = new JSONObject(processId);
+
+        mockMvc.perform(delete(API_PROCESS_DEPLOYED_PROCESSES_DELETE_URL)
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(deploymentIdJson.toJSONString()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("DeploymentId is not valid"));
+
+        verifyZeroInteractions(repositoryService);
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when the DeploymentIdJson is null")
+    void testDeploymentJsonIsNull() throws Exception {
+        Map<String, String> processId = new HashMap<>();
+        JSONObject deploymentIdJson = new JSONObject(processId);
+
+        mockMvc.perform(delete(API_PROCESS_DEPLOYED_PROCESSES_DELETE_URL)
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(deploymentIdJson.toJSONString()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("DeploymentId is not valid"));
+
+        verifyZeroInteractions(repositoryService);
     }
 
     @Test
@@ -373,7 +436,7 @@ class WorkflowControllerTest {
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(deploymentIdJson.toJSONString()))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Deployment Id is not valid"));
+                .andExpect(content().string("Deployment Id must be a number"));
     }
 
     @Test
@@ -387,6 +450,6 @@ class WorkflowControllerTest {
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Task Id is not valid"));
+                .andExpect(content().string("Task Id must be a number"));
     }
 }

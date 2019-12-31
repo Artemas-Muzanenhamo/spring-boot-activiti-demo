@@ -1,9 +1,6 @@
 package com.activiti.demo;
 
-import com.activiti.demo.exception.InvalidProcessInstanceKeyException;
-import com.activiti.demo.exception.InvalidProcessNameException;
-import com.activiti.demo.exception.InvalidTaskAssigneeException;
-import com.activiti.demo.exception.InvalidTaskIdException;
+import com.activiti.demo.exception.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -43,6 +40,12 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(InvalidTaskAssigneeException.class)
     public ResponseEntity<String> invalidTaskAssigneeException(InvalidTaskAssigneeException e) {
+        logger.error(e.getMessage(), e);
+        return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
+    }
+
+    @ExceptionHandler(InvalidDeploymentIdException.class)
+    public ResponseEntity<String> invalidDeploymentIdException(InvalidDeploymentIdException e) {
         logger.error(e.getMessage(), e);
         return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
     }

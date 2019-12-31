@@ -1,12 +1,14 @@
 package com.activiti.demo.converter;
 
-import com.activiti.demo.web.json.DeploymentIdJson;
+import com.activiti.demo.exception.InvalidDeploymentIdException;
 import com.activiti.demo.model.DeploymentId;
+import com.activiti.demo.web.json.DeploymentIdJson;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
 import static com.activiti.demo.converter.DeploymentIdConverter.deploymentIdJsonToDto;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class DeploymentIdConverterTest {
 
@@ -21,5 +23,25 @@ class DeploymentIdConverterTest {
 
         assertThat(deploymentId).isNotNull();
         assertThat(deploymentId.getDeploymentId()).isEqualTo(DEPLOYMENT_ID);
+    }
+
+    @Test
+    @DisplayName("Should throw an exception when the DeploymentId value is null")
+    void testWhenDeploymentIdValueIsNull() {
+        DeploymentIdJson deploymentIdJson = new DeploymentIdJson(null);
+
+        InvalidDeploymentIdException exception = assertThrows(InvalidDeploymentIdException.class, () -> deploymentIdJsonToDto(deploymentIdJson));
+
+        assertThat(exception).hasMessage("DeploymentId is not valid");
+    }
+
+    @Test
+    @DisplayName("Should throw an exception when the DeploymentId is null")
+    void testWhenDeploymentIdIsNull() {
+        DeploymentIdJson deploymentIdJson = new DeploymentIdJson(null);
+
+        InvalidDeploymentIdException exception = assertThrows(InvalidDeploymentIdException.class, () -> deploymentIdJsonToDto(deploymentIdJson));
+
+        assertThat(exception).hasMessage("DeploymentId is not valid");
     }
 }

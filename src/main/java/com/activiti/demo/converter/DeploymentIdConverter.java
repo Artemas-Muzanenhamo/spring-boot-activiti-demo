@@ -1,10 +1,16 @@
 package com.activiti.demo.converter;
 
+import com.activiti.demo.exception.InvalidDeploymentIdException;
 import com.activiti.demo.web.json.DeploymentIdJson;
 import com.activiti.demo.model.DeploymentId;
 
+import java.util.Optional;
+
 public class DeploymentIdConverter {
     public static DeploymentId deploymentIdJsonToDto(DeploymentIdJson deploymentIdJson) {
-        return new DeploymentId(deploymentIdJson.getDeploymentId());
+        return Optional.ofNullable(deploymentIdJson)
+                .map(DeploymentIdJson::getDeploymentId)
+                .map(DeploymentId::new)
+                .orElseThrow(() -> new InvalidDeploymentIdException("DeploymentId is not valid"));
     }
 }
