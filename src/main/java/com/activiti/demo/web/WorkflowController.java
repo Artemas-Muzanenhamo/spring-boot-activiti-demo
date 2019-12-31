@@ -7,7 +7,6 @@ import com.activiti.demo.web.json.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -85,6 +84,7 @@ public class WorkflowController {
     @ResponseBody
     public void completeTask(@RequestBody TaskIdJson taskIdJson) {
         TaskId taskId = taskIdJsonToDto(taskIdJson);
+        validateTaskIdIsNumeric(taskId);
         workflowServiceImpl.completeTask(taskId);
     }
 
@@ -111,14 +111,6 @@ public class WorkflowController {
     private DeploymentObject createDeploymentObject(Deployment deployment) {
         return new DeploymentObject(deployment.getId(), deployment.getName(),
                 deployment.getDeploymentTime(), deployment.getCategory(), deployment.getKey(), deployment.getTenantId());
-    }
-
-    private TaskObject createTaskObject(Task task) {
-        return new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
-                task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),
-                task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
-                task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
-                task.getDelegationState());
     }
 
     private void validateTaskIdIsNumeric(TaskId taskId) {

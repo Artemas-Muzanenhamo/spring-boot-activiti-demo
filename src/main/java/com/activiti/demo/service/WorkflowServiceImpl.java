@@ -72,7 +72,6 @@ public class WorkflowServiceImpl implements WorkflowService {
     @Override
     public void completeTask(TaskId taskId) {
         log.info("ABOUT TO DELETE TASKID: " + taskId.getTaskId());
-        validateTaskIdIsNumeric(taskId);
         processEngine.getTaskService()
                 .complete(taskId.getTaskId());
         log.info("DELETED TASKID: " + taskId.getTaskId());
@@ -84,13 +83,5 @@ public class WorkflowServiceImpl implements WorkflowService {
                 task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
                 task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
                 task.getDelegationState());
-    }
-
-    private void validateTaskIdIsNumeric(TaskId taskId) {
-        try {
-            Long.valueOf(taskId.getTaskId());
-        } catch (NumberFormatException e) {
-            throw new InvalidTaskIdException("Task Id must be a number");
-        }
     }
 }
