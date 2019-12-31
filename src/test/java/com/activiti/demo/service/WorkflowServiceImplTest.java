@@ -141,4 +141,16 @@ class WorkflowServiceImplTest {
         verify(taskService).createTaskQuery();
         verify(taskQuery).list();
     }
+
+    @Test
+    @DisplayName("Should complete a task given a valid Task Id")
+    void completeTaskByTaskId() {
+        TaskId taskId = new TaskId(TASK_ID);
+        given(processEngine.getTaskService()).willReturn(taskService);
+
+        workflowService.completeTask(taskId);
+
+        verify(processEngine).getTaskService();
+        verify(taskService).complete(TASK_ID);
+    }
 }

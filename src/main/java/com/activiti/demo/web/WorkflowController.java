@@ -84,12 +84,8 @@ public class WorkflowController {
     @PostMapping(value = "/complete-task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public void completeTask(@RequestBody TaskIdJson taskIdJson) {
-        log.info("ABOUT TO DELETE TASKID: " + taskIdJson.getTaskId());
         TaskId taskId = taskIdJsonToDto(taskIdJson);
-        validateTaskIdIsNumeric(taskId);
-        processEngine.getTaskService()
-                .complete(taskId.getTaskId());
-        log.info("DELETED TASKID: " + taskIdJson.getTaskId());
+        workflowServiceImpl.completeTask(taskId);
     }
 
     @ResponseStatus(value = OK)

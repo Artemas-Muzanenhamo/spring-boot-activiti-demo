@@ -262,14 +262,13 @@ class WorkflowControllerTest {
         Map<String, String> taskId = new HashMap<>();
         taskId.put("taskId", "123");
         JSONObject jsonObject = new JSONObject(taskId);
-        given(processEngine.getTaskService()).willReturn(taskService);
 
         mockMvc.perform(post(API_PROCESS_COMPLETE_TASK_URL)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
 
-        verify(processEngine).getTaskService();
+        verify(workflowService).completeTask(any(TaskId.class));
     }
 
     @Test
@@ -284,7 +283,7 @@ class WorkflowControllerTest {
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
 
-        verifyZeroInteractions(processEngine);
+        verifyZeroInteractions(workflowService);
     }
 
     @Test
@@ -298,7 +297,7 @@ class WorkflowControllerTest {
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
 
-        verifyZeroInteractions(processEngine);
+        verifyZeroInteractions(workflowService);
     }
 
     @Test

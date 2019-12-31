@@ -115,4 +115,15 @@ class WorkflowControllerUnitTest {
         assertThat(task).isEqualTo(taskObject);
         verify(workflowService).findAllTasks();
     }
+
+    @Test
+    @DisplayName("Should complete a task given a valid Task Id")
+    void completeTaskGivenATaskId() {
+        TaskIdJson taskIdJson = new TaskIdJson(TASK_ID);
+        TaskId taskId = new TaskId(TASK_ID);
+
+        workflowController.completeTask(taskIdJson);
+
+        verify(workflowService).completeTask(taskId);
+    }
 }

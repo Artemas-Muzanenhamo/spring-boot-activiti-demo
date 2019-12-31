@@ -1,5 +1,6 @@
 package com.activiti.demo.service;
 
+import com.activiti.demo.exception.InvalidTaskIdException;
 import com.activiti.demo.model.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.repository.Deployment;
@@ -68,11 +69,28 @@ public class WorkflowServiceImpl implements WorkflowService {
                 .collect(toList());
     }
 
+    @Override
+    public void completeTask(TaskId taskId) {
+        log.info("ABOUT TO DELETE TASKID: " + taskId.getTaskId());
+        validateTaskIdIsNumeric(taskId);
+        processEngine.getTaskService()
+                .complete(taskId.getTaskId());
+        log.info("DELETED TASKID: " + taskId.getTaskId());
+    }
+
     private TaskObject createTaskObject(Task task) {
         return new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
                 task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),
                 task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
                 task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
                 task.getDelegationState());
+    }
+
+    private void validateTaskIdIsNumeric(TaskId taskId) {
+        try {
+            Long.valueOf(taskId.getTaskId());
+        } catch (NumberFormatException e) {
+            throw new InvalidTaskIdException("Task Id must be a number");
+        }
     }
 }

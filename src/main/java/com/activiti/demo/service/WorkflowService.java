@@ -14,4 +14,6 @@ public interface WorkflowService {
     TaskObject findTaskByTaskId(TaskId taskId);
 
     List<TaskObject> findAllTasks();
+
+    void completeTask(TaskId taskId);
 }
