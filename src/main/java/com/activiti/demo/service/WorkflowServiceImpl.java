@@ -1,6 +1,5 @@
 package com.activiti.demo.service;
 
-import com.activiti.demo.exception.InvalidTaskIdException;
 import com.activiti.demo.model.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.repository.Deployment;
@@ -18,6 +17,10 @@ import static java.util.stream.Collectors.toList;
 public class WorkflowServiceImpl implements WorkflowService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private ProcessEngine processEngine;
+
+    public WorkflowServiceImpl(ProcessEngine processEngine) {
+        this.processEngine = processEngine;
+    }
 
     @Override
     public void deployProcess(ProcessName processName) {
