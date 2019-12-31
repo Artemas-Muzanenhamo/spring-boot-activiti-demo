@@ -1,5 +1,7 @@
 package com.activiti.demo.web;
 
+import com.activiti.demo.model.ProcessName;
+import com.activiti.demo.service.WorkflowService;
 import net.minidev.json.JSONObject;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
@@ -27,6 +29,7 @@ import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.emptyMap;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
@@ -52,6 +55,8 @@ class WorkflowControllerTest {
     private static final String DEPLOYMENT_ID = "34578";
     @Autowired
     private MockMvc mockMvc;
+    @MockBean
+    private WorkflowService workflowService;
     @MockBean
     private ProcessEngine processEngine;
     @MockBean
@@ -79,11 +84,6 @@ class WorkflowControllerTest {
         Map<String, String> processName = new HashMap<>();
         processName.put("processName", "say-hello-process");
         JSONObject jsonObject = new JSONObject(processName);
-        given(processEngine.getRepositoryService()).willReturn(repositoryService);
-        given(repositoryService.createDeployment()).willReturn(deploymentBuilder);
-        given(deploymentBuilder.addClasspathResource(anyString())).willReturn(deploymentBuilder);
-        given(deploymentBuilder.name(anyString())).willReturn(deploymentBuilder);
-        given(deploymentBuilder.deploy()).willReturn(deployment);
 
         mockMvc.perform(post("/api/process/deploy")
                 .accept(APPLICATION_JSON_UTF8_VALUE)
@@ -91,12 +91,7 @@ class WorkflowControllerTest {
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
 
-        verify(processEngine).getRepositoryService();
-        verify(repositoryService).createDeployment();
-        verify(deploymentBuilder).addClasspathResource(anyString());
-        verify(deploymentBuilder).name(anyString());
-        verify(deploymentBuilder).deploy();
-        verify(deployment).getId();
+        verify(workflowService).deployProcess(any(ProcessName.class));
     }
 
     @Test

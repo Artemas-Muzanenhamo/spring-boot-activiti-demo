@@ -1,8 +1,9 @@
 package com.activiti.demo.web;
 
 import com.activiti.demo.exception.InvalidTaskIdException;
-import com.activiti.demo.web.json.*;
 import com.activiti.demo.model.*;
+import com.activiti.demo.service.WorkflowService;
+import com.activiti.demo.web.json.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
@@ -32,24 +33,20 @@ public class WorkflowController {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private ProcessEngine processEngine;
     private RepositoryService repositoryService;
+    private WorkflowService workflowServiceImpl;
 
     @Autowired
-    public WorkflowController(ProcessEngine processEngine, RepositoryService repositoryService) {
+    public WorkflowController(ProcessEngine processEngine, RepositoryService repositoryService, WorkflowService workflowServiceImpl) {
         this.processEngine = processEngine;
         this.repositoryService = repositoryService;
+        this.workflowServiceImpl = workflowServiceImpl;
     }
 
     @PostMapping(value = "/deploy", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseStatus(value = OK)
     public void deploy(@RequestBody ProcessNameJson processNameJson) {
         ProcessName processName = processNameJsonToDto(processNameJson);
-        Deployment deployment = processEngine.getRepositoryService()
-                .createDeployment()
-                .addClasspathResource("processes/my-process.bpmn20.xml")
-                .name(processName.getProcessName())
-                .deploy();
-        log.info("DEPLOYMENT ID:" + deployment.getId());
-        log.info("DEPLOYMENT NAME:" + deployment.getName());
+        workflowServiceImpl.deployProcess(processName);
     }
 
     @ResponseStatus(value = OK)
