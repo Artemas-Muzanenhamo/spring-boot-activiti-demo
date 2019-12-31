@@ -58,6 +58,16 @@ public class WorkflowServiceImpl implements WorkflowService {
                 .orElse(new TaskObject());
     }
 
+    @Override
+    public List<TaskObject> findAllTasks() {
+        return processEngine.getTaskService()
+                .createTaskQuery()
+                .list()
+                .stream()
+                .map(this::createTaskObject)
+                .collect(toList());
+    }
+
     private TaskObject createTaskObject(Task task) {
         return new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
                 task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),

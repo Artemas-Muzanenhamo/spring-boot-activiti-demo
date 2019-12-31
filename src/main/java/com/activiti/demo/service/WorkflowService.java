@@ -12,4 +12,6 @@ public interface WorkflowService {
     List<TaskObject> findTaskByAssignee(TaskAssignee taskAssignee);
 
     TaskObject findTaskByTaskId(TaskId taskId);
+
+    List<TaskObject> findAllTasks();
 }

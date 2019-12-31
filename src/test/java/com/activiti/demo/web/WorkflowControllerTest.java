@@ -8,13 +8,8 @@ import com.activiti.demo.service.WorkflowService;
 import net.minidev.json.JSONObject;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
-import org.activiti.engine.RuntimeService;
 import org.activiti.engine.TaskService;
-import org.activiti.engine.repository.Deployment;
-import org.activiti.engine.repository.DeploymentBuilder;
 import org.activiti.engine.repository.DeploymentQuery;
-import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.task.Task;
 import org.activiti.engine.task.TaskQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -63,19 +58,9 @@ class WorkflowControllerTest {
     @MockBean
     private RepositoryService repositoryService;
     @Mock
-    private RuntimeService runtimeService;
-    @Mock
     private TaskService taskService;
     @Mock
-    private ProcessInstance processInstance;
-    @Mock
     private TaskQuery taskQuery;
-    @Mock
-    private Task task;
-    @Mock
-    private DeploymentBuilder deploymentBuilder;
-    @Mock
-    private Deployment deployment;
     @Mock
     private DeploymentQuery deploymentQuery;
 
@@ -265,14 +250,10 @@ class WorkflowControllerTest {
     @Test
     @DisplayName("Should retrieve all tasks")
     void getAllTasks() throws Exception {
-        given(processEngine.getTaskService()).willReturn(taskService);
-        given(taskService.createTaskQuery()).willReturn(taskQuery);
-
         mockMvc.perform(get(API_PROCESS_TASKS_URL))
                 .andExpect(status().isOk());
 
-        verify(processEngine).getTaskService();
-        verify(taskService).createTaskQuery();
+        verify(workflowService).findAllTasks();
     }
 
     @Test

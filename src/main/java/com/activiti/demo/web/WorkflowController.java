@@ -77,12 +77,7 @@ public class WorkflowController {
     @GetMapping(value = "/tasks", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public List<TaskObject> getAllTasks() {
-        return processEngine.getTaskService()
-                .createTaskQuery()
-                .list()
-                .stream()
-                .map(this::createTaskObject)
-                .collect(Collectors.toList());
+        return workflowServiceImpl.findAllTasks();
     }
 
     @ResponseStatus(value = OK)

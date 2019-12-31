@@ -101,4 +101,18 @@ class WorkflowControllerUnitTest {
         verify(workflowService).findTaskByTaskId(taskId);
         verify(taskObject).getId();
     }
+
+    @Test
+    @DisplayName("Should retrieve all tasks")
+    void findAllTasks() {
+        List<TaskObject> taskObjects = List.of(this.taskObject);
+        given(workflowService.findAllTasks()).willReturn(taskObjects);
+
+        List<TaskObject> tasks = workflowController.getAllTasks();
+
+        assertThat(tasks).isNotEmpty();
+        TaskObject task = tasks.get(0);
+        assertThat(task).isEqualTo(taskObject);
+        verify(workflowService).findAllTasks();
+    }
 }

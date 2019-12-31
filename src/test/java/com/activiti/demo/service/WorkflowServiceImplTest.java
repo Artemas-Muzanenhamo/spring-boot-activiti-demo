@@ -126,4 +126,19 @@ class WorkflowServiceImplTest {
         verify(taskService).createTaskQuery();
         verify(taskQuery).taskId(anyString());
     }
+
+    @Test
+    @DisplayName("Should return all tasks")
+    void findAllTasks() {
+        given(processEngine.getTaskService()).willReturn(taskService);
+        given(taskService.createTaskQuery()).willReturn(taskQuery);
+        given(taskQuery.list()).willReturn(List.of(task));
+
+        List<TaskObject> tasks = workflowService.findAllTasks();
+
+        assertThat(tasks).isNotEmpty();
+        verify(processEngine).getTaskService();
+        verify(taskService).createTaskQuery();
+        verify(taskQuery).list();
+    }
 }
