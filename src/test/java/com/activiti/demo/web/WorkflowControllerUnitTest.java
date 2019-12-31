@@ -1,13 +1,11 @@
 package com.activiti.demo.web;
 
-import com.activiti.demo.model.ProcessInstanceKey;
-import com.activiti.demo.model.ProcessName;
-import com.activiti.demo.model.TaskAssignee;
-import com.activiti.demo.model.TaskObject;
+import com.activiti.demo.model.*;
 import com.activiti.demo.service.WorkflowService;
 import com.activiti.demo.web.json.ProcessInstanceKeyJson;
 import com.activiti.demo.web.json.ProcessNameJson;
 import com.activiti.demo.web.json.TaskAssigneeJson;
+import com.activiti.demo.web.json.TaskIdJson;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -28,6 +26,7 @@ class WorkflowControllerUnitTest {
     private static final String PROCESS_NAME = "some-process-name";
     private static final String PROCESS_INSTANCE_KEY = "some-process-instance-key";
     private static final String TASK_ASSIGNEE = "some-task-assignee";
+    private static final String TASK_ID = "123";
     private WorkflowController workflowController;
     @Mock
     private WorkflowService workflowService;
@@ -84,5 +83,22 @@ class WorkflowControllerUnitTest {
 
         verify(taskObject).getAssignee();
         verify(workflowService).findTaskByAssignee(taskAssignee);
+    }
+
+    @Test
+    @DisplayName("Should retrieve a task given a valid Task Id")
+    void findTasksByTaskId() {
+        TaskIdJson taskIdJson = new TaskIdJson(TASK_ID);
+        TaskId taskId = new TaskId(TASK_ID);
+        given(workflowService.findTaskByTaskId(taskId)).willReturn(taskObject);
+        given(taskObject.getId()).willReturn(TASK_ID);
+
+        TaskObject task = workflowController.findTaskById(taskIdJson);
+
+        assertThat(task).isNotNull();
+        assertThat(task.getId()).isEqualTo(TASK_ID);
+
+        verify(workflowService).findTaskByTaskId(taskId);
+        verify(taskObject).getId();
     }
 }

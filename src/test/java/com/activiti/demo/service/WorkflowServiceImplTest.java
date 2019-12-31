@@ -1,9 +1,6 @@
 package com.activiti.demo.service;
 
-import com.activiti.demo.model.ProcessInstanceKey;
-import com.activiti.demo.model.ProcessName;
-import com.activiti.demo.model.TaskAssignee;
-import com.activiti.demo.model.TaskObject;
+import com.activiti.demo.model.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -30,7 +27,8 @@ import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class WorkflowServiceImplTest {
-    public static final String TASK_ASSIGNEE = "some-task-assignee";
+    private static final String TASK_ASSIGNEE = "some-task-assignee";
+    private static final String TASK_ID = "1234";
     @InjectMocks
     private WorkflowServiceImpl workflowService;
     @Mock
@@ -89,8 +87,8 @@ class WorkflowServiceImplTest {
     }
 
     @Test
-    @DisplayName("Should return a task given a valid Task Assignee")
-    void findTask() {
+    @DisplayName("Should return tasks given a valid Task Assignee")
+    void findTasksByTaskAssignee() {
         TaskAssignee taskAssignee = new TaskAssignee(TASK_ASSIGNEE);
         List<Task> tasks = List.of(task);
         given(task.getAssignee()).willReturn(TASK_ASSIGNEE);
@@ -110,5 +108,22 @@ class WorkflowServiceImplTest {
         verify(taskQuery).taskAssignee(anyString());
         verify(taskQuery).list();
         verify(task).getAssignee();
+    }
+
+    @Test
+    @DisplayName("Should return a task given a valid Task Id")
+    void findTaskByTaskId() {
+        TaskId taskId = new TaskId(TASK_ID);
+        given(processEngine.getTaskService()).willReturn(taskService);
+        given(taskService.createTaskQuery()).willReturn(taskQuery);
+        given(taskQuery.taskId(taskId.getTaskId())).willReturn(taskQuery);
+
+        TaskObject task = workflowService.findTaskByTaskId(taskId);
+
+        assertThat(task).isNotNull();
+
+        verify(processEngine).getTaskService();
+        verify(taskService).createTaskQuery();
+        verify(taskQuery).taskId(anyString());
     }
 }

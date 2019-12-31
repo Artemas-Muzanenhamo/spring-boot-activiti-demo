@@ -3,6 +3,7 @@ package com.activiti.demo.web;
 import com.activiti.demo.model.ProcessInstanceKey;
 import com.activiti.demo.model.ProcessName;
 import com.activiti.demo.model.TaskAssignee;
+import com.activiti.demo.model.TaskId;
 import com.activiti.demo.service.WorkflowService;
 import net.minidev.json.JSONObject;
 import org.activiti.engine.ProcessEngine;
@@ -31,7 +32,6 @@ import java.util.Map;
 
 import static java.util.Collections.emptyMap;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
@@ -220,18 +220,13 @@ class WorkflowControllerTest {
         Map<String, String> taskId = new HashMap<>();
         taskId.put("taskId", "1");
         JSONObject jsonObject = new JSONObject(taskId);
-        given(processEngine.getTaskService()).willReturn(taskService);
-        given(taskService.createTaskQuery()).willReturn(taskQuery);
-        given(taskQuery.taskId(taskId.get("taskId"))).willReturn(taskQuery);
 
         mockMvc.perform(post(API_PROCESS_TASK_URL)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
 
-        verify(processEngine).getTaskService();
-        verify(taskService).createTaskQuery();
-        verify(taskQuery).taskId(anyString());
+        verify(workflowService).findTaskByTaskId(any(TaskId.class));
     }
 
     @Test

@@ -1,9 +1,6 @@
 package com.activiti.demo.service;
 
-import com.activiti.demo.model.ProcessInstanceKey;
-import com.activiti.demo.model.ProcessName;
-import com.activiti.demo.model.TaskAssignee;
-import com.activiti.demo.model.TaskObject;
+import com.activiti.demo.model.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
@@ -49,6 +46,16 @@ public class WorkflowServiceImpl implements WorkflowService {
                 .stream()
                 .map(this::createTaskObject)
                 .collect(toList());
+    }
+
+    @Override
+    public TaskObject findTaskByTaskId(TaskId taskId) {
+        return processEngine.getTaskService().createTaskQuery()
+                .taskId(taskId.getTaskId()).list()
+                .stream()
+                .map(this::createTaskObject)
+                .findFirst()
+                .orElse(new TaskObject());
     }
 
     private TaskObject createTaskObject(Task task) {

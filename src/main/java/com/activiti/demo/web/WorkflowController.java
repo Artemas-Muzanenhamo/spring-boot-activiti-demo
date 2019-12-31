@@ -70,12 +70,7 @@ public class WorkflowController {
     public TaskObject findTaskById(@RequestBody TaskIdJson taskIdJson) {
         TaskId taskId = taskIdJsonToDto(taskIdJson);
         validateTaskIdIsNumeric(taskId);
-        return processEngine.getTaskService().createTaskQuery()
-                .taskId(taskId.getTaskId()).list()
-                .stream()
-                .map(this::createTaskObject)
-                .findFirst()
-                .orElse(new TaskObject());
+        return workflowServiceImpl.findTaskByTaskId(taskId);
     }
 
     @ResponseStatus(value = OK)
