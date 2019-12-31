@@ -2,6 +2,8 @@ package com.activiti.demo.service;
 
 import com.activiti.demo.model.ProcessInstanceKey;
 import com.activiti.demo.model.ProcessName;
+import com.activiti.demo.model.TaskAssignee;
+import com.activiti.demo.model.TaskObject;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.RuntimeService;
@@ -19,12 +21,16 @@ import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 
 @ExtendWith(MockitoExtension.class)
 class WorkflowServiceImplTest {
+    public static final String TASK_ASSIGNEE = "some-task-assignee";
     @InjectMocks
     private WorkflowServiceImpl workflowService;
     @Mock
@@ -80,5 +86,26 @@ class WorkflowServiceImplTest {
 
         verify(processEngine).getRuntimeService();
         verify(runtimeService).startProcessInstanceByKey(anyString());
+    }
+
+    @Test
+    @DisplayName("Should return a task given a valid Task Assignee")
+    void findTask() {
+        TaskAssignee taskAssignee = new TaskAssignee(TASK_ASSIGNEE);
+        List<Task> tasks = List.of(task);
+        given(processEngine.getTaskService()).willReturn(taskService);
+        given(taskService.createTaskQuery()).willReturn(taskQuery);
+        given(taskQuery.taskAssignee(taskAssignee.getTaskAssignee())).willReturn(taskQuery);
+        given(taskQuery.list()).willReturn(tasks);
+
+        List<TaskObject> taskByAssignee = workflowService.findTaskByAssignee(taskAssignee);
+
+        assertThat(taskByAssignee).isNotEmpty();
+        TaskObject task = taskByAssignee.get(0);
+        assertThat(task).isNotNull();
+        verify(processEngine).getTaskService();
+        verify(taskService).createTaskQuery();
+        verify(taskQuery).taskAssignee(anyString());
+        verify(taskQuery).list();
     }
 }

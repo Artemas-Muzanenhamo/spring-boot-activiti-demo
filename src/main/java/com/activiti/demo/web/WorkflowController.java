@@ -59,15 +59,9 @@ public class WorkflowController {
     @ResponseStatus(value = OK)
     @PostMapping(value = "/find-task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public List<TaskObject> findTask(@RequestBody TaskAssigneeJson taskAssigneeJson) {
+    public List<TaskObject> findTasks(@RequestBody TaskAssigneeJson taskAssigneeJson) {
         TaskAssignee taskAssignee = taskAssigneeJsonToDto(taskAssigneeJson);
-        return processEngine.getTaskService()
-                .createTaskQuery()
-                .taskAssignee(taskAssignee.getTaskAssignee())
-                .list()
-                .stream()
-                .map(this::createTaskObject)
-                .collect(Collectors.toList());
+        return workflowServiceImpl.findTaskByAssignee(taskAssignee);
     }
 
     @ResponseStatus(value = OK)

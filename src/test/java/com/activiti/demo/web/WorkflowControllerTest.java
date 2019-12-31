@@ -2,6 +2,7 @@ package com.activiti.demo.web;
 
 import com.activiti.demo.model.ProcessInstanceKey;
 import com.activiti.demo.model.ProcessName;
+import com.activiti.demo.model.TaskAssignee;
 import com.activiti.demo.service.WorkflowService;
 import net.minidev.json.JSONObject;
 import org.activiti.engine.ProcessEngine;
@@ -26,7 +27,6 @@ import org.springframework.test.context.junit.jupiter.SpringExtension;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 import static java.util.Collections.emptyMap;
@@ -176,21 +176,13 @@ class WorkflowControllerTest {
         Map<String, String> assignee = new HashMap<>();
         assignee.put("taskAssignee", "artemas");
         JSONObject jsonObject = new JSONObject(assignee);
-        List<Task> tasks = List.of(this.task);
-        given(processEngine.getTaskService()).willReturn(taskService);
-        given(taskService.createTaskQuery()).willReturn(taskQuery);
-        given(taskQuery.taskAssignee(assignee.get("taskAssignee"))).willReturn(taskQuery);
-        given(taskQuery.list()).willReturn(tasks);
 
         mockMvc.perform(post(API_PROCESS_FIND_TASK_URL)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isOk());
 
-        verify(processEngine).getTaskService();
-        verify(taskService).createTaskQuery();
-        verify(taskQuery).taskAssignee(anyString());
-        verify(taskQuery).list();
+        verify(workflowService).findTaskByAssignee(any(TaskAssignee.class));
     }
 
     @Test
@@ -205,10 +197,7 @@ class WorkflowControllerTest {
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
 
-        verifyZeroInteractions(processEngine);
-        verifyZeroInteractions(taskService);
-        verifyZeroInteractions(taskQuery);
-        verifyZeroInteractions(taskQuery);
+        verifyZeroInteractions(workflowService);
     }
 
     @Test
@@ -222,10 +211,7 @@ class WorkflowControllerTest {
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
 
-        verifyZeroInteractions(processEngine);
-        verifyZeroInteractions(taskService);
-        verifyZeroInteractions(taskQuery);
-        verifyZeroInteractions(taskQuery);
+        verifyZeroInteractions(workflowService);
     }
 
     @Test

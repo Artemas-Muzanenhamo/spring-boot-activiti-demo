@@ -2,12 +2,19 @@ package com.activiti.demo.service;
 
 import com.activiti.demo.model.ProcessInstanceKey;
 import com.activiti.demo.model.ProcessName;
+import com.activiti.demo.model.TaskAssignee;
+import com.activiti.demo.model.TaskObject;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+
+import static java.util.stream.Collectors.toList;
 
 @Service
 public class WorkflowServiceImpl implements WorkflowService {
@@ -31,5 +38,24 @@ public class WorkflowServiceImpl implements WorkflowService {
                 .startProcessInstanceByKey(processInstanceKey.getProcessInstanceKey());
         log.info("PROCESS INSTANCE ID:-->" + processInstance.getId());
         log.info("PROCESS INSTANCE DEF ID:-->" + processInstance.getProcessDefinitionId());
+    }
+
+    @Override
+    public List<TaskObject> findTaskByAssignee(TaskAssignee taskAssignee) {
+        return processEngine.getTaskService()
+                .createTaskQuery()
+                .taskAssignee(taskAssignee.getTaskAssignee())
+                .list()
+                .stream()
+                .map(this::createTaskObject)
+                .collect(toList());
+    }
+
+    private TaskObject createTaskObject(Task task) {
+        return new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
+                task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),
+                task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
+                task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
+                task.getDelegationState());
     }
 }
