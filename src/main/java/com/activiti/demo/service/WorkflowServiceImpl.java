@@ -2,6 +2,7 @@ package com.activiti.demo.service;
 
 import com.activiti.demo.model.*;
 import org.activiti.engine.ProcessEngine;
+import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
 import org.activiti.engine.task.Task;
@@ -17,9 +18,11 @@ import static java.util.stream.Collectors.toList;
 public class WorkflowServiceImpl implements WorkflowService {
     private final Logger log = LoggerFactory.getLogger(this.getClass());
     private ProcessEngine processEngine;
+    private RepositoryService repositoryService;
 
-    public WorkflowServiceImpl(ProcessEngine processEngine) {
+    public WorkflowServiceImpl(ProcessEngine processEngine, RepositoryService repositoryService) {
         this.processEngine = processEngine;
+        this.repositoryService = repositoryService;
     }
 
     @Override
@@ -86,6 +89,12 @@ public class WorkflowServiceImpl implements WorkflowService {
                 .stream()
                 .map(this::createDeploymentObject)
                 .collect(toList());
+    }
+
+    @Override
+    public void deleteDeployedProcess(DeploymentId deploymentId) {
+        log.info("ABOUT TO DELETE PROCESS: " + deploymentId.getDeploymentId());
+        repositoryService.deleteDeployment(deploymentId.getDeploymentId());
     }
 
     private DeploymentObject createDeploymentObject(Deployment deployment) {

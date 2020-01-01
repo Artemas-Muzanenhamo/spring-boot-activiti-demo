@@ -2,10 +2,7 @@ package com.activiti.demo.web;
 
 import com.activiti.demo.model.*;
 import com.activiti.demo.service.WorkflowService;
-import com.activiti.demo.web.json.ProcessInstanceKeyJson;
-import com.activiti.demo.web.json.ProcessNameJson;
-import com.activiti.demo.web.json.TaskAssigneeJson;
-import com.activiti.demo.web.json.TaskIdJson;
+import com.activiti.demo.web.json.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.junit.jupiter.api.BeforeEach;
@@ -27,6 +24,7 @@ class WorkflowControllerUnitTest {
     private static final String PROCESS_INSTANCE_KEY = "some-process-instance-key";
     private static final String TASK_ASSIGNEE = "some-task-assignee";
     private static final String TASK_ID = "123";
+    public static final String DEPLOYMENT_ID = "43253";
     private WorkflowController workflowController;
     @Mock
     private WorkflowService workflowService;
@@ -139,5 +137,16 @@ class WorkflowControllerUnitTest {
 
         assertThat(processes).isNotEmpty();
         verify(workflowService).findAllDeployedProcesses();
+    }
+
+    @Test
+    @DisplayName("Should delete a deployed process given a valid Deployment Id")
+    void deleteDeployedProcess() {
+        DeploymentIdJson deploymentIdJson = new DeploymentIdJson(DEPLOYMENT_ID);
+        DeploymentId deploymentId = new DeploymentId(DEPLOYMENT_ID);
+
+        workflowController.deleteDeployedProcess(deploymentIdJson);
+
+        verify(workflowService).deleteDeployedProcess(deploymentId);
     }
 }

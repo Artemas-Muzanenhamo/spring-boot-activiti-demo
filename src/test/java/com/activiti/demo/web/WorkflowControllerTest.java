@@ -1,9 +1,6 @@
 package com.activiti.demo.web;
 
-import com.activiti.demo.model.ProcessInstanceKey;
-import com.activiti.demo.model.ProcessName;
-import com.activiti.demo.model.TaskAssignee;
-import com.activiti.demo.model.TaskId;
+import com.activiti.demo.model.*;
 import com.activiti.demo.service.WorkflowService;
 import net.minidev.json.JSONObject;
 import org.activiti.engine.ProcessEngine;
@@ -305,8 +302,6 @@ class WorkflowControllerTest {
         mockMvc.perform(get(API_PROCESS_DEPLOYED_PROCESSES_URL))
                 .andExpect(status().isOk());
 
-//        verify(processEngine).getRepositoryService();
-//        verify(repositoryService).createDeploymentQuery();
         verify(workflowService).findAllDeployedProcesses();
     }
 
@@ -321,7 +316,7 @@ class WorkflowControllerTest {
                 .content(deploymentIdJson.toJSONString()))
                 .andExpect(status().isOk());
 
-        verify(repositoryService).deleteDeployment(DEPLOYMENT_ID);
+        verify(workflowService).deleteDeployedProcess(any(DeploymentId.class));
     }
 
     @Test

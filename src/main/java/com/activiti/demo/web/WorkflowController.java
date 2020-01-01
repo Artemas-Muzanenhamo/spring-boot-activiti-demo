@@ -98,9 +98,8 @@ public class WorkflowController {
     @ResponseBody
     public void deleteDeployedProcess(@RequestBody DeploymentIdJson deploymentIdJson) {
         DeploymentId deploymentId = deploymentIdJsonToDto(deploymentIdJson);
-        log.info("ABOUT TO DELETE PROCESS: " + deploymentId.getDeploymentId());
         validateDeploymentIdIsNumeric(deploymentId);
-        repositoryService.deleteDeployment(deploymentId.getDeploymentId());
+        workflowServiceImpl.deleteDeployedProcess(deploymentId);
     }
 
     private void validateTaskIdIsNumeric(TaskId taskId) {

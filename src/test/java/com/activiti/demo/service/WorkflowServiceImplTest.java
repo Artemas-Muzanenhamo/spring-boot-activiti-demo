@@ -29,6 +29,7 @@ import static org.mockito.Mockito.verify;
 class WorkflowServiceImplTest {
     private static final String TASK_ASSIGNEE = "some-task-assignee";
     private static final String TASK_ID = "1234";
+    public static final String DEPLOYMENT_ID = "43254";
     @InjectMocks
     private WorkflowServiceImpl workflowService;
     @Mock
@@ -169,5 +170,15 @@ class WorkflowServiceImplTest {
         verify(processEngine).getRepositoryService();
         verify(repositoryService).createDeploymentQuery();
         verify(deploymentQuery).list();
+    }
+
+    @Test
+    @DisplayName("Should delete a deployed process given a Deployement Id")
+    void deleteDeployedProcess() {
+        DeploymentId deploymentId = new DeploymentId(DEPLOYMENT_ID);
+
+        workflowService.deleteDeployedProcess(deploymentId);
+
+        verify(repositoryService).deleteDeployment(DEPLOYMENT_ID);
     }
 }
