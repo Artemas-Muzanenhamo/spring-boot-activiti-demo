@@ -29,7 +29,7 @@ import static org.mockito.Mockito.verify;
 class WorkflowServiceImplTest {
     private static final String TASK_ASSIGNEE = "some-task-assignee";
     private static final String TASK_ID = "1234";
-    public static final String DEPLOYMENT_ID = "43254";
+    private static final String DEPLOYMENT_ID = "43254";
     @InjectMocks
     private WorkflowServiceImpl workflowService;
     @Mock

@@ -24,7 +24,7 @@ class WorkflowControllerUnitTest {
     private static final String PROCESS_INSTANCE_KEY = "some-process-instance-key";
     private static final String TASK_ASSIGNEE = "some-task-assignee";
     private static final String TASK_ID = "123";
-    public static final String DEPLOYMENT_ID = "43253";
+    private static final String DEPLOYMENT_ID = "43253";
     private WorkflowController workflowController;
     @Mock
     private WorkflowService workflowService;

@@ -1,6 +1,7 @@
 package com.activiti.demo;
 
 import com.activiti.demo.exception.*;
+import org.activiti.engine.ActivitiObjectNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.ResponseEntity;
@@ -46,6 +47,12 @@ public class ControllerExceptionHandler {
 
     @ExceptionHandler(InvalidDeploymentIdException.class)
     public ResponseEntity<String> invalidDeploymentIdException(InvalidDeploymentIdException e) {
+        logger.error(e.getMessage(), e);
+        return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
+    }
+
+    @ExceptionHandler(ActivitiObjectNotFoundException.class)
+    public ResponseEntity<String> activitiObjectNotFoundException(ActivitiObjectNotFoundException e) {
         logger.error(e.getMessage(), e);
         return new ResponseEntity<>(e.getMessage(), BAD_REQUEST);
     }
