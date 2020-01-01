@@ -3,15 +3,9 @@ package com.activiti.demo.web;
 import com.activiti.demo.model.*;
 import com.activiti.demo.service.WorkflowService;
 import net.minidev.json.JSONObject;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
-import org.activiti.engine.TaskService;
-import org.activiti.engine.repository.DeploymentQuery;
-import org.activiti.engine.task.TaskQuery;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.Mock;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -49,16 +43,6 @@ class WorkflowControllerTest {
     private MockMvc mockMvc;
     @MockBean
     private WorkflowService workflowService;
-    @MockBean
-    private ProcessEngine processEngine;
-    @MockBean
-    private RepositoryService repositoryService;
-    @Mock
-    private TaskService taskService;
-    @Mock
-    private TaskQuery taskQuery;
-    @Mock
-    private DeploymentQuery deploymentQuery;
 
     @Test
     @DisplayName("Should deploy a process given a process name")
@@ -221,10 +205,6 @@ class WorkflowControllerTest {
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
-
-        verifyZeroInteractions(processEngine);
-        verifyZeroInteractions(taskService);
-        verifyZeroInteractions(taskQuery);
     }
 
     @Test
@@ -237,10 +217,6 @@ class WorkflowControllerTest {
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest());
-
-        verifyZeroInteractions(processEngine);
-        verifyZeroInteractions(taskService);
-        verifyZeroInteractions(taskQuery);
     }
 
     @Test
@@ -332,7 +308,7 @@ class WorkflowControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("DeploymentId is not valid"));
 
-        verifyZeroInteractions(repositoryService);
+        verifyZeroInteractions(workflowService);
     }
 
     @Test
@@ -347,7 +323,7 @@ class WorkflowControllerTest {
                 .andExpect(status().isBadRequest())
                 .andExpect(content().string("DeploymentId is not valid"));
 
-        verifyZeroInteractions(repositoryService);
+        verifyZeroInteractions(workflowService);
     }
 
     @Test

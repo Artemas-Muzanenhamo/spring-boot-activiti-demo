@@ -39,7 +39,7 @@ class WorkflowControllerUnitTest {
 
     @BeforeEach
     void setUp() {
-        workflowController = new WorkflowController(processEngine, repositoryService, workflowService);
+        workflowController = new WorkflowController(workflowService);
     }
 
     @Test
