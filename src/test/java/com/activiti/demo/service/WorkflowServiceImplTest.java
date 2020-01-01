@@ -153,4 +153,21 @@ class WorkflowServiceImplTest {
         verify(processEngine).getTaskService();
         verify(taskService).complete(TASK_ID);
     }
+
+    @Test
+    @DisplayName("Should return all deployed processes")
+    void findAllDeployedProcesses() {
+        List<Deployment> deployments = List.of(this.deployment);
+        given(processEngine.getRepositoryService()).willReturn(repositoryService);
+        given(repositoryService.createDeploymentQuery()).willReturn(deploymentQuery);
+        given(deploymentQuery.list()).willReturn(deployments);
+
+        List<DeploymentObject> processes = workflowService.findAllDeployedProcesses();
+
+        assertThat(processes).isNotEmpty();
+
+        verify(processEngine).getRepositoryService();
+        verify(repositoryService).createDeploymentQuery();
+        verify(deploymentQuery).list();
+    }
 }

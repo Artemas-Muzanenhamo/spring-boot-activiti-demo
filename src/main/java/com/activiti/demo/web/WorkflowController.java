@@ -6,14 +6,12 @@ import com.activiti.demo.service.WorkflowService;
 import com.activiti.demo.web.json.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
-import org.activiti.engine.repository.Deployment;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static com.activiti.demo.converter.DeploymentIdConverter.deploymentIdJsonToDto;
 import static com.activiti.demo.converter.ProcessInstanceKeyConverter.processInstanceKeyJsonToDto;
@@ -92,10 +90,7 @@ public class WorkflowController {
     @GetMapping(value = "/deployed-processes", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public List<DeploymentObject> getAllDeployedProcesses() {
-        return processEngine.getRepositoryService().createDeploymentQuery().list()
-                .stream()
-                .map(this::createDeploymentObject)
-                .collect(Collectors.toList());
+        return workflowServiceImpl.findAllDeployedProcesses();
     }
 
     @ResponseStatus(value = OK)
@@ -106,11 +101,6 @@ public class WorkflowController {
         log.info("ABOUT TO DELETE PROCESS: " + deploymentId.getDeploymentId());
         validateDeploymentIdIsNumeric(deploymentId);
         repositoryService.deleteDeployment(deploymentId.getDeploymentId());
-    }
-
-    private DeploymentObject createDeploymentObject(Deployment deployment) {
-        return new DeploymentObject(deployment.getId(), deployment.getName(),
-                deployment.getDeploymentTime(), deployment.getCategory(), deployment.getKey(), deployment.getTenantId());
     }
 
     private void validateTaskIdIsNumeric(TaskId taskId) {

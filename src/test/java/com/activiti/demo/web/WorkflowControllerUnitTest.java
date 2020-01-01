@@ -36,6 +36,8 @@ class WorkflowControllerUnitTest {
     private RepositoryService repositoryService;
     @Mock
     private TaskObject taskObject;
+    @Mock
+    private DeploymentObject deploymentObject;
 
     @BeforeEach
     void setUp() {
@@ -125,5 +127,17 @@ class WorkflowControllerUnitTest {
         workflowController.completeTask(taskIdJson);
 
         verify(workflowService).completeTask(taskId);
+    }
+
+    @Test
+    @DisplayName("Should get all deployed processes")
+    void getAllDeployedProcesses() {
+        List<DeploymentObject> deployedProcesses = List.of(this.deploymentObject);
+        given(workflowService.findAllDeployedProcesses()).willReturn(deployedProcesses);
+
+        List<DeploymentObject> processes = workflowController.getAllDeployedProcesses();
+
+        assertThat(processes).isNotEmpty();
+        verify(workflowService).findAllDeployedProcesses();
     }
 }

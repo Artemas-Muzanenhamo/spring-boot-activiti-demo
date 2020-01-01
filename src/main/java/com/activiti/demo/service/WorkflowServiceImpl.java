@@ -80,6 +80,19 @@ public class WorkflowServiceImpl implements WorkflowService {
         log.info("DELETED TASKID: " + taskId.getTaskId());
     }
 
+    @Override
+    public List<DeploymentObject> findAllDeployedProcesses() {
+        return processEngine.getRepositoryService().createDeploymentQuery().list()
+                .stream()
+                .map(this::createDeploymentObject)
+                .collect(toList());
+    }
+
+    private DeploymentObject createDeploymentObject(Deployment deployment) {
+        return new DeploymentObject(deployment.getId(), deployment.getName(),
+                deployment.getDeploymentTime(), deployment.getCategory(), deployment.getKey(), deployment.getTenantId());
+    }
+
     private TaskObject createTaskObject(Task task) {
         return new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
                 task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),

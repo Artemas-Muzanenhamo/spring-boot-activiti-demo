@@ -27,7 +27,6 @@ import java.util.Map;
 
 import static java.util.Collections.emptyMap;
 import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyZeroInteractions;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
@@ -303,14 +302,12 @@ class WorkflowControllerTest {
     @Test
     @DisplayName("Should get all deployed processes")
     void getAllDeployedProcesses() throws Exception {
-        given(processEngine.getRepositoryService()).willReturn(repositoryService);
-        given(repositoryService.createDeploymentQuery()).willReturn(deploymentQuery);
-
         mockMvc.perform(get(API_PROCESS_DEPLOYED_PROCESSES_URL))
                 .andExpect(status().isOk());
 
-        verify(processEngine).getRepositoryService();
-        verify(repositoryService).createDeploymentQuery();
+//        verify(processEngine).getRepositoryService();
+//        verify(repositoryService).createDeploymentQuery();
+        verify(workflowService).findAllDeployedProcesses();
     }
 
     @Test

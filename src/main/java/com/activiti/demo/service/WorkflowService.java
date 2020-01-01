@@ -16,4 +16,6 @@ public interface WorkflowService {
     List<TaskObject> findAllTasks();
 
     void completeTask(TaskId taskId);
+
+    List<DeploymentObject> findAllDeployedProcesses();
 }
