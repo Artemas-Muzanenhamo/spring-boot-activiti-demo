@@ -10,7 +10,7 @@ public class TaskAssigneeConverter {
     public static TaskAssignee taskAssigneeJsonToDto(TaskAssigneeJson taskAssigneeJson) {
         return Optional.ofNullable(taskAssigneeJson)
                 .map(TaskAssigneeJson::getTaskAssignee)
-                .filter(taskAssignee -> nonEmpty(taskAssignee))
+                .filter(TaskAssigneeConverter::nonEmpty)
                 .map(TaskAssignee::new)
                 .orElseThrow(() -> new InvalidTaskAssigneeException("Task assignee supplied is not valid"));
     }
