@@ -44,6 +44,7 @@ class WorkflowControllerTest {
     private static final String FIND_TASK_BY_ASSIGNEE_ERROR_MESSAGE = "Task assignee supplied is not valid";
     private static final String FIND_TASK_BY_ID_ERROR_MESSAGE = "Task Id is not valid";
     private static final String COMPLETE_TASK_BY_TASK_ID_ERROR_MESSAGE = "Task Id is not valid";
+    private static final String DEPLOY_PROCESS_BY_DEPLOYMENT_ID_ERROR_MESSAGE = "DeploymentId is not valid";
 
     @Autowired
     private MockMvc mockMvc;
@@ -401,7 +402,23 @@ class WorkflowControllerTest {
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(deploymentIdJson.toJSONString()))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("DeploymentId is not valid"));
+                .andExpect(content().string(DEPLOY_PROCESS_BY_DEPLOYMENT_ID_ERROR_MESSAGE));
+
+        verifyZeroInteractions(workflowService);
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when the DeploymentIdJson value is empty")
+    void testDeploymentJsonValueIsEmpty() throws Exception {
+        Map<String, String> processId = new HashMap<>();
+        processId.put("deploymentId", "");
+        JSONObject deploymentIdJson = new JSONObject(processId);
+
+        mockMvc.perform(delete(API_PROCESS_DEPLOYED_PROCESSES_DELETE_URL)
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(deploymentIdJson.toJSONString()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(DEPLOY_PROCESS_BY_DEPLOYMENT_ID_ERROR_MESSAGE));
 
         verifyZeroInteractions(workflowService);
     }
@@ -416,7 +433,7 @@ class WorkflowControllerTest {
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(deploymentIdJson.toJSONString()))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("DeploymentId is not valid"));
+                .andExpect(content().string(DEPLOY_PROCESS_BY_DEPLOYMENT_ID_ERROR_MESSAGE));
 
         verifyZeroInteractions(workflowService);
     }

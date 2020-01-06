@@ -36,6 +36,16 @@ class DeploymentIdConverterTest {
     }
 
     @Test
+    @DisplayName("Should throw an exception when the DeploymentId value is empty")
+    void testWhenDeploymentIdValueIsEmpty() {
+        DeploymentIdJson deploymentIdJson = new DeploymentIdJson("");
+
+        InvalidDeploymentIdException exception = assertThrows(InvalidDeploymentIdException.class, () -> deploymentIdJsonToDto(deploymentIdJson));
+
+        assertThat(exception).hasMessage("DeploymentId is not valid");
+    }
+
+    @Test
     @DisplayName("Should throw an exception when the DeploymentId is null")
     void testWhenDeploymentIdIsNull() {
         DeploymentIdJson deploymentIdJson = new DeploymentIdJson(null);

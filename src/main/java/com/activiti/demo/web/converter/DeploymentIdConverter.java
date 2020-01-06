@@ -10,7 +10,12 @@ public class DeploymentIdConverter {
     public static DeploymentId deploymentIdJsonToDto(DeploymentIdJson deploymentIdJson) {
         return Optional.ofNullable(deploymentIdJson)
                 .map(DeploymentIdJson::getDeploymentId)
+                .filter(DeploymentIdConverter::nonEmpty)
                 .map(DeploymentId::new)
                 .orElseThrow(() -> new InvalidDeploymentIdException("DeploymentId is not valid"));
+    }
+
+    private static boolean nonEmpty(String deploymentId) {
+        return !deploymentId.isEmpty();
     }
 }
