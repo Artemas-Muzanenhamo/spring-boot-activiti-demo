@@ -42,6 +42,7 @@ class WorkflowControllerTest {
     private static final String DEPLOY_PROCESS_ERROR_MESSAGE = "Process name supplied is not valid";
     private static final String START_PROCESS_ERROR_MESSAGE = "Process instance key supplied is not valid";
     private static final String FIND_TASK_BY_ASSIGNEE_ERROR_MESSAGE = "Task assignee supplied is not valid";
+    private static final String FIND_TASK_BY_ID_ERROR_MESSAGE = "Task Id is not valid";
 
     @Autowired
     private MockMvc mockMvc;
@@ -263,7 +264,22 @@ class WorkflowControllerTest {
         mockMvc.perform(post(API_PROCESS_TASK_URL)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(FIND_TASK_BY_ID_ERROR_MESSAGE));
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when the taskId value is empty")
+    void throwExceptionWhenTaskIdValueIsEmpty() throws Exception {
+        Map<String, String> taskId = new HashMap<>();
+        taskId.put("taskId", "");
+        JSONObject jsonObject = new JSONObject(taskId);
+
+        mockMvc.perform(post(API_PROCESS_TASK_URL)
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(FIND_TASK_BY_ID_ERROR_MESSAGE));
     }
 
     @Test
@@ -275,7 +291,8 @@ class WorkflowControllerTest {
         mockMvc.perform(post(API_PROCESS_TASK_URL)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(FIND_TASK_BY_ID_ERROR_MESSAGE));
     }
 
     @Test

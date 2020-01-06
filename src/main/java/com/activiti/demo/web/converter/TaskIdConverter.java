@@ -10,7 +10,12 @@ public class TaskIdConverter {
     public static TaskId taskIdJsonToDto(TaskIdJson taskIdJson) {
         return Optional.ofNullable(taskIdJson)
                 .map(TaskIdJson::getTaskId)
+                .filter(TaskIdConverter::nonEmpty)
                 .map(TaskId::new)
                 .orElseThrow(() -> new InvalidTaskIdException("Task Id is not valid"));
+    }
+
+    private static boolean nonEmpty(String taskId) {
+        return !taskId.isEmpty();
     }
 }

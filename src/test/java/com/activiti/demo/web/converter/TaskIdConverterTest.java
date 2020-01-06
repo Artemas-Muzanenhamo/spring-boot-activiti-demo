@@ -37,6 +37,16 @@ class TaskIdConverterTest {
     }
 
     @Test
+    @DisplayName("Should throw an exception when a TaskIdJson value is empty")
+    void throwExceptionWhenTaskIdJsonValueIsEmpty() {
+        TaskIdJson taskIdJson = new TaskIdJson("");
+
+        InvalidTaskIdException exception = assertThrows(InvalidTaskIdException.class, () -> taskIdJsonToDto(taskIdJson));
+
+        assertThat(exception).hasMessage("Task Id is not valid");
+    }
+
+    @Test
     @DisplayName("Should throw an exception when a TaskIdJson is null")
     void throwExceptionWhenTaskIdJsonIsNull() {
         InvalidTaskIdException exception = assertThrows(InvalidTaskIdException.class, () -> taskIdJsonToDto(null));
