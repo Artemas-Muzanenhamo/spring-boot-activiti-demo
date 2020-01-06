@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class TaskAssigneeConverterTest {
 
     private static final String ASSIGNEE = "some-assignee";
+    private static final String MESSAGE = "Task assignee supplied is not valid";
 
     @Test
     @DisplayName("Should convert TaskAssigneeJson to DTO")
@@ -26,12 +27,22 @@ class TaskAssigneeConverterTest {
     }
 
     @Test
-    @DisplayName("Should throw an exception when TaskAssignee valus is null")
+    @DisplayName("Should throw an exception when TaskAssignee value is null")
     void throwExceptionWhenTaskAssigneeVaueIsNull() {
         TaskAssigneeJson taskAssigneeJson = new TaskAssigneeJson(null);
 
         InvalidTaskAssigneeException exception = assertThrows(InvalidTaskAssigneeException.class, () -> taskAssigneeJsonToDto(taskAssigneeJson));
 
-        assertThat(exception).hasMessage("Task assignee supplied is not valid");
+        assertThat(exception).hasMessage(MESSAGE);
+    }
+
+    @Test
+    @DisplayName("Should throw an exception when TaskAssignee value is empty")
+    void throwExceptionWhenTaskAssigneeVaueIsEmpty() {
+        TaskAssigneeJson taskAssigneeJson = new TaskAssigneeJson("");
+
+        InvalidTaskAssigneeException exception = assertThrows(InvalidTaskAssigneeException.class, () -> taskAssigneeJsonToDto(taskAssigneeJson));
+
+        assertThat(exception).hasMessage(MESSAGE);
     }
 }
