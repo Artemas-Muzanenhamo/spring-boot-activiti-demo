@@ -40,6 +40,7 @@ class WorkflowControllerTest {
     private static final String API_PROCESS_START_TASK_URL = "/api/process/start-task";
     private static final String DEPLOYMENT_ID = "34578";
     private static final String DEPLOY_PROCESS_ERROR_MESSAGE = "Process name supplied is not valid";
+    private static final String START_PROCESS_ERROR_MESSAGE = "Process instance key supplied is not valid";
 
     @Autowired
     private MockMvc mockMvc;
@@ -137,7 +138,24 @@ class WorkflowControllerTest {
         mockMvc.perform(post(API_PROCESS_START_TASK_URL)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(START_PROCESS_ERROR_MESSAGE));
+
+        verifyZeroInteractions(workflowService);
+    }
+
+    @Test
+    @DisplayName("Should throw a BAD_REQUEST when the processInstanceKey value is empty")
+    void throwExceptionWhenProcessInstanceKeyValueIsEmpty() throws Exception {
+        Map<String, String> variables = new HashMap<>();
+        variables.put("processInstanceKey", "");
+        JSONObject jsonObject = new JSONObject(variables);
+
+        mockMvc.perform(post(API_PROCESS_START_TASK_URL)
+                .contentType(APPLICATION_JSON_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(START_PROCESS_ERROR_MESSAGE));
 
         verifyZeroInteractions(workflowService);
     }
@@ -151,7 +169,8 @@ class WorkflowControllerTest {
         mockMvc.perform(post(API_PROCESS_START_TASK_URL)
                 .contentType(APPLICATION_JSON_VALUE)
                 .content(jsonObject.toJSONString()))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(START_PROCESS_ERROR_MESSAGE));
 
         verifyZeroInteractions(workflowService);
     }

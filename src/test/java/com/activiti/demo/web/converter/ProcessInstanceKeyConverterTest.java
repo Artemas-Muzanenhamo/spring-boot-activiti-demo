@@ -13,6 +13,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 class ProcessInstanceKeyConverterTest {
 
     private static final String PROCESS_INSTANCE_KEY = "234422";
+    private static final String MESSAGE = "Process instance key supplied is not valid";
 
     @Test
     @DisplayName("Should convert ProcessInstanceKeyJson to DTO")
@@ -32,7 +33,17 @@ class ProcessInstanceKeyConverterTest {
 
         InvalidProcessInstanceKeyException exception = assertThrows(InvalidProcessInstanceKeyException.class, () -> processInstanceKeyJsonToDto(processInstanceKeyJson));
 
-        assertThat(exception).hasMessage("Process instance key supplied is not valid");
+        assertThat(exception).hasMessage(MESSAGE);
+    }
+
+    @Test
+    @DisplayName("Should throw an Exception when the ProcessInstanceKeyJson value is empty")
+    void throwExceptionWhenProcessInstanceKeyValueIsEmpty() {
+        ProcessInstanceKeyJson processInstanceKeyJson = new ProcessInstanceKeyJson("");
+
+        InvalidProcessInstanceKeyException exception = assertThrows(InvalidProcessInstanceKeyException.class, () -> processInstanceKeyJsonToDto(processInstanceKeyJson));
+
+        assertThat(exception).hasMessage(MESSAGE);
     }
 
     @Test
@@ -40,6 +51,6 @@ class ProcessInstanceKeyConverterTest {
     void throwExceptionWhenProcessInstanceKeyIsNull() {
         InvalidProcessInstanceKeyException exception = assertThrows(InvalidProcessInstanceKeyException.class, () -> processInstanceKeyJsonToDto(null));
 
-        assertThat(exception).hasMessage("Process instance key supplied is not valid");
+        assertThat(exception).hasMessage(MESSAGE);
     }
 }

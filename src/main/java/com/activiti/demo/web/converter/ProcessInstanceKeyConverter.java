@@ -10,7 +10,12 @@ public class ProcessInstanceKeyConverter {
     public static ProcessInstanceKey processInstanceKeyJsonToDto(ProcessInstanceKeyJson processInstanceKeyJson) {
         return Optional.ofNullable(processInstanceKeyJson)
                 .map(ProcessInstanceKeyJson::getProcessInstanceKey)
+                .filter(ProcessInstanceKeyConverter::nonEmpty)
                 .map(ProcessInstanceKey::new)
                 .orElseThrow(() -> new InvalidProcessInstanceKeyException("Process instance key supplied is not valid"));
+    }
+
+    private static boolean nonEmpty(String processInstanceKey) {
+        return !processInstanceKey.isEmpty();
     }
 }
