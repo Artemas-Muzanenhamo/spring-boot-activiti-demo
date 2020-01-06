@@ -40,6 +40,7 @@ class WorkflowControllerTest {
     private static final String API_PROCESS_START_TASK_URL = "/api/process/start-task";
     private static final String DEPLOYMENT_ID = "34578";
     private static final String DEPLOY_PROCESS_ERROR_MESSAGE = "Process name supplied is not valid";
+
     @Autowired
     private MockMvc mockMvc;
     @MockBean

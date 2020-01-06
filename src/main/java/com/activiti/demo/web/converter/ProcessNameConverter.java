@@ -10,8 +10,12 @@ public class ProcessNameConverter {
     public static ProcessName processNameJsonToDto(ProcessNameJson processNameJson) {
         return Optional.ofNullable(processNameJson)
                 .map(ProcessNameJson::getProcessName)
-                .filter(processName -> !processName.isEmpty())
+                .filter(ProcessNameConverter::nonEmpty)
                 .map(ProcessName::new)
                 .orElseThrow(() -> new InvalidProcessNameException("Process name supplied is not valid"));
+    }
+
+    private static boolean nonEmpty(String processName) {
+        return !processName.isEmpty();
     }
 }
