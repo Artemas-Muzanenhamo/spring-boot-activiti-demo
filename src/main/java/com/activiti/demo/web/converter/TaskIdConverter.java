@@ -7,12 +7,14 @@ import com.activiti.demo.model.TaskId;
 import java.util.Optional;
 
 public class TaskIdConverter {
+    private static final String MESSAGE = "Task Id is not valid";
+
     public static TaskId taskIdJsonToDto(TaskIdJson taskIdJson) {
         return Optional.ofNullable(taskIdJson)
                 .map(TaskIdJson::getTaskId)
                 .filter(TaskIdConverter::nonEmpty)
                 .map(TaskId::new)
-                .orElseThrow(() -> new InvalidTaskIdException("Task Id is not valid"));
+                .orElseThrow(() -> new InvalidTaskIdException(MESSAGE));
     }
 
     private static boolean nonEmpty(String taskId) {
