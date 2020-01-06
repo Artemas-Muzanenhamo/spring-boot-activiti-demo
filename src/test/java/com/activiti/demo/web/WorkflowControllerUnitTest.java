@@ -3,8 +3,6 @@ package com.activiti.demo.web;
 import com.activiti.demo.model.*;
 import com.activiti.demo.service.WorkflowService;
 import com.activiti.demo.web.json.*;
-import org.activiti.engine.ProcessEngine;
-import org.activiti.engine.RepositoryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -28,10 +26,6 @@ class WorkflowControllerUnitTest {
     private WorkflowController workflowController;
     @Mock
     private WorkflowService workflowService;
-    @Mock
-    private ProcessEngine processEngine;
-    @Mock
-    private RepositoryService repositoryService;
     @Mock
     private TaskObject taskObject;
     @Mock

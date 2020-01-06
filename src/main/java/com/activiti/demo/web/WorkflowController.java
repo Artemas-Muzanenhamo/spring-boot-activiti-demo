@@ -11,11 +11,11 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-import static com.activiti.demo.converter.DeploymentIdConverter.deploymentIdJsonToDto;
-import static com.activiti.demo.converter.ProcessInstanceKeyConverter.processInstanceKeyJsonToDto;
-import static com.activiti.demo.converter.ProcessNameConverter.processNameJsonToDto;
-import static com.activiti.demo.converter.TaskAssigneeConverter.taskAssigneeJsonToDto;
-import static com.activiti.demo.converter.TaskIdConverter.taskIdJsonToDto;
+import static com.activiti.demo.web.converter.DeploymentIdConverter.deploymentIdJsonToDto;
+import static com.activiti.demo.web.converter.ProcessInstanceKeyConverter.processInstanceKeyJsonToDto;
+import static com.activiti.demo.web.converter.ProcessNameConverter.processNameJsonToDto;
+import static com.activiti.demo.web.converter.TaskAssigneeConverter.taskAssigneeJsonToDto;
+import static com.activiti.demo.web.converter.TaskIdConverter.taskIdJsonToDto;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
 

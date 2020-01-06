@@ -1,4 +1,4 @@
-package com.activiti.demo.converter;
+package com.activiti.demo.web.converter;
 
 import com.activiti.demo.exception.InvalidTaskAssigneeException;
 import com.activiti.demo.model.TaskAssignee;

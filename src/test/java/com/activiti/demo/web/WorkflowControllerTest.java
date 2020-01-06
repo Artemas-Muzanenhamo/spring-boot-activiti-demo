@@ -77,6 +77,23 @@ class WorkflowControllerTest {
     }
 
     @Test
+    @DisplayName("Should throw a BAD_REQUEST exception when process name value passed is empty")
+    void throwExceptionWhenProcessNameValueIsEmpty() throws Exception {
+        Map<String, String> processName = new HashMap<>();
+        processName.put("processName", "");
+        JSONObject jsonObject = new JSONObject(processName);
+
+        mockMvc.perform(post("/api/process/deploy")
+                .accept(APPLICATION_JSON_UTF8_VALUE)
+                .contentType(APPLICATION_JSON_UTF8_VALUE)
+                .content(jsonObject.toJSONString()))
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string("Process name supplied is not valid"));
+
+        verifyZeroInteractions(workflowService);
+    }
+
+    @Test
     @DisplayName("Should throw a BAD_REQUEST exception when process name passed is not valid")
     void throwExceptionWhenProcessNameIsInvalid() throws Exception {
         Map<String, String> processName = new HashMap<>();

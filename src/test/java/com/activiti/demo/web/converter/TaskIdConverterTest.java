@@ -1,4 +1,4 @@
-package com.activiti.demo.converter;
+package com.activiti.demo.web.converter;
 
 import com.activiti.demo.exception.InvalidTaskIdException;
 import com.activiti.demo.web.json.TaskIdJson;
@@ -6,7 +6,7 @@ import com.activiti.demo.model.TaskId;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
-import static com.activiti.demo.converter.TaskIdConverter.taskIdJsonToDto;
+import static com.activiti.demo.web.converter.TaskIdConverter.taskIdJsonToDto;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
