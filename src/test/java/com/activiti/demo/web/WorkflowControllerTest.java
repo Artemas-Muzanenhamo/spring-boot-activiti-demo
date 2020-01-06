@@ -39,6 +39,7 @@ class WorkflowControllerTest {
     private static final String API_PROCESS_FIND_TASK_URL = "/api/process/find-task";
     private static final String API_PROCESS_START_TASK_URL = "/api/process/start-task";
     private static final String DEPLOYMENT_ID = "34578";
+    private static final String DEPLOY_PROCESS_ERROR_MESSAGE = "Process name supplied is not valid";
     @Autowired
     private MockMvc mockMvc;
     @MockBean
@@ -71,7 +72,8 @@ class WorkflowControllerTest {
                 .accept(APPLICATION_JSON_UTF8_VALUE)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .content(jsonObject.toJSONString()))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(DEPLOY_PROCESS_ERROR_MESSAGE));
 
         verifyZeroInteractions(workflowService);
     }
@@ -88,7 +90,7 @@ class WorkflowControllerTest {
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .content(jsonObject.toJSONString()))
                 .andExpect(status().isBadRequest())
-                .andExpect(content().string("Process name supplied is not valid"));
+                .andExpect(content().string(DEPLOY_PROCESS_ERROR_MESSAGE));
 
         verifyZeroInteractions(workflowService);
     }
@@ -103,7 +105,8 @@ class WorkflowControllerTest {
                 .accept(APPLICATION_JSON_UTF8_VALUE)
                 .contentType(APPLICATION_JSON_UTF8_VALUE)
                 .content(jsonObject.toJSONString()))
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isBadRequest())
+                .andExpect(content().string(DEPLOY_PROCESS_ERROR_MESSAGE));
 
         verifyZeroInteractions(workflowService);
     }
