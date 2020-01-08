@@ -7,12 +7,15 @@ import com.activiti.demo.model.ProcessName;
 import java.util.Optional;
 
 public class ProcessNameConverter {
+
+    private static final String MESSAGE = "Process name supplied is not valid";
+
     public static ProcessName processNameJsonToDto(ProcessNameJson processNameJson) {
         return Optional.ofNullable(processNameJson)
                 .map(ProcessNameJson::getProcessName)
                 .filter(ProcessNameConverter::nonEmpty)
                 .map(ProcessName::new)
-                .orElseThrow(() -> new InvalidProcessNameException("Process name supplied is not valid"));
+                .orElseThrow(() -> new InvalidProcessNameException(MESSAGE));
     }
 
     private static boolean nonEmpty(String processName) {

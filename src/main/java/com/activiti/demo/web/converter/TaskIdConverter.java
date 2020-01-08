@@ -7,6 +7,7 @@ import com.activiti.demo.model.TaskId;
 import java.util.Optional;
 
 public class TaskIdConverter {
+
     private static final String MESSAGE = "Task Id is not valid";
 
     public static TaskId taskIdJsonToDto(TaskIdJson taskIdJson) {

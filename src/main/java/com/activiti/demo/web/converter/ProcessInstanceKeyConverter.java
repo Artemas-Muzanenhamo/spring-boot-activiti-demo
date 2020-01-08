@@ -7,12 +7,15 @@ import com.activiti.demo.model.ProcessInstanceKey;
 import java.util.Optional;
 
 public class ProcessInstanceKeyConverter {
+
+    private static final String MESSAGE = "Process instance key supplied is not valid";
+
     public static ProcessInstanceKey processInstanceKeyJsonToDto(ProcessInstanceKeyJson processInstanceKeyJson) {
         return Optional.ofNullable(processInstanceKeyJson)
                 .map(ProcessInstanceKeyJson::getProcessInstanceKey)
                 .filter(ProcessInstanceKeyConverter::nonEmpty)
                 .map(ProcessInstanceKey::new)
-                .orElseThrow(() -> new InvalidProcessInstanceKeyException("Process instance key supplied is not valid"));
+                .orElseThrow(() -> new InvalidProcessInstanceKeyException(MESSAGE));
     }
 
     private static boolean nonEmpty(String processInstanceKey) {
