@@ -51,7 +51,7 @@ public class WorkflowServiceImpl implements WorkflowService {
                 .taskAssignee(taskAssignee.getTaskAssignee())
                 .list()
                 .stream()
-                .map(this::createTaskObject)
+                .map(WorkflowServiceImpl::createTaskObject)
                 .collect(toList());
     }
 
@@ -60,7 +60,7 @@ public class WorkflowServiceImpl implements WorkflowService {
         return processEngine.getTaskService().createTaskQuery()
                 .taskId(taskId.getTaskId()).list()
                 .stream()
-                .map(this::createTaskObject)
+                .map(WorkflowServiceImpl::createTaskObject)
                 .findFirst()
                 .orElse(new TaskObject());
     }
@@ -71,7 +71,7 @@ public class WorkflowServiceImpl implements WorkflowService {
                 .createTaskQuery()
                 .list()
                 .stream()
-                .map(this::createTaskObject)
+                .map(WorkflowServiceImpl::createTaskObject)
                 .collect(toList());
     }
 
@@ -87,7 +87,7 @@ public class WorkflowServiceImpl implements WorkflowService {
     public List<DeploymentObject> findAllDeployedProcesses() {
         return processEngine.getRepositoryService().createDeploymentQuery().list()
                 .stream()
-                .map(this::createDeploymentObject)
+                .map(WorkflowServiceImpl::createDeploymentObject)
                 .collect(toList());
     }
 
@@ -97,12 +97,12 @@ public class WorkflowServiceImpl implements WorkflowService {
         repositoryService.deleteDeployment(deploymentId.getDeploymentId());
     }
 
-    private DeploymentObject createDeploymentObject(Deployment deployment) {
+    private static DeploymentObject createDeploymentObject(Deployment deployment) {
         return new DeploymentObject(deployment.getId(), deployment.getName(),
                 deployment.getDeploymentTime(), deployment.getCategory(), deployment.getKey(), deployment.getTenantId());
     }
 
-    private TaskObject createTaskObject(Task task) {
+    private static TaskObject createTaskObject(Task task) {
         return new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
                 task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),
                 task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
