@@ -12,6 +12,7 @@ import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+import static java.lang.String.format;
 import static java.util.stream.Collectors.toList;
 
 @Service
@@ -32,16 +33,17 @@ public class WorkflowServiceImpl implements WorkflowService {
                 .addClasspathResource("processes/my-process.bpmn20.xml")
                 .name(processName.getProcessName())
                 .deploy();
-        log.info("DEPLOYMENT ID:" + deployment.getId());
-        log.info("DEPLOYMENT NAME:" + deployment.getName());
+        log.info(format("DEPLOYMENT ID: %s", deployment.getId()));
+        log.info(format("DEPLOYMENT NAME: %s", deployment.getName()));
     }
 
     @Override
     public void startProcess(ProcessInstanceKey processInstanceKey) {
         ProcessInstance processInstance = processEngine.getRuntimeService()
                 .startProcessInstanceByKey(processInstanceKey.getProcessInstanceKey());
-        log.info("PROCESS INSTANCE ID:-->" + processInstance.getId());
-        log.info("PROCESS INSTANCE DEF ID:-->" + processInstance.getProcessDefinitionId());
+        log.info(format("PROCESS INSTANCE ID: %s", processInstance.getId()));
+        log.info(format("PROCESS INSTANCE ID: %s", processInstance.getId()));
+        log.info(format("PROCESS INSTANCE DEF ID: %s", processInstance.getProcessDefinitionId()));
     }
 
     @Override
@@ -77,10 +79,10 @@ public class WorkflowServiceImpl implements WorkflowService {
 
     @Override
     public void completeTask(TaskId taskId) {
-        log.info("ABOUT TO DELETE TASKID: " + taskId.getTaskId());
+        log.info(format("ABOUT TO COMPLETE A TASK WITH TASK ID: %s", taskId.getTaskId()));
         processEngine.getTaskService()
                 .complete(taskId.getTaskId());
-        log.info("DELETED TASKID: " + taskId.getTaskId());
+        log.info(format("COMPLETED A TASK WITH TASK ID: %s", taskId.getTaskId()));
     }
 
     @Override
@@ -93,7 +95,7 @@ public class WorkflowServiceImpl implements WorkflowService {
 
     @Override
     public void deleteDeployedProcess(DeploymentId deploymentId) {
-        log.info("ABOUT TO DELETE PROCESS: " + deploymentId.getDeploymentId());
+        log.info(format("ABOUT TO DELETE PROCESS WITH DEPLOYMENT ID: %s", deploymentId.getDeploymentId()));
         repositoryService.deleteDeployment(deploymentId.getDeploymentId());
     }
 
