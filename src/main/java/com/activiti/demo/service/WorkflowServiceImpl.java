@@ -1,11 +1,11 @@
 package com.activiti.demo.service;
 
+import com.activiti.demo.mapper.TaskObjectMapper;
 import com.activiti.demo.model.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
 import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.runtime.ProcessInstance;
-import org.activiti.engine.task.Task;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -53,7 +53,7 @@ public class WorkflowServiceImpl implements WorkflowService {
                 .taskAssignee(taskAssignee.getTaskAssignee())
                 .list()
                 .stream()
-                .map(WorkflowServiceImpl::createTaskObject)
+                .map(TaskObjectMapper::createTaskObject)
                 .collect(toList());
     }
 
@@ -62,7 +62,7 @@ public class WorkflowServiceImpl implements WorkflowService {
         return processEngine.getTaskService().createTaskQuery()
                 .taskId(taskId.getTaskId()).list()
                 .stream()
-                .map(WorkflowServiceImpl::createTaskObject)
+                .map(TaskObjectMapper::createTaskObject)
                 .findFirst()
                 .orElse(new TaskObject());
     }
@@ -73,7 +73,7 @@ public class WorkflowServiceImpl implements WorkflowService {
                 .createTaskQuery()
                 .list()
                 .stream()
-                .map(WorkflowServiceImpl::createTaskObject)
+                .map(TaskObjectMapper::createTaskObject)
                 .collect(toList());
     }
 
@@ -102,13 +102,5 @@ public class WorkflowServiceImpl implements WorkflowService {
     private static DeploymentObject createDeploymentObject(Deployment deployment) {
         return new DeploymentObject(deployment.getId(), deployment.getName(),
                 deployment.getDeploymentTime(), deployment.getCategory(), deployment.getKey(), deployment.getTenantId());
-    }
-
-    private static TaskObject createTaskObject(Task task) {
-        return new TaskObject(task.getId(), task.getName(), task.getAssignee(), task.getDescription(),
-                task.getExecutionId(), task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(),
-                task.getTaskDefinitionKey(), task.getDueDate(), task.getParentTaskId(), task.getTenantId(),
-                task.getTaskLocalVariables(), task.getProcessVariables(), task.getProcessDefinitionId(),
-                task.getDelegationState());
     }
 }
