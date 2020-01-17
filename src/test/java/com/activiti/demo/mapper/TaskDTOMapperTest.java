@@ -10,7 +10,7 @@ import org.mockito.Mock;
 import static com.activiti.demo.mapper.TaskDTOMapper.toTaskDTO;
 import static org.assertj.core.api.Assertions.assertThat;
 
-class TaskMapperTest {
+class TaskDTOMapperTest {
     @Mock
     private Task task;
 
