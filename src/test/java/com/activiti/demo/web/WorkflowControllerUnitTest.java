@@ -67,12 +67,12 @@ class WorkflowControllerUnitTest {
         given(taskDTO.getAssignee()).willReturn(TASK_ASSIGNEE);
         given(workflowService.findTaskByAssignee(taskAssignee)).willReturn(taskDTOS);
 
-        List<TaskDTO> tasks = workflowController.findTasks(taskAssigneeJson);
+        List<TaskJson> tasks = workflowController.findTasks(taskAssigneeJson);
 
         assertThat(tasks).isNotNull();
         assertThat(tasks).hasSize(1);
 
-        TaskDTO task = tasks.get(0);
+        TaskJson task = tasks.get(0);
         assertThat(task.getAssignee()).isEqualTo(TASK_ASSIGNEE);
 
         verify(taskDTO).getAssignee();

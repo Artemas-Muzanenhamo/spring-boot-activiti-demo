@@ -1,10 +1,9 @@
 package com.activiti.demo.model;
 
+import org.activiti.engine.task.DelegationState;
+
 import java.util.Date;
 import java.util.Map;
-
-import org.activiti.engine.task.DelegationState;
-import org.activiti.engine.task.Task;
 
 public class TaskDTO {
 
@@ -26,13 +25,6 @@ public class TaskDTO {
 	private DelegationState delegationState;
 
 	public TaskDTO() {}
-
-	public TaskDTO(String id, String name, String assignee) {
-		super();
-		this.id = id;
-		this.name = name;
-		this.assignee = assignee;
-	}
 	
 	public TaskDTO(String id, String name, String assignee, String description, String executionId,
                    String owner, String processInstanceId, Date createTime, String taskDefinitionKey, Date dueDate,
