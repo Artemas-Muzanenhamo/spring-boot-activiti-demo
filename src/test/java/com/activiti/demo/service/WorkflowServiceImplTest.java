@@ -98,12 +98,12 @@ class WorkflowServiceImplTest {
         given(taskQuery.taskAssignee(taskAssignee.getTaskAssignee())).willReturn(taskQuery);
         given(taskQuery.list()).willReturn(tasks);
 
-        List<TaskObject> taskByAssignee = workflowService.findTaskByAssignee(taskAssignee);
+        List<TaskDTO> taskByAssignee = workflowService.findTaskByAssignee(taskAssignee);
 
         assertThat(taskByAssignee).isNotEmpty();
-        TaskObject taskObject = taskByAssignee.get(0);
-        assertThat(taskObject).isNotNull();
-        assertThat(taskObject.getAssignee()).isEqualTo(TASK_ASSIGNEE);
+        TaskDTO taskDTO = taskByAssignee.get(0);
+        assertThat(taskDTO).isNotNull();
+        assertThat(taskDTO.getAssignee()).isEqualTo(TASK_ASSIGNEE);
         verify(processEngine).getTaskService();
         verify(taskService).createTaskQuery();
         verify(taskQuery).taskAssignee(anyString());
@@ -119,7 +119,7 @@ class WorkflowServiceImplTest {
         given(taskService.createTaskQuery()).willReturn(taskQuery);
         given(taskQuery.taskId(taskId.getTaskId())).willReturn(taskQuery);
 
-        TaskObject task = workflowService.findTaskByTaskId(taskId);
+        TaskDTO task = workflowService.findTaskByTaskId(taskId);
 
         assertThat(task).isNotNull();
 
@@ -135,7 +135,7 @@ class WorkflowServiceImplTest {
         given(taskService.createTaskQuery()).willReturn(taskQuery);
         given(taskQuery.list()).willReturn(List.of(task));
 
-        List<TaskObject> tasks = workflowService.findAllTasks();
+        List<TaskDTO> tasks = workflowService.findAllTasks();
 
         assertThat(tasks).isNotEmpty();
         verify(processEngine).getTaskService();

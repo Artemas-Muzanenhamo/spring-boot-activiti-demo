@@ -6,7 +6,7 @@ import java.util.Map;
 import org.activiti.engine.task.DelegationState;
 import org.activiti.engine.task.Task;
 
-public class TaskObject{
+public class TaskDTO {
 
 	private String id;
 	private String name;
@@ -25,19 +25,19 @@ public class TaskObject{
 	private String processDefinitionId;
 	private DelegationState delegationState;
 
-	public TaskObject() {}
+	public TaskDTO() {}
 
-	public TaskObject(String id, String name, String assignee) {
+	public TaskDTO(String id, String name, String assignee) {
 		super();
 		this.id = id;
 		this.name = name;
 		this.assignee = assignee;
 	}
 	
-	public TaskObject(String id, String name, String assignee, String description, String executionId,
-			String owner, String processInstanceId, Date createTime, String taskDefinitionKey, Date dueDate,
-			String parentTaskId, String tenantId, Map<String, Object> taskLocalVariables,
-			Map<String, Object> processVariables, String processDefinitionId, DelegationState delegationState) {
+	public TaskDTO(String id, String name, String assignee, String description, String executionId,
+                   String owner, String processInstanceId, Date createTime, String taskDefinitionKey, Date dueDate,
+                   String parentTaskId, String tenantId, Map<String, Object> taskLocalVariables,
+                   Map<String, Object> processVariables, String processDefinitionId, DelegationState delegationState) {
 		super();
 		this.id = id;
 		this.name = name;

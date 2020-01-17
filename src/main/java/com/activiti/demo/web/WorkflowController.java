@@ -47,7 +47,7 @@ public class WorkflowController {
     @ResponseStatus(value = OK)
     @PostMapping(value = "/find-task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public List<TaskObject> findTasks(@RequestBody TaskAssigneeJson taskAssigneeJson) {
+    public List<TaskDTO> findTasks(@RequestBody TaskAssigneeJson taskAssigneeJson) {
         TaskAssignee taskAssignee = taskAssigneeJsonToDto(taskAssigneeJson);
         return workflowServiceImpl.findTaskByAssignee(taskAssignee);
     }
@@ -55,7 +55,7 @@ public class WorkflowController {
     @ResponseStatus(value = OK)
     @PostMapping(value = "/task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public TaskObject findTaskById(@RequestBody TaskIdJson taskIdJson) {
+    public TaskDTO findTaskById(@RequestBody TaskIdJson taskIdJson) {
         TaskId taskId = taskIdJsonToDto(taskIdJson);
         validateTaskIdIsNumeric(taskId);
         return workflowServiceImpl.findTaskByTaskId(taskId);
@@ -64,7 +64,7 @@ public class WorkflowController {
     @ResponseStatus(value = OK)
     @GetMapping(value = "/tasks", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public List<TaskObject> getAllTasks() {
+    public List<TaskDTO> getAllTasks() {
         return workflowServiceImpl.findAllTasks();
     }
 

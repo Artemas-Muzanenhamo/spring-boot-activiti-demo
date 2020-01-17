@@ -9,11 +9,11 @@ public interface WorkflowService {
 
     void startProcess(ProcessInstanceKey processInstanceKey);
 
-    List<TaskObject> findTaskByAssignee(TaskAssignee taskAssignee);
+    List<TaskDTO> findTaskByAssignee(TaskAssignee taskAssignee);
 
-    TaskObject findTaskByTaskId(TaskId taskId);
+    TaskDTO findTaskByTaskId(TaskId taskId);
 
-    List<TaskObject> findAllTasks();
+    List<TaskDTO> findAllTasks();
 
     void completeTask(TaskId taskId);
 

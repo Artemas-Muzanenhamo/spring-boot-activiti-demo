@@ -1,6 +1,6 @@
 package com.activiti.demo.service;
 
-import com.activiti.demo.mapper.TaskObjectMapper;
+import com.activiti.demo.mapper.TaskDTOMapper;
 import com.activiti.demo.model.*;
 import org.activiti.engine.ProcessEngine;
 import org.activiti.engine.RepositoryService;
@@ -47,33 +47,33 @@ public class WorkflowServiceImpl implements WorkflowService {
     }
 
     @Override
-    public List<TaskObject> findTaskByAssignee(TaskAssignee taskAssignee) {
+    public List<TaskDTO> findTaskByAssignee(TaskAssignee taskAssignee) {
         return processEngine.getTaskService()
                 .createTaskQuery()
                 .taskAssignee(taskAssignee.getTaskAssignee())
                 .list()
                 .stream()
-                .map(TaskObjectMapper::createTaskObject)
+                .map(TaskDTOMapper::toTaskDTO)
                 .collect(toList());
     }
 
     @Override
-    public TaskObject findTaskByTaskId(TaskId taskId) {
+    public TaskDTO findTaskByTaskId(TaskId taskId) {
         return processEngine.getTaskService().createTaskQuery()
                 .taskId(taskId.getTaskId()).list()
                 .stream()
-                .map(TaskObjectMapper::createTaskObject)
+                .map(TaskDTOMapper::toTaskDTO)
                 .findFirst()
-                .orElse(new TaskObject());
+                .orElse(new TaskDTO());
     }
 
     @Override
-    public List<TaskObject> findAllTasks() {
+    public List<TaskDTO> findAllTasks() {
         return processEngine.getTaskService()
                 .createTaskQuery()
                 .list()
                 .stream()
-                .map(TaskObjectMapper::createTaskObject)
+                .map(TaskDTOMapper::toTaskDTO)
                 .collect(toList());
     }
 

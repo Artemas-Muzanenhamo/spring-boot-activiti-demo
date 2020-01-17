@@ -27,7 +27,7 @@ class WorkflowControllerUnitTest {
     @Mock
     private WorkflowService workflowService;
     @Mock
-    private TaskObject taskObject;
+    private TaskDTO taskDTO;
     @Mock
     private DeploymentObject deploymentObject;
 
@@ -63,19 +63,19 @@ class WorkflowControllerUnitTest {
     void findTasks() {
         TaskAssigneeJson taskAssigneeJson = new TaskAssigneeJson(TASK_ASSIGNEE);
         TaskAssignee taskAssignee = new TaskAssignee(TASK_ASSIGNEE);
-        List<TaskObject> taskObjects = List.of(taskObject);
-        given(taskObject.getAssignee()).willReturn(TASK_ASSIGNEE);
-        given(workflowService.findTaskByAssignee(taskAssignee)).willReturn(taskObjects);
+        List<TaskDTO> taskDTOS = List.of(taskDTO);
+        given(taskDTO.getAssignee()).willReturn(TASK_ASSIGNEE);
+        given(workflowService.findTaskByAssignee(taskAssignee)).willReturn(taskDTOS);
 
-        List<TaskObject> tasks = workflowController.findTasks(taskAssigneeJson);
+        List<TaskDTO> tasks = workflowController.findTasks(taskAssigneeJson);
 
         assertThat(tasks).isNotNull();
         assertThat(tasks).hasSize(1);
 
-        TaskObject task = tasks.get(0);
+        TaskDTO task = tasks.get(0);
         assertThat(task.getAssignee()).isEqualTo(TASK_ASSIGNEE);
 
-        verify(taskObject).getAssignee();
+        verify(taskDTO).getAssignee();
         verify(workflowService).findTaskByAssignee(taskAssignee);
     }
 
@@ -84,29 +84,29 @@ class WorkflowControllerUnitTest {
     void findTasksByTaskId() {
         TaskIdJson taskIdJson = new TaskIdJson(TASK_ID);
         TaskId taskId = new TaskId(TASK_ID);
-        given(workflowService.findTaskByTaskId(taskId)).willReturn(taskObject);
-        given(taskObject.getId()).willReturn(TASK_ID);
+        given(workflowService.findTaskByTaskId(taskId)).willReturn(taskDTO);
+        given(taskDTO.getId()).willReturn(TASK_ID);
 
-        TaskObject task = workflowController.findTaskById(taskIdJson);
+        TaskDTO task = workflowController.findTaskById(taskIdJson);
 
         assertThat(task).isNotNull();
         assertThat(task.getId()).isEqualTo(TASK_ID);
 
         verify(workflowService).findTaskByTaskId(taskId);
-        verify(taskObject).getId();
+        verify(taskDTO).getId();
     }
 
     @Test
     @DisplayName("Should retrieve all tasks")
     void findAllTasks() {
-        List<TaskObject> taskObjects = List.of(this.taskObject);
-        given(workflowService.findAllTasks()).willReturn(taskObjects);
+        List<TaskDTO> taskDTOS = List.of(this.taskDTO);
+        given(workflowService.findAllTasks()).willReturn(taskDTOS);
 
-        List<TaskObject> tasks = workflowController.getAllTasks();
+        List<TaskDTO> tasks = workflowController.getAllTasks();
 
         assertThat(tasks).isNotEmpty();
-        TaskObject task = tasks.get(0);
-        assertThat(task).isEqualTo(taskObject);
+        TaskDTO task = tasks.get(0);
+        assertThat(task).isEqualTo(taskDTO);
         verify(workflowService).findAllTasks();
     }
 
