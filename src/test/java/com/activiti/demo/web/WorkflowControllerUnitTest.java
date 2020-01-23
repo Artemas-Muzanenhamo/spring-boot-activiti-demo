@@ -99,14 +99,29 @@ class WorkflowControllerUnitTest {
     @Test
     @DisplayName("Should retrieve all tasks")
     void findAllTasks() {
-        List<TaskDTO> taskDTOS = List.of(this.taskDTO);
+        List<TaskDTO> taskDTOS = List.of(taskDTO);
         given(workflowService.findAllTasks()).willReturn(taskDTOS);
 
-        List<TaskDTO> tasks = workflowController.getAllTasks();
+        List<TaskJson> tasks = workflowController.getAllTasks();
 
         assertThat(tasks).isNotEmpty();
-        TaskDTO task = tasks.get(0);
-        assertThat(task).isEqualTo(taskDTO);
+        TaskJson task = tasks.get(0);
+        assertThat(task.getId()).isEqualTo(taskDTO.getId());
+        assertThat(task.getName()).isEqualTo(taskDTO.getName());
+        assertThat(task.getAssignee()).isEqualTo(taskDTO.getAssignee());
+        assertThat(task.getDescription()).isEqualTo(taskDTO.getDescription());
+        assertThat(task.getExecutionId()).isEqualTo(taskDTO.getExecutionId());
+        assertThat(task.getOwner()).isEqualTo(taskDTO.getOwner());
+        assertThat(task.getProcessInstanceId()).isEqualTo(taskDTO.getProcessInstanceId());
+        assertThat(task.getCreateTime()).isEqualTo(taskDTO.getCreateTime());
+        assertThat(task.getTaskDefinitionKey()).isEqualTo(taskDTO.getTaskDefinitionKey());
+        assertThat(task.getDueDate()).isEqualTo(taskDTO.getDueDate());
+        assertThat(task.getParentTaskId()).isEqualTo(taskDTO.getParentTaskId());
+        assertThat(task.getTenantId()).isEqualTo(taskDTO.getTenantId());
+        assertThat(task.getTaskLocalVariables()).isEqualTo(taskDTO.getTaskLocalVariables());
+        assertThat(task.getProcessVariables()).isEqualTo(taskDTO.getProcessVariables());
+        assertThat(task.getProcessDefinitionId()).isEqualTo(taskDTO.getProcessDefinitionId());
+        assertThat(task.getDelegationState()).isEqualTo(taskDTO.getDelegationState());
         verify(workflowService).findAllTasks();
     }
 
@@ -124,7 +139,7 @@ class WorkflowControllerUnitTest {
     @Test
     @DisplayName("Should get all deployed processes")
     void getAllDeployedProcesses() {
-        List<DeploymentObject> deployedProcesses = List.of(this.deploymentObject);
+        List<DeploymentObject> deployedProcesses = List.of(deploymentObject);
         given(workflowService.findAllDeployedProcesses()).willReturn(deployedProcesses);
 
         List<DeploymentObject> processes = workflowController.getAllDeployedProcesses();

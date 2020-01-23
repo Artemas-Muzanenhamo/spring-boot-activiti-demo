@@ -68,8 +68,9 @@ public class WorkflowController {
     @ResponseStatus(value = OK)
     @GetMapping(value = "/tasks", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public List<TaskDTO> getAllTasks() {
-        return workflowServiceImpl.findAllTasks();
+    public List<TaskJson> getAllTasks() {
+        List<TaskDTO> tasks = workflowServiceImpl.findAllTasks();
+        return taskDtoListToJsonList(tasks);
     }
 
     @ResponseStatus(value = OK)
