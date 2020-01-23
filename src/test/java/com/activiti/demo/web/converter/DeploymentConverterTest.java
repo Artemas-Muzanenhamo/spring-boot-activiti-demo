@@ -13,7 +13,7 @@ import static org.assertj.core.api.Java6Assertions.assertThat;
 class DeploymentConverterTest {
 
     @Test
-    @DisplayName("Should convert a list of DeploymentObjects to a list of DeploymentJson")
+    @DisplayName("Should convert a list of DeploymentDTO to a list of DeploymentJson")
     void convertToDeploymentJson() {
         List<DeploymentDTO> deploymentDTOS = List.of(new DeploymentDTO());
 
