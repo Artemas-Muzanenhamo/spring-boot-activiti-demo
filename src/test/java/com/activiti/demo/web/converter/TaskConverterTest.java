@@ -7,20 +7,35 @@ import org.junit.jupiter.api.Test;
 
 import java.util.List;
 
-import static com.activiti.demo.web.converter.TaskConverter.tasksDtoToJson;
+import static com.activiti.demo.web.converter.TaskConverter.taskDtoToJson;
+import static com.activiti.demo.web.converter.TaskConverter.taskDtoListToJsonList;
 import static org.assertj.core.api.Assertions.assertThat;
 
 class TaskConverterTest {
     @Test
-    @DisplayName("Should convert TaskDTO to TaskJson")
-    void convertToTaskJson() {
+    @DisplayName("Should convert List<TaskDTO> to List<TaskJson>")
+    void convertToListOfTaskJson() {
         TaskDTO taskDTO = new TaskDTO();
         List<TaskDTO> taskDTOS = List.of(taskDTO);
 
-        List<TaskJson> tasks = tasksDtoToJson(taskDTOS);
+        List<TaskJson> tasks = taskDtoListToJsonList(taskDTOS);
 
         assertThat(tasks).isNotEmpty();
         TaskJson taskJson = tasks.get(0);
         assertThat(taskJson).isNotNull();
     }
+
+    @Test
+    @DisplayName("Should convert TaskDTO to TaskJson")
+    void convertToTaskJson() {
+        TaskDTO taskDTO = new TaskDTO();
+
+        TaskJson task = taskDtoToJson(taskDTO);
+
+        assertThat(task).isNotNull();
+    }
+
+    // TODO: return empty TaskJson when TaskDTO is null
+
+    // TODO: taskDtoListToJsonList() to use taskDtoToJson() behind the scenes
 }

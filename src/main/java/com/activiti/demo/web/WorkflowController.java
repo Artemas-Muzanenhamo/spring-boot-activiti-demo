@@ -13,7 +13,8 @@ import static com.activiti.demo.web.converter.DeploymentIdConverter.deploymentId
 import static com.activiti.demo.web.converter.ProcessInstanceKeyConverter.processInstanceKeyJsonToDto;
 import static com.activiti.demo.web.converter.ProcessNameConverter.processNameJsonToDto;
 import static com.activiti.demo.web.converter.TaskAssigneeConverter.taskAssigneeJsonToDto;
-import static com.activiti.demo.web.converter.TaskConverter.tasksDtoToJson;
+import static com.activiti.demo.web.converter.TaskConverter.taskDtoListToJsonList;
+import static com.activiti.demo.web.converter.TaskConverter.taskDtoToJson;
 import static com.activiti.demo.web.converter.TaskIdConverter.taskIdJsonToDto;
 import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_UTF8_VALUE;
@@ -51,16 +52,17 @@ public class WorkflowController {
     public List<TaskJson> findTasks(@RequestBody TaskAssigneeJson taskAssigneeJson) {
         TaskAssignee taskAssignee = taskAssigneeJsonToDto(taskAssigneeJson);
         List<TaskDTO> tasks = workflowServiceImpl.findTaskByAssignee(taskAssignee);
-        return tasksDtoToJson(tasks);
+        return taskDtoListToJsonList(tasks);
     }
 
     @ResponseStatus(value = OK)
     @PostMapping(value = "/task", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public TaskDTO findTaskById(@RequestBody TaskIdJson taskIdJson) {
+    public TaskJson findTaskById(@RequestBody TaskIdJson taskIdJson) {
         TaskId taskId = taskIdJsonToDto(taskIdJson);
         validateTaskIdIsNumeric(taskId);
-        return workflowServiceImpl.findTaskByTaskId(taskId);
+        TaskDTO task = workflowServiceImpl.findTaskByTaskId(taskId);
+        return taskDtoToJson(task);
     }
 
     @ResponseStatus(value = OK)

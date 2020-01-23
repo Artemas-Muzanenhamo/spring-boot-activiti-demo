@@ -87,7 +87,7 @@ class WorkflowControllerUnitTest {
         given(workflowService.findTaskByTaskId(taskId)).willReturn(taskDTO);
         given(taskDTO.getId()).willReturn(TASK_ID);
 
-        TaskDTO task = workflowController.findTaskById(taskIdJson);
+        TaskJson task = workflowController.findTaskById(taskIdJson);
 
         assertThat(task).isNotNull();
         assertThat(task.getId()).isEqualTo(TASK_ID);
