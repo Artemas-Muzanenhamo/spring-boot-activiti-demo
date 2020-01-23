@@ -4,6 +4,7 @@ import com.activiti.demo.model.TaskDTO;
 import com.activiti.demo.web.json.TaskJson;
 
 import java.util.List;
+import java.util.Optional;
 
 import static java.util.stream.Collectors.toList;
 
@@ -15,11 +16,13 @@ public class TaskConverter {
     }
 
     public static TaskJson taskDtoToJson(TaskDTO taskDTO) {
-        return new TaskJson(
-                taskDTO.getId(), taskDTO.getName(), taskDTO.getAssignee(), taskDTO.getDescription(), taskDTO.getExecutionId(),
-                taskDTO.getOwner(), taskDTO.getProcessInstanceId(), taskDTO.getCreateTime(), taskDTO.getTaskDefinitionKey(),
-                taskDTO.getDueDate(), taskDTO.getParentTaskId(), taskDTO.getTenantId(), taskDTO.getTaskLocalVariables(),
-                taskDTO.getProcessVariables(), taskDTO.getProcessDefinitionId(), taskDTO.getDelegationState()
-        );
+        return Optional.ofNullable(taskDTO)
+                .map(task -> new TaskJson(
+                        task.getId(), task.getName(), task.getAssignee(), task.getDescription(), task.getExecutionId(),
+                        task.getOwner(), task.getProcessInstanceId(), task.getCreateTime(), task.getTaskDefinitionKey(),
+                        task.getDueDate(), task.getParentTaskId(), task.getTenantId(), task.getTaskLocalVariables(),
+                        task.getProcessVariables(), task.getProcessDefinitionId(), task.getDelegationState()
+                ))
+                .orElse(new TaskJson());
     }
 }

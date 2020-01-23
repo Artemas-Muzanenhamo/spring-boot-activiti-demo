@@ -35,7 +35,11 @@ class TaskConverterTest {
         assertThat(task).isNotNull();
     }
 
-    // TODO: return empty TaskJson when TaskDTO is null
+    @Test
+    @DisplayName("Should return an empty TaskJson when TaskDTO is null")
+    void returnEmptyTaskJson() {
+        TaskJson taskJson = taskDtoToJson(null);
 
-    // TODO: taskDtoListToJsonList() to use taskDtoToJson() behind the scenes
+        assertThat(taskJson).isNotNull();
+    }
 }
