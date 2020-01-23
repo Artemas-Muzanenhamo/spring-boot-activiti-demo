@@ -1,6 +1,6 @@
 package com.activiti.demo.web.converter;
 
-import com.activiti.demo.model.DeploymentObject;
+import com.activiti.demo.model.DeploymentDTO;
 import com.activiti.demo.web.json.DeploymentJson;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,19 +15,19 @@ class DeploymentConverterTest {
     @Test
     @DisplayName("Should convert a list of DeploymentObjects to a list of DeploymentJson")
     void convertToDeploymentJson() {
-        List<DeploymentObject> deploymentObjects = List.of(new DeploymentObject());
+        List<DeploymentDTO> deploymentDTOS = List.of(new DeploymentDTO());
 
-        List<DeploymentJson> deploymentJsonList = toDeploymentJsonList(deploymentObjects);
+        List<DeploymentJson> deploymentJsonList = toDeploymentJsonList(deploymentDTOS);
 
         assertThat(deploymentJsonList).isNotNull();
         DeploymentJson deploymentJson = deploymentJsonList.get(0);
-        DeploymentObject deploymentObject = deploymentObjects.get(0);
-        assertThat(deploymentJson.getId()).isEqualTo(deploymentObject.getId());
-        assertThat(deploymentJson.getName()).isEqualTo(deploymentObject.getName());
-        assertThat(deploymentJson.getDeploymentTime()).isEqualTo(deploymentObject.getDeploymentTime());
-        assertThat(deploymentJson.getCategory()).isEqualTo(deploymentObject.getCategory());
-        assertThat(deploymentJson.getKey()).isEqualTo(deploymentObject.getKey());
-        assertThat(deploymentJson.getTenantId()).isEqualTo(deploymentObject.getTenantId());
+        DeploymentDTO deploymentDTO = deploymentDTOS.get(0);
+        assertThat(deploymentJson.getId()).isEqualTo(deploymentDTO.getId());
+        assertThat(deploymentJson.getName()).isEqualTo(deploymentDTO.getName());
+        assertThat(deploymentJson.getDeploymentTime()).isEqualTo(deploymentDTO.getDeploymentTime());
+        assertThat(deploymentJson.getCategory()).isEqualTo(deploymentDTO.getCategory());
+        assertThat(deploymentJson.getKey()).isEqualTo(deploymentDTO.getKey());
+        assertThat(deploymentJson.getTenantId()).isEqualTo(deploymentDTO.getTenantId());
     }
 
 }

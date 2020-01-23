@@ -2,7 +2,7 @@ package com.activiti.demo.model;
 
 import java.util.Date;
 
-public class DeploymentObject {
+public class DeploymentDTO {
 
     private String id;
     private String name;
@@ -11,9 +11,9 @@ public class DeploymentObject {
     private String key;
     private String tenantId;
 
-    public DeploymentObject() { }
+    public DeploymentDTO() { }
 
-    public DeploymentObject(String id, String name, Date deploymentTime, String category, String key, String tenantId) {
+    public DeploymentDTO(String id, String name, Date deploymentTime, String category, String key, String tenantId) {
         this.id = id;
         this.name = name;
         this.deploymentTime = deploymentTime;

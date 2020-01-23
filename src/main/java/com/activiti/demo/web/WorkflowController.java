@@ -87,7 +87,7 @@ public class WorkflowController {
     @GetMapping(value = "/deployed-processes", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
     public List<DeploymentJson> getAllDeployedProcesses() {
-        List<DeploymentObject> deployedProcesses = workflowServiceImpl.findAllDeployedProcesses();
+        List<DeploymentDTO> deployedProcesses = workflowServiceImpl.findAllDeployedProcesses();
         return toDeploymentJsonList(deployedProcesses);
     }
 

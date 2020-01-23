@@ -17,7 +17,7 @@ public interface WorkflowService {
 
     void completeTask(TaskId taskId);
 
-    List<DeploymentObject> findAllDeployedProcesses();
+    List<DeploymentDTO> findAllDeployedProcesses();
 
     void deleteDeployedProcess(DeploymentId deploymentId);
 }

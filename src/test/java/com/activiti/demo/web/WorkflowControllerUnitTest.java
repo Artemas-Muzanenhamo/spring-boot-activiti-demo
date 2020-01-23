@@ -29,7 +29,7 @@ class WorkflowControllerUnitTest {
     @Mock
     private TaskDTO taskDTO;
     @Mock
-    private DeploymentObject deploymentObject;
+    private DeploymentDTO deploymentDTO;
 
     @BeforeEach
     void setUp() {
@@ -139,7 +139,7 @@ class WorkflowControllerUnitTest {
     @Test
     @DisplayName("Should get all deployed processes")
     void getAllDeployedProcesses() {
-        List<DeploymentObject> deployedProcesses = List.of(deploymentObject);
+        List<DeploymentDTO> deployedProcesses = List.of(deploymentDTO);
         given(workflowService.findAllDeployedProcesses()).willReturn(deployedProcesses);
 
         List<DeploymentJson> processes = workflowController.getAllDeployedProcesses();

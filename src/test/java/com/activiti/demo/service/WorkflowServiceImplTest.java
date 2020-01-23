@@ -163,7 +163,7 @@ class WorkflowServiceImplTest {
         given(repositoryService.createDeploymentQuery()).willReturn(deploymentQuery);
         given(deploymentQuery.list()).willReturn(deployments);
 
-        List<DeploymentObject> processes = workflowService.findAllDeployedProcesses();
+        List<DeploymentDTO> processes = workflowService.findAllDeployedProcesses();
 
         assertThat(processes).isNotEmpty();
 

@@ -86,7 +86,7 @@ public class WorkflowServiceImpl implements WorkflowService {
     }
 
     @Override
-    public List<DeploymentObject> findAllDeployedProcesses() {
+    public List<DeploymentDTO> findAllDeployedProcesses() {
         return processEngine.getRepositoryService().createDeploymentQuery().list()
                 .stream()
                 .map(WorkflowServiceImpl::createDeploymentObject)
@@ -99,8 +99,8 @@ public class WorkflowServiceImpl implements WorkflowService {
         repositoryService.deleteDeployment(deploymentId.getDeploymentId());
     }
 
-    private static DeploymentObject createDeploymentObject(Deployment deployment) {
-        return new DeploymentObject(deployment.getId(), deployment.getName(),
+    private static DeploymentDTO createDeploymentObject(Deployment deployment) {
+        return new DeploymentDTO(deployment.getId(), deployment.getName(),
                 deployment.getDeploymentTime(), deployment.getCategory(), deployment.getKey(), deployment.getTenantId());
     }
 }
