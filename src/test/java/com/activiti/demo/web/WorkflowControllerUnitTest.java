@@ -142,7 +142,7 @@ class WorkflowControllerUnitTest {
         List<DeploymentObject> deployedProcesses = List.of(deploymentObject);
         given(workflowService.findAllDeployedProcesses()).willReturn(deployedProcesses);
 
-        List<DeploymentObject> processes = workflowController.getAllDeployedProcesses();
+        List<DeploymentJson> processes = workflowController.getAllDeployedProcesses();
 
         assertThat(processes).isNotEmpty();
         verify(workflowService).findAllDeployedProcesses();

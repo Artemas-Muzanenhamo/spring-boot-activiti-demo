@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import static com.activiti.demo.web.converter.DeploymentConverter.toDeploymentJsonList;
 import static com.activiti.demo.web.converter.DeploymentIdConverter.deploymentIdJsonToDto;
 import static com.activiti.demo.web.converter.ProcessInstanceKeyConverter.processInstanceKeyJsonToDto;
 import static com.activiti.demo.web.converter.ProcessNameConverter.processNameJsonToDto;
@@ -85,8 +86,9 @@ public class WorkflowController {
     @ResponseStatus(value = OK)
     @GetMapping(value = "/deployed-processes", produces = APPLICATION_JSON_UTF8_VALUE)
     @ResponseBody
-    public List<DeploymentObject> getAllDeployedProcesses() {
-        return workflowServiceImpl.findAllDeployedProcesses();
+    public List<DeploymentJson> getAllDeployedProcesses() {
+        List<DeploymentObject> deployedProcesses = workflowServiceImpl.findAllDeployedProcesses();
+        return toDeploymentJsonList(deployedProcesses);
     }
 
     @ResponseStatus(value = OK)
