@@ -22,12 +22,12 @@ class DeploymentConverterTest {
         assertThat(deploymentJsonList).isNotNull();
         DeploymentJson deploymentJson = deploymentJsonList.get(0);
         DeploymentObject deploymentObject = deploymentObjects.get(0);
-        assertThat(deploymentJson.getId()).isEqualTo(deploymentObject.getGetId());
-        assertThat(deploymentJson.getName()).isEqualTo(deploymentObject.getGetName());
-        assertThat(deploymentJson.getDeploymentTime()).isEqualTo(deploymentObject.getGetDeploymentTime());
-        assertThat(deploymentJson.getCategory()).isEqualTo(deploymentObject.getGetCategory());
-        assertThat(deploymentJson.getKey()).isEqualTo(deploymentObject.getGetKey());
-        assertThat(deploymentJson.getTenantId()).isEqualTo(deploymentObject.getGetTenantId());
+        assertThat(deploymentJson.getId()).isEqualTo(deploymentObject.getId());
+        assertThat(deploymentJson.getName()).isEqualTo(deploymentObject.getName());
+        assertThat(deploymentJson.getDeploymentTime()).isEqualTo(deploymentObject.getDeploymentTime());
+        assertThat(deploymentJson.getCategory()).isEqualTo(deploymentObject.getCategory());
+        assertThat(deploymentJson.getKey()).isEqualTo(deploymentObject.getKey());
+        assertThat(deploymentJson.getTenantId()).isEqualTo(deploymentObject.getTenantId());
     }
 
 }

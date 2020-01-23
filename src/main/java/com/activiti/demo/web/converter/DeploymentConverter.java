@@ -11,12 +11,12 @@ public class DeploymentConverter {
     public static List<DeploymentJson> toDeploymentJsonList(List<DeploymentObject> deploymentObjects) {
         return deploymentObjects.stream()
                 .map(deployment -> new DeploymentJson(
-                        deployment.getGetId(),
-                        deployment.getGetName(),
-                        deployment.getGetDeploymentTime(),
-                        deployment.getGetCategory(),
-                        deployment.getGetKey(),
-                        deployment.getGetTenantId())
+                        deployment.getId(),
+                        deployment.getName(),
+                        deployment.getDeploymentTime(),
+                        deployment.getCategory(),
+                        deployment.getKey(),
+                        deployment.getTenantId())
                 )
                 .collect(toList());
     }

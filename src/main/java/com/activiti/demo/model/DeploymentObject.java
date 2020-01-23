@@ -4,69 +4,69 @@ import java.util.Date;
 
 public class DeploymentObject {
 
-    private String getId;
-    private String getName;
-    private Date getDeploymentTime;
-    private String getCategory;
-    private String getKey;
-    private String getTenantId;
+    private String id;
+    private String name;
+    private Date deploymentTime;
+    private String category;
+    private String key;
+    private String tenantId;
 
     public DeploymentObject() { }
 
-    public DeploymentObject(String getId, String getName, Date getDeploymentTime, String getCategory, String getKey, String getTenantId) {
-        this.getId = getId;
-        this.getName = getName;
-        this.getDeploymentTime = getDeploymentTime;
-        this.getCategory = getCategory;
-        this.getKey = getKey;
-        this.getTenantId = getTenantId;
+    public DeploymentObject(String id, String name, Date deploymentTime, String category, String key, String tenantId) {
+        this.id = id;
+        this.name = name;
+        this.deploymentTime = deploymentTime;
+        this.category = category;
+        this.key = key;
+        this.tenantId = tenantId;
     }
 
-    public String getGetId() {
-        return getId;
+    public String getId() {
+        return id;
     }
 
-    public void setGetId(String getId) {
-        this.getId = getId;
+    public void setId(String id) {
+        this.id = id;
     }
 
-    public String getGetName() {
-        return getName;
+    public String getName() {
+        return name;
     }
 
-    public void setGetName(String getName) {
-        this.getName = getName;
+    public void setName(String name) {
+        this.name = name;
     }
 
-    public Date getGetDeploymentTime() {
-        return getDeploymentTime;
+    public Date getDeploymentTime() {
+        return deploymentTime;
     }
 
-    public void setGetDeploymentTime(Date getDeploymentTime) {
-        this.getDeploymentTime = getDeploymentTime;
+    public void setDeploymentTime(Date deploymentTime) {
+        this.deploymentTime = deploymentTime;
     }
 
-    public String getGetCategory() {
-        return getCategory;
+    public String getCategory() {
+        return category;
     }
 
-    public void setGetCategory(String getCategory) {
-        this.getCategory = getCategory;
+    public void setCategory(String category) {
+        this.category = category;
     }
 
-    public String getGetKey() {
-        return getKey;
+    public String getKey() {
+        return key;
     }
 
-    public void setGetKey(String getKey) {
-        this.getKey = getKey;
+    public void setKey(String key) {
+        this.key = key;
     }
 
-    public String getGetTenantId() {
-        return getTenantId;
+    public String getTenantId() {
+        return tenantId;
     }
 
-    public void setGetTenantId(String getTenantId) {
-        this.getTenantId = getTenantId;
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 }
