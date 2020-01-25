@@ -5,6 +5,7 @@ import com.activiti.demo.web.json.DeploymentJson;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.activiti.demo.web.converter.DeploymentConverter.toDeploymentJsonList;
@@ -28,6 +29,14 @@ class DeploymentConverterTest {
         assertThat(deploymentJson.getCategory()).isEqualTo(deploymentDTO.getCategory());
         assertThat(deploymentJson.getKey()).isEqualTo(deploymentDTO.getKey());
         assertThat(deploymentJson.getTenantId()).isEqualTo(deploymentDTO.getTenantId());
+    }
+
+    @Test
+    @DisplayName("Should return an empty list of DeploymentJson when a list of DeploymentDTO is null")
+    void returnEmptyDeploymentJson() {
+        List<DeploymentJson> deploymentJsonList = toDeploymentJsonList(null);
+
+        assertThat(deploymentJsonList).isEmpty();
     }
 
 }
